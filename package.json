@@ -8,6 +8,7 @@
     "cheerio": "^0.17.0",
     "cron": "^1.0.5",
     "express": "^4.10.1",
+    "promise": "^6.1.0",
     "request": "^2.47.0"
   },
   "devDependencies": {},

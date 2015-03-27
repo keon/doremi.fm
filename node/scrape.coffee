@@ -1,20 +1,26 @@
-http        = require "http"
-request     = require "request"
-cheerio     = require "cheerio"
-fs          = require "fs"
-CronJob     = require('cron').CronJob
-YouTube     = require('youtube-node')
-moment      = require('moment')
-async       = require('async')
+http          = require "http"
+request       = require "request"
+cheerio       = require "cheerio"
+fs            = require "fs"
+CronJob       = require('cron').CronJob
+YouTube       = require('youtube-node')
+moment        = require('moment')
+async         = require('async')
 
-youTube     = new YouTube()
-songs       = []
-out_file    = "../songs.json"
-pages       = "http://mwave.interest.me/kpop/chart.m"
-date        = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
-blacklist = ["simply k-pop", "tease", "teaser", "phone", "iPhone", "iPad", "Gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr"]
-whitelist = ["mnet", "full audio", "kpop", "k pop", "k-pop", "korean", "korea", "kor", "kor pop", "korean pop", "korean-pop", "kor-pop", "korean version", "kr", "kr ver", "official", "mv", "m/v", "music video"]
-has_korean = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
+youTube       = new YouTube()
+songs         = []
+out_file      = "../songs.json"
+
+mnet_url      = "http://mwave.interest.me/kpop/chart.m"
+mnet_kor_url  = ""
+mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m"
+urls          = [mnet_url, mnet_vote_url, mnet_kor_url]
+
+date          = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
+
+blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iPhone", "iPad", "Gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr"]
+whitelist     = ["mnet", "full audio", "kpop", "k pop", "k-pop", "korean", "korea", "kor", "kor pop", "korean pop", "korean-pop", "kor-pop", "korean version", "kr", "kr ver", "official", "mv", "m/v", "music video"]
+has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 
 
 youTube.setKey('AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg')
@@ -67,12 +73,11 @@ checkWhitelist = (song, query) ->
 
 
 get_data = (url, callback) ->
-    request(url, (error, response, html) ->
-      if not error and response.statusCode is 200
-        $ = cheerio.load(html)
+  request(url, (error, response, html) ->
+    if not error and response.statusCode is 200
+      $ = cheerio.load(html)
 
-        parsedResults = []
-
+      if url = mnet_url
         $("div.list_song tr").each (i, element) ->
           artist = $(this).find(".tit_artist a:first-child").text().replace("(","").replace(")","").replace("'","")
           title = $(this).find(".tit_song a").text().replace("(","").replace(")","").replace("'","")
@@ -80,13 +85,28 @@ get_data = (url, callback) ->
           query = artist + " " + title
           if artist? and artist isnt ""
             mwave = artist: artist, title: title, query: query.toLowerCase(), rank: rank
-            parsedResults.push mwave
+            songs.push mwave
+        callback()
 
-        callback(parsedResults)
-    )
+      if url = mnet_vote_url
+        songs.push "hahaha"
+        callback()
+  )
 
 update_data = ->
-  get_data pages, (data) ->
+  async.eachSeries urls, ( (url, callback) ->
+    get_data url, ->
+      console.log songs
+      callback()
+    return
+  ), (err) ->
+    if err then console.log err
+    else
+      console.log 'All files have been processed successfully'
+    return
+
+  ###
+  get_data mnet_url, (data) ->
     songs = data
     async.each songs, ((song, callback) ->
       youTube.search(song.query, 50, (error, r1) ->
@@ -108,56 +128,42 @@ update_data = ->
           callback()
 
         else
-          # Get the 5 most relevant matches
-          ###
-          ids = (i.id.videoId for i,key in r1.items).join(",")
-
-          # Get additional stats for those 5 matches
-          youTube.getById ids, (error, r2) ->
+          s = r1.items[0].id.videoId
+          youTube.getById s, (error, r2) ->
             if error
               console.log error
               callback()
 
             else
-              # Check for black and white list, push into acceptable array
-              acceptable = []
-              for j in r2.items
-                title = j.snippet.title
-                description = j.snippet.description
-                bad = 0
-                for term in blacklist
-                  if title.indexOf(term) isnt -1 then bad++
-                  if description.indexOf(term) isnt -1 then bad++
+              j = r2.items[0]
+              title = j.snippet.title
+              description = j.snippet.description
+              viewCount = j.statistics.viewCount
+              bad = 0
+              for term in blacklist
+                if title.indexOf(term) isnt -1 then bad++
+                if description.indexOf(term) isnt -1 then bad++
 
-                j.score = checkWhitelist(j,song.query)
-                if bad is 0 and j.score > 2 then acceptable.push j
+              score = checkWhitelist(j,song.query)
 
-              # Sort by score and then viewCount
-              acceptable.sort (x, y) ->
-                n = y.score - x.score
-                return n unless n is 0
-                y.statistics.viewCount - x.statistics.viewCount
+              if bad > 1 or score < 3 or viewCount < 5000
+                console.log "#{song.query} doesn't pass checks: score: #{score}, bad: #{bad}"
+                callback()
 
-              best = acceptable[0]
+              else
+                song.youtubeId = s
+                song.statistics = j.statistics
+                callback()
 
-              song.youtubeId = best.id
-              callback()
-          ###
-          # I want to check blacklist, whitelist, viewCount and shorten the length of returned array if needed
-          song.youtubeId = r1.items[0].id.videoId
-          callback()
       )
       return
     ), (err) ->
-      if err
-        console.log 'A song failed to process'
-
+      if err then console.log err
       else
         console.log 'All songs have been processed successfully'
+        songDataReady()
 
-      songDataReady()
-
-      return
+    ###
 
 
 

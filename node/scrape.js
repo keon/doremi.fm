@@ -1,4 +1,4 @@
-var CronJob, YouTube, async, blacklist, checkWhitelist, cheerio, date, fs, get_data, has_korean, http, moment, out_file, pages, request, songDataReady, songs, update_data, whitelist, youTube,
+var CronJob, YouTube, async, blacklist, checkWhitelist, cheerio, date, fs, get_data, has_korean, http, mnet_kor_url, mnet_url, mnet_vote_url, moment, out_file, request, songDataReady, songs, update_data, urls, whitelist, youTube,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 http = require("http");
@@ -23,7 +23,13 @@ songs = [];
 
 out_file = "../songs.json";
 
-pages = "http://mwave.interest.me/kpop/chart.m";
+mnet_url = "http://mwave.interest.me/kpop/chart.m";
+
+mnet_kor_url = "";
+
+mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m";
+
+urls = [mnet_url, mnet_vote_url, mnet_kor_url];
 
 date = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
 
@@ -101,97 +107,108 @@ checkWhitelist = function(song, query) {
 
 get_data = function(url, callback) {
   return request(url, function(error, response, html) {
-    var $, parsedResults;
+    var $;
     if (!error && response.statusCode === 200) {
       $ = cheerio.load(html);
-      parsedResults = [];
-      $("div.list_song tr").each(function(i, element) {
-        var artist, mwave, query, rank, title;
-        artist = $(this).find(".tit_artist a:first-child").text().replace("(", "").replace(")", "").replace("'", "");
-        title = $(this).find(".tit_song a").text().replace("(", "").replace(")", "").replace("'", "");
-        rank = $(this).find(".nb em").text();
-        query = artist + " " + title;
-        if ((artist != null) && artist !== "") {
-          mwave = {
-            artist: artist,
-            title: title,
-            query: query.toLowerCase(),
-            rank: rank
-          };
-          return parsedResults.push(mwave);
-        }
-      });
-      return callback(parsedResults);
+      if (url = mnet_url) {
+        $("div.list_song tr").each(function(i, element) {
+          var artist, mwave, query, rank, title;
+          artist = $(this).find(".tit_artist a:first-child").text().replace("(", "").replace(")", "").replace("'", "");
+          title = $(this).find(".tit_song a").text().replace("(", "").replace(")", "").replace("'", "");
+          rank = $(this).find(".nb em").text();
+          query = artist + " " + title;
+          if ((artist != null) && artist !== "") {
+            mwave = {
+              artist: artist,
+              title: title,
+              query: query.toLowerCase(),
+              rank: rank
+            };
+            return songs.push(mwave);
+          }
+        });
+        callback();
+      }
+      if (url = mnet_vote_url) {
+        songs.push("hahaha");
+        return callback();
+      }
     }
   });
 };
 
 update_data = function() {
-  return get_data(pages, function(data) {
-    songs = data;
-    return async.each(songs, (function(song, callback) {
-      youTube.search(song.query, 50, function(error, r1) {
-        if (error) {
-          console.log(error);
-          return callback();
-        } else if (r1.pageInfo.totalResults < 10) {
-          console.log("not enough songs for " + song.query);
-          return callback();
-        } else if (!r1.items[0]) {
-          console.log("no matches for " + song.query);
-          return callback();
-        } else if (r1.items[0].id == null) {
-          console.log("no id for " + song.query);
-          return callback();
-        } else {
+  return async.eachSeries(urls, (function(url, callback) {
+    get_data(url, function() {
+      console.log(songs);
+      return callback();
+    });
+  }), function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('All files have been processed successfully');
+    }
+  });
 
-          /*
-          ids = (i.id.videoId for i,key in r1.items).join(",")
-          
-           * Get additional stats for those 5 matches
-          youTube.getById ids, (error, r2) ->
+  /*
+  get_data mnet_url, (data) ->
+    songs = data
+    async.each songs, ((song, callback) ->
+      youTube.search(song.query, 50, (error, r1) ->
+  
+        if error
+          console.log error
+          callback()
+  
+        else if r1.pageInfo.totalResults < 10
+          console.log "not enough songs for #{song.query}"
+          callback()
+  
+        else if not r1.items[0]
+          console.log "no matches for #{song.query}"
+          callback()
+  
+        else if not r1.items[0].id?
+          console.log "no id for #{song.query}"
+          callback()
+  
+        else
+          s = r1.items[0].id.videoId
+          youTube.getById s, (error, r2) ->
             if error
               console.log error
               callback()
-          
+  
             else
-               * Check for black and white list, push into acceptable array
-              acceptable = []
-              for j in r2.items
-                title = j.snippet.title
-                description = j.snippet.description
-                bad = 0
-                for term in blacklist
-                  if title.indexOf(term) isnt -1 then bad++
-                  if description.indexOf(term) isnt -1 then bad++
-          
-                j.score = checkWhitelist(j,song.query)
-                if bad is 0 and j.score > 2 then acceptable.push j
-          
-               * Sort by score and then viewCount
-              acceptable.sort (x, y) ->
-                n = y.score - x.score
-                return n unless n is 0
-                y.statistics.viewCount - x.statistics.viewCount
-          
-              best = acceptable[0]
-          
-              song.youtubeId = best.id
-              callback()
-           */
-          song.youtubeId = r1.items[0].id.videoId;
-          return callback();
-        }
-      });
-    }), function(err) {
-      if (err) {
-        console.log('A song failed to process');
-      } else {
-        console.log('All songs have been processed successfully');
-      }
-      songDataReady();
-    });
-  });
+              j = r2.items[0]
+              title = j.snippet.title
+              description = j.snippet.description
+              viewCount = j.statistics.viewCount
+              bad = 0
+              for term in blacklist
+                if title.indexOf(term) isnt -1 then bad++
+                if description.indexOf(term) isnt -1 then bad++
+  
+              score = checkWhitelist(j,song.query)
+  
+              if bad > 1 or score < 3 or viewCount < 5000
+                console.log "#{song.query} doesn't pass checks: score: #{score}, bad: #{bad}"
+                callback()
+  
+              else
+                song.youtubeId = s
+                song.statistics = j.statistics
+                callback()
+  
+      )
+      return
+    ), (err) ->
+      if err then console.log err
+      else
+        console.log 'All songs have been processed successfully'
+        songDataReady()
+   */
 };
 
 songDataReady = function() {
