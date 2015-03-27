@@ -67,9 +67,7 @@ checkWhitelist = (song, query) ->
 
 
 get_data = (url, callback) ->
-    console.log "get_data"
     request(url, (error, response, html) ->
-      console.log error, response
       if not error and response.statusCode is 200
         $ = cheerio.load(html)
 
@@ -83,7 +81,6 @@ get_data = (url, callback) ->
           if artist? and artist isnt ""
             mwave = artist: artist, title: title, query: query.toLowerCase(), rank: rank
             parsedResults.push mwave
-            console.log mwave
 
         callback(parsedResults)
     )
@@ -91,9 +88,7 @@ get_data = (url, callback) ->
 update_data = ->
   get_data pages, (data) ->
     songs = data
-    console.log data
     async.each songs, ((song, callback) ->
-      console.log "in async"
       youTube.search(song.query, 50, (error, r1) ->
 
         if error

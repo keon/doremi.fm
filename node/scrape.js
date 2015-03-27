@@ -100,10 +100,8 @@ checkWhitelist = function(song, query) {
 };
 
 get_data = function(url, callback) {
-  console.log("get_data");
   return request(url, function(error, response, html) {
     var $, parsedResults;
-    console.log(error, response);
     if (!error && response.statusCode === 200) {
       $ = cheerio.load(html);
       parsedResults = [];
@@ -120,8 +118,7 @@ get_data = function(url, callback) {
             query: query.toLowerCase(),
             rank: rank
           };
-          parsedResults.push(mwave);
-          return console.log(mwave);
+          return parsedResults.push(mwave);
         }
       });
       return callback(parsedResults);
@@ -132,9 +129,7 @@ get_data = function(url, callback) {
 update_data = function() {
   return get_data(pages, function(data) {
     songs = data;
-    console.log(data);
     return async.each(songs, (function(song, callback) {
-      console.log("in async");
       youTube.search(song.query, 50, function(error, r1) {
         if (error) {
           console.log(error);
