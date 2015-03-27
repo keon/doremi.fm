@@ -7,10 +7,10 @@ url_params = [
   "cc_load_policy=0"
   "disablekb=1"
   "iv_load_policy=3"
-  "modestbranding=1"
-  "showinfo=0"
+  #"modestbranding=1"
+  #"showinfo=0"
   "autohide=1"
-  "origin=http://localhost:8001"
+  "origin=http://localhost:8002"
   "playsinline=1"
   "fs=0"
   "rel=0"
@@ -42,12 +42,14 @@ onYouTubeIframeAPIReady = ->
 
       song_data = JSON.parse result
       ajaxCallsRemaining = song_data.length-1
-
+      songDataReady()
+      ###
       for song in song_data
         ytQuerySearch(song, (song) ->
           --ajaxCallsRemaining
           if ajaxCallsRemaining <= 0 then songDataReady()
         )
+      ###
     )
 
   else
@@ -57,8 +59,9 @@ onYouTubeIframeAPIReady = ->
   return
 
 songDataReady = ->
-  localStorage.setItem("song_data", JSON.stringify song_data)
-  player.src = "http://www.youtube.com/embed/#{randSong().ytId}?#{url_params}"
+  #localStorage.setItem("song_data", JSON.stringify song_data)
+  console.log song_data
+  player.src = "http://www.youtube.com/embed/#{randSong().youtubeId}?#{url_params}"
 
 onPlayerReady = (event) ->
   return
@@ -77,7 +80,7 @@ onPlayerStateChange = (event) ->
 
   if event.data is YT.PlayerState.ENDED
     clearTimeout(progressTimer)
-    player.src = "http://www.youtube.com/embed/#{randSong().ytId}?#{url_params}"
+    player.src = "http://www.youtube.com/embed/#{randSong().youtubeId}?#{url_params}"
     player.playVideo()
 
   if event.data is YT.PlayerState.PAUSED
@@ -90,7 +93,7 @@ stopVideo = ->
   player.stopVideo()
   return
 
-
+###
 ytQuerySearch = (song, callback) ->
   gapi.client.setApiKey 'AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg'
   gapi.client.load 'youtube', 'v3', ->
@@ -110,11 +113,13 @@ ytQuerySearch = (song, callback) ->
     requestIds.execute (response) ->
       if response.result.items.length > 0
         video_id = response.result.items[0].id.videoId
-        if video_id? then song.ytId = video_id
+        if video_id? then song.youtubeId = video_id
         callback(song)
       return
     return
   return
+###
+
 
 randSong = ->
   song_data[Math.floor(Math.random()*song_data.length)]
@@ -137,7 +142,9 @@ HttpClient = ->
 
 
 $("#next").on "click", ->
-  player.src = "http://www.youtube.com/embed/#{randSong().ytId}?#{url_params}"
+  song = randSong()
+  console.log song.query
+  player.src = "http://www.youtube.com/embed/#{song.youtubeId}?#{url_params}"
 
 $('#progress').on "input", ->
   plr.seekTo(@value)
