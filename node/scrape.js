@@ -315,7 +315,7 @@ update_data = function() {
                   }
                 }
                 score = checkWhitelist(j, song.query);
-                if (bad > 1 || score < 3 || viewCount < 5000) {
+                if (bad > 0 || score < 3 || viewCount < 5000) {
                   console.log("" + song.query + " doesn't pass checks: score: " + score + ", bad: " + bad);
                   return callback();
                 } else {
@@ -337,85 +337,37 @@ update_data = function() {
       });
     }
   });
-
-  /*
-  get_data mnet_url, (data) ->
-    songs = data
-    async.each songs, ((song, callback) ->
-      youTube.search(song.query, 50, (error, r1) ->
-  
-        if error
-          console.log error
-          callback()
-  
-        else if r1.pageInfo.totalResults < 10
-          console.log "not enough songs for #{song.query}"
-          callback()
-  
-        else if not r1.items[0]
-          console.log "no matches for #{song.query}"
-          callback()
-  
-        else if not r1.items[0].id?
-          console.log "no id for #{song.query}"
-          callback()
-  
-        else
-          s = r1.items[0].id.videoId
-          youTube.getById s, (error, r2) ->
-            if error
-              console.log error
-              callback()
-  
-            else
-              j = r2.items[0]
-              title = j.snippet.title
-              description = j.snippet.description
-              viewCount = j.statistics.viewCount
-              bad = 0
-              for term in blacklist
-                if title.indexOf(term) isnt -1 then bad++
-                if description.indexOf(term) isnt -1 then bad++
-  
-              score = checkWhitelist(j,song.query)
-  
-              if bad > 1 or score < 3 or viewCount < 5000
-                console.log "#{song.query} doesn't pass checks: score: #{score}, bad: #{bad}"
-                callback()
-  
-              else
-                song.youtubeId = s
-                song.statistics = j.statistics
-                callback()
-  
-      )
-      return
-    ), (err) ->
-      if err then console.log err
-      else
-        console.log 'All songs have been processed successfully'
-        songDataReady()
-   */
 };
 
 songDataReady = function() {
-  return fs.writeFile(out_file, JSON.stringify(songs), function(err) {
+  var song;
+  songs = (function() {
+    var _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = songs.length; _i < _len; _i++) {
+      song = songs[_i];
+      if (song.youtubeId != null) {
+        _results.push(song);
+      }
+    }
+    return _results;
+  })();
+  fs.writeFile(out_file, JSON.stringify(songs), function(err) {
     if (err) {
       throw err;
     }
     console.log("JSON saved to " + out_file);
   });
-
-  /*
-  request.post
-    url: "http://jombly.com:3000/update"
-    body: JSON.stringify songs
-    headers: {"Content-Type": "application/json;charset=UTF-8"}
-  , (error, response, body) ->
-    console.log "error code: #{error}"
-    console.log "status code: #{response.statusCode}"
-    return
-   */
+  return request.post({
+    url: "http://jombly.com:3000/update",
+    body: JSON.stringify(songs),
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }, function(error, response, body) {
+    console.log("error code: " + error);
+    console.log("status code: " + response.statusCode);
+  });
 };
 
 update_data();

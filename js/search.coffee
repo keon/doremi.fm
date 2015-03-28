@@ -39,17 +39,9 @@ onYouTubeIframeAPIReady = ->
 
     client = new HttpClient()
     client.get("http://jombly.com:3000/today", (result) ->
-
       song_data = JSON.parse result
       ajaxCallsRemaining = song_data.length-1
       songDataReady()
-      ###
-      for song in song_data
-        ytQuerySearch(song, (song) ->
-          --ajaxCallsRemaining
-          if ajaxCallsRemaining <= 0 then songDataReady()
-        )
-      ###
     )
 
   else
@@ -92,34 +84,6 @@ onPlayerStateChange = (event) ->
 stopVideo = ->
   player.stopVideo()
   return
-
-###
-ytQuerySearch = (song, callback) ->
-  gapi.client.setApiKey 'AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg'
-  gapi.client.load 'youtube', 'v3', ->
-    date = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
-
-    requestIds = gapi.client.youtube.search.list(
-      type: "video"
-      q: "#{song.query} m/v"
-      part: 'id'
-      maxResults: 50
-      order: "relevance"
-      publishedAfter: date
-      #videoDefinition: "high"
-      videoEmbeddable: "true"
-    )
-
-    requestIds.execute (response) ->
-      if response.result.items.length > 0
-        video_id = response.result.items[0].id.videoId
-        if video_id? then song.youtubeId = video_id
-        callback(song)
-      return
-    return
-  return
-###
-
 
 randSong = ->
   song_data[Math.floor(Math.random()*song_data.length)]

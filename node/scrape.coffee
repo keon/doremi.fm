@@ -225,6 +225,7 @@ update_data = ->
                 title = j.snippet.title
                 description = j.snippet.description
                 viewCount = j.statistics.viewCount
+
                 bad = 0
                 for term in blacklist
                   if title.indexOf(term) isnt -1 then bad++
@@ -232,7 +233,7 @@ update_data = ->
 
                 score = checkWhitelist(j,song.query)
 
-                if bad > 1 or score < 3 or viewCount < 5000
+                if bad > 0 or score < 3 or viewCount < 5000
                   console.log "#{song.query} doesn't pass checks: score: #{score}, bad: #{bad}"
                   callback()
 
@@ -249,76 +250,16 @@ update_data = ->
           songDataReady()
     return
 
-  ###
-  get_data mnet_url, (data) ->
-    songs = data
-    async.each songs, ((song, callback) ->
-      youTube.search(song.query, 50, (error, r1) ->
-
-        if error
-          console.log error
-          callback()
-
-        else if r1.pageInfo.totalResults < 10
-          console.log "not enough songs for #{song.query}"
-          callback()
-
-        else if not r1.items[0]
-          console.log "no matches for #{song.query}"
-          callback()
-
-        else if not r1.items[0].id?
-          console.log "no id for #{song.query}"
-          callback()
-
-        else
-          s = r1.items[0].id.videoId
-          youTube.getById s, (error, r2) ->
-            if error
-              console.log error
-              callback()
-
-            else
-              j = r2.items[0]
-              title = j.snippet.title
-              description = j.snippet.description
-              viewCount = j.statistics.viewCount
-              bad = 0
-              for term in blacklist
-                if title.indexOf(term) isnt -1 then bad++
-                if description.indexOf(term) isnt -1 then bad++
-
-              score = checkWhitelist(j,song.query)
-
-              if bad > 1 or score < 3 or viewCount < 5000
-                console.log "#{song.query} doesn't pass checks: score: #{score}, bad: #{bad}"
-                callback()
-
-              else
-                song.youtubeId = s
-                song.statistics = j.statistics
-                callback()
-
-      )
-      return
-    ), (err) ->
-      if err then console.log err
-      else
-        console.log 'All songs have been processed successfully'
-        songDataReady()
-
-    ###
 
 
 
 songDataReady = ->
-  #songs = (song for song in songs when song.youtubeId?)
+  songs = (song for song in songs when song.youtubeId?)
   fs.writeFile out_file, JSON.stringify(songs), (err) ->
     throw err if err
     console.log "JSON saved to #{out_file}"
     return
 
-  ###
   request.post
     url: "http://jombly.com:3000/update"
     body: JSON.stringify songs
@@ -327,6 +268,5 @@ songDataReady = ->
     console.log "error code: #{error}"
     console.log "status code: #{response.statusCode}"
     return
-  ###
 
 update_data()

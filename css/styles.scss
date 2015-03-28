@@ -53,34 +53,50 @@ input, select, button, textarea, a {
     -webkit-tap-highlight-color: transparent;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-content: stretch;
-    align-items: stretch;
-    background: $dark-grey;
-}
-
-#container {
-    flex: 0 1 100%;
-    width: 100%;
-    background: $dark-grey;
+#main-container {
 }
 
 #video-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    padding-top: 30px; height: 0; overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
 }
 
 #video-container iframe,
 #video-container object,
 #video-container embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+#controls {
+  background: transparent;
+}
+
+#next {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+}
+
+#progress {
+  width: 100%;
+  outline: none;
+  -webkit-appearance: none;
+  background: rgba($off-white,.2);
+  padding: 3px;
+  margin: 0 auto;
+  display: block;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+     -webkit-appearance: none;
+    background-color: black;
+    width: 10px;
+    height: 10px;
+    cursor: ew-resize;
 }
