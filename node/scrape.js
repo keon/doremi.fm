@@ -1,5 +1,7 @@
-var CronJob, LD, YouTube, async, blacklist, checkWhitelist, cheerio, date, fs, get_data, has_korean, http, mnet_kor_url, mnet_url, mnet_vote_url, moment, out_file, request, songDataReady, songs, update_data, urls, whitelist, youTube,
+var CronJob, LD, YouTube, async, blacklist, checkWhitelist, cheerio, date, fs, gaon_kor_url, gapi_key, get_data, has_korean, http, mnet_kor_url, mnet_url, mnet_vote_url, moment, out_file, request, songDataReady, songs, update_data, urls, whitelist, youTube,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+gapi_key = "AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg";
 
 http = require("http");
 
@@ -27,9 +29,11 @@ mnet_url = "http://mwave.interest.me/kpop/chart.m";
 
 mnet_kor_url = "";
 
+gaon_kor_url = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=S1040&termGbn=week&hitYear=2015&targetTime=13&nationGbn=K";
+
 mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m";
 
-urls = [mnet_url, mnet_vote_url];
+urls = [mnet_url, mnet_vote_url, gaon_kor_url];
 
 date = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
 
@@ -39,7 +43,7 @@ whitelist = ["mnet", "full audio", "kpop", "k pop", "k-pop", "korean", "korea", 
 
 has_korean = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
 
-youTube.setKey("AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg");
+youTube.setKey(gapi_key);
 
 youTube.addParam("type", "video");
 
@@ -139,9 +143,12 @@ checkWhitelist = function(song, query) {
 get_data = function(url, callback) {
   return request(url, function(error, response, html) {
     var $;
+    if (error) {
+      console.log(error);
+    }
     if (!error && response.statusCode === 200) {
       $ = cheerio.load(html);
-      if (url = mnet_url) {
+      if (url === mnet_url) {
         $("div.list_song tr").each(function(i, element) {
           var artist, mwave, query, rank, title;
           artist = $(this).find(".tit_artist a:first-child").text().replace("(", "").replace(")", "").replace("'", "");
@@ -159,7 +166,7 @@ get_data = function(url, callback) {
           }
         });
       }
-      if (url = mnet_vote_url) {
+      if (url === mnet_vote_url) {
         $(".vote_state_list tr").each(function(i, element) {
           var artist, mnet, query, rank, title;
           artist = $(this).find(".artist a").text().replace("(", "").replace(")", "").replace("'", "");
@@ -177,19 +184,40 @@ get_data = function(url, callback) {
           }
         });
       }
+      if (url === gaon_kor_url) {
+        $(".chart tr").each(function(i, element) {
+          var artist, gaon, query, rank, title;
+          artist = $(this).find(".subject p:nth-child(2)").text().split("|")[0].replace("(", "").replace(")", "").replace("'", "");
+          title = $(this).find(".subject p:first-child").text().replace("(", "").replace(")", "").replace("'", "");
+          rank = $(this).find(".ranking span").text();
+          if (rank === "") {
+            rank = $(this).find(".ranking").text();
+          }
+          query = "" + artist + " " + title;
+          if ((artist != null) && artist !== "") {
+            gaon = {
+              artist: artist,
+              title: title,
+              query: query.toLowerCase(),
+              rank: rank
+            };
+            return songs.push(gaon);
+          }
+        });
+      }
       return callback();
     }
   });
 };
 
 update_data = function() {
-  return async.eachSeries(urls, (function(url, callback) {
+  return async.each(urls, (function(url, callback) {
     get_data(url, function() {
       console.log("in get data " + url);
       return callback();
     });
   }), function(err) {
-    var matches, q, unique, unique_queries, x, y, _i, _len;
+    var key, match_query, match_title, q, t, unique, unique_queries, unique_titles, x, y, _i, _j, _len, _len1;
     if (err) {
       console.log(err);
     } else {
@@ -206,22 +234,107 @@ update_data = function() {
           }
           return _results;
         })();
-        matches = (function() {
+        unique_titles = (function() {
+          var _j, _len1, _results;
+          _results = [];
+          for (_j = 0, _len1 = unique.length; _j < _len1; _j++) {
+            t = unique[_j];
+            _results.push(t.title);
+          }
+          return _results;
+        })();
+        match_query = (function() {
           var _j, _len1, _results;
           _results = [];
           for (_j = 0, _len1 = unique_queries.length; _j < _len1; _j++) {
-            y = unique_queries[_j];
-            if (LD(x.query, y) < 3) {
-              _results.push(y);
+            q = unique_queries[_j];
+            if (LD(x.query, q) < 3) {
+              _results.push(q);
             }
           }
           return _results;
         })();
-        if (matches.length === 0) {
+        match_title = (function() {
+          var _j, _len1, _results;
+          _results = [];
+          for (_j = 0, _len1 = unique_titles.length; _j < _len1; _j++) {
+            t = unique_titles[_j];
+            if (LD(x.title, t) < 3) {
+              _results.push(t);
+            }
+          }
+          return _results;
+        })();
+        if (match_query.length === 0 && match_title.length === 0) {
           unique.push(x);
         }
       }
-      console.log(unique.length);
+      unique.sort(function(x, y) {
+        return x.rank - y.rank;
+      });
+      for (key = _j = 0, _len1 = unique.length; _j < _len1; key = ++_j) {
+        y = unique[key];
+        y.rank = key + 1;
+      }
+      songs = unique;
+      async.each(songs, (function(song, callback) {
+        return youTube.search(song.query, 50, function(error, r1) {
+          var s;
+          if (error) {
+            console.log(error);
+            return callback();
+          } else if (r1.pageInfo.totalResults < 10) {
+            console.log("not enough songs for " + song.query);
+            return callback();
+          } else if (!r1.items[0]) {
+            console.log("no matches for " + song.query);
+            return callback();
+          } else if (r1.items[0].id == null) {
+            console.log("no id for " + song.query);
+            return callback();
+          } else {
+            s = r1.items[0].id.videoId;
+            return youTube.getById(s, (function(error, r2) {
+              var bad, description, j, score, term, title, viewCount, _k, _len2;
+              if (error) {
+                console.log(error);
+                return callback();
+              } else {
+                j = r2.items[0];
+                title = j.snippet.title;
+                description = j.snippet.description;
+                viewCount = j.statistics.viewCount;
+                bad = 0;
+                for (_k = 0, _len2 = blacklist.length; _k < _len2; _k++) {
+                  term = blacklist[_k];
+                  if (title.indexOf(term) !== -1) {
+                    bad++;
+                  }
+                  if (description.indexOf(term) !== -1) {
+                    bad++;
+                  }
+                }
+                score = checkWhitelist(j, song.query);
+                if (bad > 1 || score < 3 || viewCount < 5000) {
+                  console.log("" + song.query + " doesn't pass checks: score: " + score + ", bad: " + bad);
+                  return callback();
+                } else {
+                  song.youtubeId = s;
+                  song.statistics = j.statistics;
+                  return callback();
+                }
+              }
+            }));
+          }
+        });
+      }), function(err) {
+        if (err) {
+          return console.log(err);
+        } else {
+          console.log('All songs have been processed successfully');
+          return songDataReady();
+        }
+      });
     }
   });
 
@@ -286,18 +399,6 @@ update_data = function() {
 };
 
 songDataReady = function() {
-  var song;
-  songs = (function() {
-    var _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = songs.length; _i < _len; _i++) {
-      song = songs[_i];
-      if (song.youtubeId != null) {
-        _results.push(song);
-      }
-    }
-    return _results;
-  })();
   return fs.writeFile(out_file, JSON.stringify(songs), function(err) {
     if (err) {
       throw err;
