@@ -2,10 +2,10 @@ http          = require "http"
 request       = require "request"
 cheerio       = require "cheerio"
 fs            = require "fs"
-CronJob       = require('cron').CronJob
-YouTube       = require('youtube-node')
-moment        = require('moment')
-async         = require('async')
+CronJob       = require("cron").CronJob
+YouTube       = require "youtube-node"
+moment        = require("moment")
+async         = require("async")
 
 youTube       = new YouTube()
 songs         = []
@@ -23,13 +23,13 @@ whitelist     = ["mnet", "full audio", "kpop", "k pop", "k-pop", "korean", "kore
 has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 
 
-youTube.setKey('AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg')
-youTube.addParam("type", "video")
-youTube.addParam("part", "id")
-youTube.addParam("order", "relevance")
-youTube.addParam("publishedAfter", date)
-youTube.addParam("videoDefinition", "high")
-youTube.addParam("videoEmbeddable", "true")
+youTube.setKey   "AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg"
+youTube.addParam "type"           , "video"
+youTube.addParam "part"           , "id"
+youTube.addParam "order"          , "relevance"
+youTube.addParam "publishedAfter" , date
+youTube.addParam "videoDefinition", "high"
+youTube.addParam "videoEmbeddable", "true"
 
 
 checkWhitelist = (song, query) ->
@@ -79,30 +79,37 @@ get_data = (url, callback) ->
 
       if url = mnet_url
         $("div.list_song tr").each (i, element) ->
-          artist = $(this).find(".tit_artist a:first-child").text().replace("(","").replace(")","").replace("'","")
-          title = $(this).find(".tit_song a").text().replace("(","").replace(")","").replace("'","")
+          artist = $(this).find(".tit_artist a:first-child").text().replace("(", "").replace(")", "").replace("'", "")
+          title = $(this).find(".tit_song a").text().replace("(", "").replace(")", "").replace("'", "")
           rank = $(this).find(".nb em").text()
-          query = artist + " " + title
+          query = "#{artist} #{title}"
           if artist? and artist isnt ""
-            mwave = artist: artist, title: title, query: query.toLowerCase(), rank: rank
+            mwave = { artist: artist, title: title, query: query.toLowerCase(), rank: rank }
             songs.push mwave
         callback()
 
       if url = mnet_vote_url
-        songs.push "hahaha"
+        $(".vote_state_list tr").each (i, element) ->
+          artist = $(this).find(".artist a").text()
+          title = $(this).find(".music_icon a:nth-child(2)").text()
+          rank = $(this).find(".rank img").attr("alt")
+          query = "#{artist} #{title}"
+          if artist? and artist isnt ""
+            mnet = { artist: artist, title: title, query: query.toLowerCase(), rank: rank }
+            songs.push mnet
         callback()
   )
 
 update_data = ->
   async.eachSeries urls, ( (url, callback) ->
     get_data url, ->
-      console.log songs
       callback()
     return
   ), (err) ->
     if err then console.log err
     else
       console.log 'All files have been processed successfully'
+      console.log songs
     return
 
   ###
