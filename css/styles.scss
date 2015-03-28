@@ -53,25 +53,6 @@ input, select, button, textarea, a {
     -webkit-tap-highlight-color: transparent;
 }
 
-#main-container {
-}
-
-#video-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-}
-
-#video-container iframe,
-#video-container object,
-#video-container embed {
-  width: 100%;
-  position: absolute;
-}
-
 #controls {
   background: transparent;
 }
