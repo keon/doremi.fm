@@ -102,6 +102,7 @@ startVideo = function() {
 newSong = function() {
   var song;
   song = randSong();
+  console.log(song.query);
   return player.loadVideoById(song.youtubeId);
 };
 

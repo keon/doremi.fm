@@ -14,27 +14,30 @@ songs         = []
 out_file      = "../songs.json"
 
 mnet_url      = "http://mwave.interest.me/kpop/chart.m"
-mnet_kor_url  = "http://www.mnet.com/chart/TOP100/20150328"
+mnet_kor_url  = "http://www.mnet.com/chart/Kpop/all/"
 gaon_kor_url  = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=S1040&termGbn=week&hitYear=2015&targetTime=13&nationGbn=K"
 mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m"
-urls          = [mnet_url, mnet_vote_url, gaon_kor_url]
+urls          = [mnet_url, mnet_vote_url, gaon_kor_url, mnet_kor_url]
 
 date          = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
 
-blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iPhone", "iPad", "Gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr"]
+blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iPhone", "iPad", "Gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice"]
 
-whitelist     = ["mnet", "full audio", "kpop", "k pop", "k-pop", "korean", "korea", "kor", "kor pop", "korean pop", "korean-pop", "kor-pop", "korean version", "kr", "kr ver", "official", "mv", "m/v", "music video"]
+whitelist     = ["kpop", "k pop", "k-pop", "korea", "kr"]
+
+superlist     = ["mv", "m v", "m/v", "musicvideo", "music video", "full audio", "fullaudio", "complete audio", "completeaudio", "official"]
 
 has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 
 
 youTube.setKey   gapi_key
-youTube.addParam "type"           , "video"
-youTube.addParam "part"           , "id"
-youTube.addParam "order"          , "relevance"
-youTube.addParam "publishedAfter" , date
-youTube.addParam "videoDefinition", "high"
-youTube.addParam "videoEmbeddable", "true"
+youTube.addParam "type"             , "video"
+youTube.addParam "part"             , "id"
+youTube.addParam "order"            , "relevance"
+youTube.addParam "publishedAfter"   , date
+youTube.addParam "videoDefinition"  , "high"
+youTube.addParam "videoEmbeddable"  , "true"
+youTube.addParam "relevanceLanguage", "en"
 
 
 LD = (s, t) ->
@@ -77,6 +80,9 @@ checkWhitelist = (song, query) ->
 
   if goodTitle > 0 then score++
   if goodDescription > 0 then score++
+
+  for term in superlist
+    if title.indexOf(term) isnt -1 then score+=5
 
   # Give a point if all of the query's words are in song title
   title_array = cleaned_title.split " "
@@ -138,6 +144,7 @@ get_data = (url, callback) ->
             mnet = { artist: artist, title: title, query: query.toLowerCase(), rank: rank }
             songs.push mnet
 
+
       if url is gaon_kor_url
         $(".chart tr").each (i, element) ->
 
@@ -163,6 +170,27 @@ get_data = (url, callback) ->
             songs.push gaon
 
 
+      if url is mnet_kor_url
+        $(".MnetMusicList tr").each (i, element) ->
+
+          artist = $(this).find(".MMLIInfo_Artist").text()
+                    .replace(/\s*\(.*?\)\s*/g, '')
+
+          title = $(this).find(".MMLI_Song").text()
+                    .replace(/\s*\(.*?\)\s*/g, '')
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("'", "")
+
+          rank = $(this).find(".MMLI_RankNum").text()
+                    .replace(/\D/g,'')
+
+          query = "#{artist} #{title}"
+
+          if artist? and artist isnt ""
+            mnet_kor = { artist: artist, title: title, query: query.toLowerCase(), rank: rank }
+            songs.push mnet_kor
+
       callback()
   )
 
@@ -178,21 +206,18 @@ update_data = ->
       console.log "in return"
       unique = []
       for x in songs
+        x.title = x.title.toLowerCase()
+        x.artist = x.artist.toLowerCase()
+        x.query = x.query.toLowerCase()
+
         unique_queries = (q.query for q in unique)
         unique_titles  = (t.title for t in unique)
-        match_query    = (q for q in unique_queries when LD(x.query,q) < 3)
-        match_title    = (t for t in unique_titles  when LD(x.title,t) < 3)
+        match_query    = (q for q in unique_queries when LD(x.query,q) <= 3)
+        match_title    = (t for t in unique_titles  when LD(x.title,t) <= 3)
         if match_query.length is 0 and match_title.length is 0
           unique.push x
 
-      unique.sort (x, y) -> x.rank - y.rank
-      for y, key in unique
-        y.rank = key+1
-
       songs = unique
-
-
-
 
       async.each songs, ((song, callback) ->
         youTube.search(song.query, 50, (error, r1) ->
@@ -201,7 +226,7 @@ update_data = ->
             console.log error
             callback()
 
-          else if r1.pageInfo.totalResults < 10
+          else if r1.pageInfo.totalResults < 5
             console.log "not enough songs for #{song.query}"
             callback()
 
@@ -214,32 +239,45 @@ update_data = ->
             callback()
 
           else
-            s = r1.items[0].id.videoId
-            youTube.getById s, ( (error, r2) ->
+            s = (item.id.videoId for item, key in r1.items)
+            #s = r1.items[0].id.videoId
+            youTube.getById s.join(","), ( (error, r2) ->
               if error
                 console.log error
                 callback()
 
               else
-                j = r2.items[0]
-                title = j.snippet.title
-                description = j.snippet.description
-                viewCount = j.statistics.viewCount
+                acceptable = []
+                for j in r2.items
+                  title = j.snippet.title.toLowerCase()
+                  description = j.snippet.description.toLowerCase()
+                  viewCount = j.statistics.viewCount
 
-                bad = 0
-                for term in blacklist
-                  if title.indexOf(term) isnt -1 then bad++
-                  if description.indexOf(term) isnt -1 then bad++
+                  bad = 0
+                  good = 0
 
-                score = checkWhitelist(j,song.query)
+                  for term in blacklist
+                    if title.indexOf(term) isnt -1
+                      bad++
 
-                if bad > 0 or score < 3 or viewCount < 5000
-                  console.log "#{song.query} doesn't pass checks: score: #{score}, bad: #{bad}"
+                  for term in superlist
+                    if title.indexOf(term) isnt -1
+                      acceptable.push j
+
+                  score = checkWhitelist(j,song.query)
+
+                  if bad is 0 and score > 5 and viewCount > 5000 and j not in acceptable
+
+                    acceptable.push j
+
+                acceptable.sort (x, y) ->
+                  y.statistics.viewCount - x.statistics.viewCount
+
+                if acceptable.length > 0
+                  song.youtubeId = acceptable[0].id
+                  song.statistics = acceptable[0].statistics
                   callback()
-
                 else
-                  song.youtubeId = s
-                  song.statistics = j.statistics
                   callback()
             )
         )
@@ -255,6 +293,10 @@ update_data = ->
 
 songDataReady = ->
   songs = (song for song in songs when song.youtubeId?)
+  songs.sort (x, y) -> x.rank - y.rank
+  for i, key in songs
+    i.rank = key+1
+
   fs.writeFile out_file, JSON.stringify(songs), (err) ->
     throw err if err
     console.log "JSON saved to #{out_file}"

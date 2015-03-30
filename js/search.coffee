@@ -107,6 +107,7 @@ startVideo = ->
 
 newSong = ->
   song = randSong()
+  console.log song.query
   player.loadVideoById(song.youtubeId)
 
 randSong = ->
