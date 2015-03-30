@@ -37,7 +37,7 @@ urls = [mnet_url, mnet_vote_url, gaon_kor_url, mnet_kor_url];
 
 date = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
 
-blacklist = ["simply k-pop", "tease", "teaser", "phone", "iPhone", "iPad", "Gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice"];
+blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito"];
 
 whitelist = ["kpop", "k pop", "k-pop", "korea", "kr"];
 
@@ -255,7 +255,7 @@ update_data = function() {
         x = songs[_i];
         x.title = x.title.toLowerCase();
         x.artist = x.artist.toLowerCase();
-        x.query = x.query.toLowerCase();
+        x.query = x.query.toLowerCase() + " mv";
         unique_queries = (function() {
           var _j, _len1, _results;
           _results = [];
@@ -307,7 +307,7 @@ update_data = function() {
           if (error) {
             console.log(error);
             return callback();
-          } else if (r1.pageInfo.totalResults < 5) {
+          } else if (r1.pageInfo.totalResults < 10) {
             console.log("not enough songs for " + song.query);
             return callback();
           } else if (!r1.items[0]) {
@@ -328,7 +328,7 @@ update_data = function() {
               return _results;
             })();
             return youTube.getById(s.join(","), (function(error, r2) {
-              var acceptable, bad, description, good, j, score, term, title, viewCount, _j, _k, _l, _len1, _len2, _len3, _ref;
+              var acceptable, bad, description, good, j, likeCount, query_array, score, term, title, titleCount, title_array, viewCount, word, _j, _k, _l, _len1, _len2, _len3, _ref;
               if (error) {
                 console.log(error);
                 return callback();
@@ -337,31 +337,32 @@ update_data = function() {
                 _ref = r2.items;
                 for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                   j = _ref[_j];
-                  title = j.snippet.title.toLowerCase();
-                  description = j.snippet.description.toLowerCase();
+                  title = j.snippet.title.toLowerCase().replace("(", "").replace(")", "").replace("'", "");
+                  description = j.snippet.description.toLowerCase().replace("(", "").replace(")", "").replace("'", "");
                   viewCount = j.statistics.viewCount;
+                  likeCount = j.statistics.likeCount;
+                  title_array = title.split(" ");
+                  query_array = song.query.split(" ");
+                  titleCount = 0;
+                  for (_k = 0, _len2 = query_array.length; _k < _len2; _k++) {
+                    word = query_array[_k];
+                    if (__indexOf.call(title_array, word) >= 0) {
+                      titleCount++;
+                    }
+                  }
                   bad = 0;
                   good = 0;
-                  for (_k = 0, _len2 = blacklist.length; _k < _len2; _k++) {
-                    term = blacklist[_k];
+                  for (_l = 0, _len3 = blacklist.length; _l < _len3; _l++) {
+                    term = blacklist[_l];
                     if (title.indexOf(term) !== -1) {
                       bad++;
                     }
                   }
-                  for (_l = 0, _len3 = superlist.length; _l < _len3; _l++) {
-                    term = superlist[_l];
-                    if (title.indexOf(term) !== -1) {
-                      acceptable.push(j);
-                    }
-                  }
                   score = checkWhitelist(j, song.query);
-                  if (bad === 0 && score > 5 && viewCount > 5000 && __indexOf.call(acceptable, j) < 0) {
+                  if (bad === 0 && score > 2 && viewCount > 100000 && likeCount > 2000 && titleCount > 0 && __indexOf.call(acceptable, j) < 0) {
                     acceptable.push(j);
                   }
                 }
-                acceptable.sort(function(x, y) {
-                  return y.statistics.viewCount - x.statistics.viewCount;
-                });
                 if (acceptable.length > 0) {
                   song.youtubeId = acceptable[0].id;
                   song.statistics = acceptable[0].statistics;

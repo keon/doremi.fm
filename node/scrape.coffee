@@ -21,7 +21,7 @@ urls          = [mnet_url, mnet_vote_url, gaon_kor_url, mnet_kor_url]
 
 date          = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
 
-blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iPhone", "iPad", "Gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice"]
+blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito"]
 
 whitelist     = ["kpop", "k pop", "k-pop", "korea", "kr"]
 
@@ -113,10 +113,12 @@ get_data = (url, callback) ->
                     .replace(")", "")
                     .replace("'", "")
 
+
           title =  $(this).find(".tit_song a").text()
                     .replace("(", "")
                     .replace(")", "")
                     .replace("'", "")
+
 
           rank = $(this).find(".nb em").text()
           query = "#{artist} #{title}"
@@ -132,10 +134,12 @@ get_data = (url, callback) ->
                     .replace(")", "")
                     .replace("'", "")
 
+
           title = $(this).find(".music_icon a:nth-child(2)").text()
                     .replace("(", "")
                     .replace(")", "")
                     .replace("'", "")
+
 
           rank = $(this).find(".rank img").attr("alt")
           query = "#{artist} #{title}"
@@ -154,10 +158,12 @@ get_data = (url, callback) ->
                     .replace(")", "")
                     .replace("'", "")
 
+
           title = $(this).find(".subject p:first-child").text()
                     .replace("(", "")
                     .replace(")", "")
                     .replace("'", "")
+
 
           rank = $(this).find(".ranking span").text()
           if rank is ""
@@ -176,14 +182,17 @@ get_data = (url, callback) ->
           artist = $(this).find(".MMLIInfo_Artist").text()
                     .replace(/\s*\(.*?\)\s*/g, '')
 
+
           title = $(this).find(".MMLI_Song").text()
                     .replace(/\s*\(.*?\)\s*/g, '')
                     .replace("(", "")
                     .replace(")", "")
                     .replace("'", "")
 
+
           rank = $(this).find(".MMLI_RankNum").text()
                     .replace(/\D/g,'')
+
 
           query = "#{artist} #{title}"
 
@@ -208,7 +217,7 @@ update_data = ->
       for x in songs
         x.title = x.title.toLowerCase()
         x.artist = x.artist.toLowerCase()
-        x.query = x.query.toLowerCase()
+        x.query = x.query.toLowerCase()+" mv"
 
         unique_queries = (q.query for q in unique)
         unique_titles  = (t.title for t in unique)
@@ -226,7 +235,7 @@ update_data = ->
             console.log error
             callback()
 
-          else if r1.pageInfo.totalResults < 5
+          else if r1.pageInfo.totalResults < 10
             console.log "not enough songs for #{song.query}"
             callback()
 
@@ -250,28 +259,44 @@ update_data = ->
                 acceptable = []
                 for j in r2.items
                   title = j.snippet.title.toLowerCase()
+                  .replace("(", "")
+                  .replace(")", "")
+                  .replace("'", "")
+
+
                   description = j.snippet.description.toLowerCase()
+                  .replace("(", "")
+                  .replace(")", "")
+                  .replace("'", "")
+
+
                   viewCount = j.statistics.viewCount
+                  likeCount = j.statistics.likeCount
+
+
+
+                  # Give a point if all of the query's words are in song title
+                  title_array = title.split " "
+                  query_array = song.query.split " "
+                  titleCount = 0
+
+                  for word in query_array
+                    if word in title_array then titleCount++
 
                   bad = 0
                   good = 0
-
                   for term in blacklist
-                    if title.indexOf(term) isnt -1
-                      bad++
-
-                  for term in superlist
-                    if title.indexOf(term) isnt -1
-                      acceptable.push j
+                    if title.indexOf(term) isnt -1 then bad++
 
                   score = checkWhitelist(j,song.query)
+                  #for term in superlist
+                  #  if title.indexOf(term) isnt -1 then good++
 
-                  if bad is 0 and score > 5 and viewCount > 5000 and j not in acceptable
-
+                  if bad is 0 and score > 2 and viewCount > 100000 and likeCount > 2000 and titleCount > 0 and j not in acceptable
                     acceptable.push j
 
-                acceptable.sort (x, y) ->
-                  y.statistics.viewCount - x.statistics.viewCount
+                #acceptable.sort (x, y) ->
+                #  y.statistics.viewCount - x.statistics.viewCount
 
                 if acceptable.length > 0
                   song.youtubeId = acceptable[0].id
