@@ -14,7 +14,7 @@ songs         = []
 out_file      = "../songs.json"
 
 mnet_url      = "http://mwave.interest.me/kpop/chart.m"
-mnet_kor_url  = ""
+mnet_kor_url  = "http://www.mnet.com/chart/TOP100/20150328"
 gaon_kor_url  = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=S1040&termGbn=week&hitYear=2015&targetTime=13&nationGbn=K"
 mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m"
 urls          = [mnet_url, mnet_vote_url, gaon_kor_url]
