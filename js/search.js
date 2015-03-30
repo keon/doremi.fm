@@ -1,52 +1,76 @@
-var HttpClient, firstScriptTag, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, plr, randSong, songDataReady, song_data, stopVideo, tag, url_params;
+var HttpClient, initData, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, player, randSong, resize, songDataReady, song_data, startVideo, stopVideo, url_params;
 
 song_data = null;
 
-plr = null;
+player = null;
 
-url_params = ["enablejsapi=1", "controls=0", "autoplay=1", "cc_load_policy=0", "disablekb=1", "iv_load_policy=3", "autohide=1", "origin=http://localhost:8002", "playsinline=1", "fs=0", "rel=0"].join("&");
+url_params = ["enablejsapi=1", "origin=http://localhost:8002", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "disablekb=1", "iv_load_policy=3", "origin=http://localhost:8002", "playsinline=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
-tag = document.createElement('script');
-
-tag.src = 'https://www.youtube.com/iframe_api';
-
-firstScriptTag = document.getElementsByTagName('script')[0];
-
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+initData = function() {
+  var client;
+  client = new HttpClient();
+  return client.get("http://jombly.com:3000/today", function(result) {
+    song_data = JSON.parse(result);
+    return songDataReady();
+  });
+};
 
 onYouTubeIframeAPIReady = function() {
-  var client, player;
+  var ratio, width;
+  width = $(window).width();
+  ratio = 16 / 9;
   player = new YT.Player('player', {
+    width: $(window).width(),
+    height: Math.ceil(width / ratio),
+    videoId: randSong().youtubeId,
+    playerVars: {
+      controls: 0,
+      showinfo: 0,
+      modestbranding: 1,
+      autoplay: 1,
+      cc_load_policy: 0,
+      disablekb: 1,
+      iv_load_policy: 3,
+      origin: "http://localhost:8002",
+      playsinline: 1,
+      fs: 0,
+      rel: 0,
+      wmode: "transparent"
+    },
     events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
     }
   });
-  plr = player;
-  if (song_data === null) {
-    console.log("data null");
-    client = new HttpClient();
-    client.get("http://jombly.com:3000/today", function(result) {
-      var ajaxCallsRemaining;
-      song_data = JSON.parse(result);
-      ajaxCallsRemaining = song_data.length - 1;
-      return songDataReady();
+};
+
+resize = function() {
+  var height, pHeight, pWidth, plr, ratio, width;
+  width = $(window).width();
+  height = $(window).height();
+  plr = $("#player");
+  ratio = 16 / 9;
+  if (width / ratio < height) {
+    pWidth = Math.ceil(height * ratio);
+    return plr.width(pWidth).height(height).css({
+      left: (width - pWidth) / 2,
+      top: 0
     });
   } else {
-    console.log("data exists");
-    songDataReday();
+    pHeight = Math.ceil(width / ratio);
+    return plr.width(width).height(pHeight).css({
+      left: 0,
+      top: (height - pHeight) / 2
+    });
   }
 };
 
-songDataReady = function() {
-  console.log(song_data);
-  return player.src = "http://www.youtube.com/embed/" + (randSong().youtubeId) + "?" + url_params;
-};
+songDataReady = function() {};
 
 onPlayerReady = function(event) {};
 
 onPlayerStateChange = function(event) {
-  var duration, player, progressTimer;
+  var duration, progressTimer;
   player = event.target;
   if (event.data === YT.PlayerState.PLAYING) {
     duration = player.getDuration();
@@ -60,8 +84,7 @@ onPlayerStateChange = function(event) {
   }
   if (event.data === YT.PlayerState.ENDED) {
     clearTimeout(progressTimer);
-    player.src = "http://www.youtube.com/embed/" + (randSong().youtubeId) + "?" + url_params;
-    player.playVideo();
+    newSong();
   }
   if (event.data === YT.PlayerState.PAUSED) {
     clearTimeout(progressTimer);
@@ -72,35 +95,51 @@ stopVideo = function() {
   player.stopVideo();
 };
 
+startVideo = function() {
+  player.playVideo();
+};
+
+newSong = function() {
+  var song;
+  song = randSong();
+  return player.loadVideoById(song.youtubeId);
+};
+
 randSong = function() {
   return song_data[Math.floor(Math.random() * song_data.length)];
 };
 
 HttpClient = function() {
-  this.get = function(aUrl, aCallback) {
-    var anHttpRequest;
-    anHttpRequest = new XMLHttpRequest;
-    anHttpRequest.onreadystatechange = function() {
-      if (anHttpRequest.readyState === 4 && anHttpRequest.status === 200) {
-        aCallback(anHttpRequest.responseText);
+  this.get = function(url, callback) {
+    var req;
+    req = new XMLHttpRequest;
+    req.onreadystatechange = function() {
+      if (req.readyState === 4 && req.status === 200) {
+        callback(req.responseText);
       }
     };
-    anHttpRequest.open('GET', aUrl, true);
-    anHttpRequest.send(null);
+    req.open('GET', url, true);
+    req.send(null);
   };
 };
 
 $("#next").on("click", function() {
-  var song;
-  song = randSong();
-  console.log(song.query);
-  return player.src = "http://www.youtube.com/embed/" + song.youtubeId + "?" + url_params;
+  return newSong();
 });
 
 $('#progress').on("input", function() {
-  return plr.seekTo(this.value);
+  player.seekTo(this.value);
 });
 
 $('#progress').on("change", function() {
-  return plr.seekTo(this.value);
+  return player.seekTo(this.value);
+});
+
+$(window).on('resize', function() {
+  return resize();
+});
+
+$(document).ready(function() {
+  initData();
+  return resize();
 });

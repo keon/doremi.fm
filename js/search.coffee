@@ -1,65 +1,82 @@
 song_data  = null
-plr        = null
+player     = null
 url_params = [
   "enablejsapi=1"
+  "origin=http://localhost:8002"
   "controls=0"
+  "showinfo=0"
+  "modestbranding=0"
   "autoplay=1"
   "cc_load_policy=0"
   "disablekb=1"
   "iv_load_policy=3"
-  #"modestbranding=1"
-  #"showinfo=0"
-  "autohide=1"
   "origin=http://localhost:8002"
   "playsinline=1"
   "fs=0"
   "rel=0"
+  "wmode=transparent"
 ].join("&")
 
 
-
-
-# Initialize the YT Player
-tag = document.createElement('script')
-tag.src = 'https://www.youtube.com/iframe_api'
-firstScriptTag = document.getElementsByTagName('script')[0]
-firstScriptTag.parentNode.insertBefore tag, firstScriptTag
-
+initData = ->
+  client = new HttpClient()
+  client.get("http://jombly.com:3000/today", (result) ->
+    song_data = JSON.parse result
+    songDataReady()
+  )
 
 onYouTubeIframeAPIReady = ->
+  width = $(window).width()
+  ratio = 16/9
+
   player = new (YT.Player)('player',
+    width: $(window).width()
+    height: Math.ceil(width / ratio)
+    videoId: randSong().youtubeId
+    playerVars:
+      controls: 0
+      showinfo: 0
+      modestbranding: 1
+      autoplay: 1
+      cc_load_policy: 0
+      disablekb: 1
+      iv_load_policy: 3
+      origin: "http://localhost:8002"
+      playsinline: 1
+      fs: 0
+      rel: 0
+      wmode: "transparent"
     events:
       'onReady': onPlayerReady
       'onStateChange': onPlayerStateChange
   )
-  plr = player
-
-  if song_data is null
-    console.log "data null"
-
-    client = new HttpClient()
-    client.get("http://jombly.com:3000/today", (result) ->
-      song_data = JSON.parse result
-      ajaxCallsRemaining = song_data.length-1
-      songDataReady()
-    )
-
-  else
-    console.log "data exists"
-    songDataReday()
-
   return
 
+
+resize = ->
+  width = $(window).width()
+  height = $(window).height()
+  plr = $("#player")
+  ratio = 16/9
+
+  if (width / ratio < height)
+    pWidth = Math.ceil(height * ratio)
+    plr.width(pWidth).height(height).css({left: (width - pWidth) / 2, top: 0})
+
+  else
+    pHeight = Math.ceil(width / ratio)
+    plr.width(width).height(pHeight).css({left: 0, top: (height - pHeight) / 2})
+
+
 songDataReady = ->
-  #localStorage.setItem("song_data", JSON.stringify song_data)
-  console.log song_data
-  player.src = "http://www.youtube.com/embed/#{randSong().youtubeId}?#{url_params}"
+  return
 
 onPlayerReady = (event) ->
   return
 
 onPlayerStateChange = (event) ->
   player = event.target
+
   if event.data is YT.PlayerState.PLAYING
     duration = player.getDuration()
     $("#progress").attr "max", duration
@@ -72,8 +89,7 @@ onPlayerStateChange = (event) ->
 
   if event.data is YT.PlayerState.ENDED
     clearTimeout(progressTimer)
-    player.src = "http://www.youtube.com/embed/#{randSong().youtubeId}?#{url_params}"
-    player.playVideo()
+    newSong()
 
   if event.data is YT.PlayerState.PAUSED
     clearTimeout(progressTimer)
@@ -85,20 +101,28 @@ stopVideo = ->
   player.stopVideo()
   return
 
+startVideo = ->
+  player.playVideo()
+  return
+
+newSong = ->
+  song = randSong()
+  player.loadVideoById(song.youtubeId)
+
 randSong = ->
   song_data[Math.floor(Math.random()*song_data.length)]
 
 HttpClient = ->
-  @get = (aUrl, aCallback) ->
-    anHttpRequest = new XMLHttpRequest
+  @get = (url, callback) ->
+    req = new XMLHttpRequest
 
-    anHttpRequest.onreadystatechange = ->
-      if anHttpRequest.readyState == 4 and anHttpRequest.status == 200
-        aCallback anHttpRequest.responseText
+    req.onreadystatechange = ->
+      if req.readyState == 4 and req.status == 200
+        callback req.responseText
       return
 
-    anHttpRequest.open 'GET', aUrl, true
-    anHttpRequest.send null
+    req.open 'GET', url, true
+    req.send null
     return
 
   return
@@ -106,12 +130,19 @@ HttpClient = ->
 
 
 $("#next").on "click", ->
-  song = randSong()
-  console.log song.query
-  player.src = "http://www.youtube.com/embed/#{song.youtubeId}?#{url_params}"
+  newSong()
 
 $('#progress').on "input", ->
-  plr.seekTo(@value)
+  player.seekTo(@value)
+  return
 
 $('#progress').on "change", ->
-  plr.seekTo(@value)
+  player.seekTo(@value)
+
+$(window).on('resize', ->
+  resize()
+)
+
+$(document).ready ->
+  initData()
+  resize()
