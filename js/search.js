@@ -1,10 +1,15 @@
-var HttpClient, current_song, initData, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, startVideo, stopVideo, url_params;
+var HttpClient, addToHistory, current_song, dont_play, initData, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, song_history, startVideo, stopVideo, url_params,
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 song_data = null;
+
+dont_play = JSON.parse(localStorage.getItem("dontPlay")) || [];
 
 current_song = null;
 
 player = null;
+
+song_history = [];
 
 url_params = ["enablejsapi=1", "origin=http://localhost:8002", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "disablekb=1", "iv_load_policy=3", "origin=http://localhost:8002", "playsinline=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
@@ -70,10 +75,27 @@ resize = function() {
 };
 
 songDataReady = function() {
-  var song, _i, _len;
+  var query, song, _i, _j, _len, _len1, _ref;
   for (_i = 0, _len = song_data.length; _i < _len; _i++) {
     song = song_data[_i];
-    $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
+    if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
+      $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
+    }
+  }
+  for (_j = 0, _len1 = dont_play.length; _j < _len1; _j++) {
+    query = dont_play[_j];
+    song = ((function() {
+      var _k, _len2, _results;
+      _results = [];
+      for (_k = 0, _len2 = song_data.length; _k < _len2; _k++) {
+        song = song_data[_k];
+        if (song.query === query) {
+          _results.push(song);
+        }
+      }
+      return _results;
+    })())[0];
+    $("#badList ol").append("<li class='badSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
   }
 };
 
@@ -119,13 +141,35 @@ newSong = function(song) {
   if (song == null) {
     song = randSong();
   }
+  if (song === current_song) {
+    newSong();
+  }
   player.loadVideoById(song.youtubeId);
   current_song = song;
-  return $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+  $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+  return addToHistory(song);
+};
+
+addToHistory = function(song) {
+  var len, max;
+  len = song_history.length;
+  max = 19;
+  song_history.unshift(song.query);
+  if (len > max) {
+    song_history.splice(max + 1, len - max);
+  }
 };
 
 randSong = function() {
-  return song_data[Math.floor(Math.random() * song_data.length)];
+  var songs;
+  songs = song_data.filter(function(x) {
+    var _ref;
+    return _ref = x.query, __indexOf.call(dont_play, _ref) < 0;
+  }).filter(function(y) {
+    var _ref;
+    return _ref = y.query, __indexOf.call(song_history, _ref) < 0;
+  });
+  return songs[Math.floor(Math.random() * song_data.length)];
 };
 
 HttpClient = function() {
@@ -142,6 +186,37 @@ HttpClient = function() {
   };
 };
 
+$("#dontPlay").on("click", function() {
+  var _ref;
+  if (_ref = current_song.query, __indexOf.call(dont_play, _ref) < 0) {
+    dont_play.push(current_song.query);
+    localStorage.setItem("dontPlay", JSON.stringify(dont_play));
+    $("#badList ol").append("<li class='badSong' data-song=" + current_song.rank + "> <strong>" + current_song.artist + "</strong> / <em>" + current_song.title + "</em> </li>");
+    $("#topList ol > li:nth-child(" + current_song.rank + ")").remove();
+    return newSong();
+  }
+});
+
+$('#badList').on("click", ".badSong", function() {
+  var id, q, song;
+  id = this.getAttribute("data-song");
+  $(this).remove();
+  song = song_data[id - 1];
+  dont_play = (function() {
+    var _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = dont_play.length; _i < _len; _i++) {
+      q = dont_play[_i];
+      if (q !== song.query) {
+        _results.push(q);
+      }
+    }
+    return _results;
+  })();
+  localStorage.setItem("dontPlay", JSON.stringify(dont_play));
+  return $("#topList ol > li:nth-child(" + id + ")").before("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
+});
+
 $("#next").on("click", function() {
   return newSong();
 });
@@ -150,8 +225,10 @@ $("#topListBtn").on("click", function() {
   $("#screen").toggleClass("active");
   $("#topListBtn").toggleClass("active");
   $("#topList").toggleClass("active");
+  $("#badList").toggleClass("active");
   $("#info").removeClass("active");
-  return $("#songInfo").removeClass("active");
+  $("#songInfo").removeClass("active");
+  return $("#volumeBar").removeClass("active");
 });
 
 $('#topList').on("click", ".topSong", function() {
@@ -160,7 +237,8 @@ $('#topList').on("click", ".topSong", function() {
   newSong(song_data[id - 1]);
   $("#screen").toggleClass("active");
   $("#topListBtn").toggleClass("active");
-  return $("#topList").toggleClass("active");
+  $("#topList").toggleClass("active");
+  return $("#badList").toggleClass("active");
 });
 
 $('#progress').on("input", function() {
@@ -182,9 +260,22 @@ $('#pause').on("click", function() {
 $('#info').on("click", function() {
   $("#topListBtn").removeClass("active");
   $("#topList").removeClass("active");
+  $("#badList").removeClass("active");
   $("#screen").removeClass("active");
+  $("#volumeBar").removeClass("active");
   $("#info").toggleClass("active");
   return $("#songInfo").toggleClass("active");
+});
+
+$('#volume').on("click", function() {
+  $("#topListBtn").removeClass("active");
+  $("#topList").removeClass("active");
+  $("#badList").removeClass("active");
+  $("#screen").removeClass("active");
+  $("#info").removeClass("active");
+  $("#songInfo").removeClass("active");
+  $("#volume").toggleClass("active");
+  return $("#volumeBar").toggleClass("active");
 });
 
 $('#progress').on("change", function() {

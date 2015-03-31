@@ -115,8 +115,8 @@ get_data = (url, callback) ->
 
 
           title =  $(this).find(".tit_song a").text()
-                    .replace("(", " ")
-                    .replace(")", " ")
+                    .replace("(", "")
+                    .replace(")", "")
                     .replace("'", "")
 
 
@@ -130,14 +130,14 @@ get_data = (url, callback) ->
       if url is mnet_vote_url
         $(".vote_state_list tr").each (i, element) ->
           artist = $(this).find(".artist a").text()
-                    .replace("(", " ")
-                    .replace(")", " ")
+                    .replace("(", "")
+                    .replace(")", "")
                     .replace("'", "")
 
 
           title = $(this).find(".music_icon a:nth-child(2)").text()
-                    .replace("(", " ")
-                    .replace(")", " ")
+                    .replace("(", "")
+                    .replace(")", "")
                     .replace("'", "")
 
 
@@ -154,14 +154,14 @@ get_data = (url, callback) ->
 
           artist = $(this).find(".subject p:nth-child(2)").text()
                     .split("|")[0]
-                    .replace("(", " ")
-                    .replace(")", " ")
+                    .replace("(", "")
+                    .replace(")", "")
                     .replace("'", "")
 
 
           title = $(this).find(".subject p:first-child").text()
-                    .replace("(", " ")
-                    .replace(")", " ")
+                    .replace("(", "")
+                    .replace(")", "")
                     .replace("'", "")
 
 
@@ -185,8 +185,8 @@ get_data = (url, callback) ->
 
           title = $(this).find(".MMLI_Song").text()
                     .replace(/\s*\(.*?\)\s*/g, '')
-                    .replace("(", " ")
-                    .replace(")", " ")
+                    .replace("(", "")
+                    .replace(")", "")
                     .replace("'", "")
 
 
@@ -292,7 +292,7 @@ update_data = ->
                   #for term in superlist
                   #  if title.indexOf(term) isnt -1 then good++
 
-                  if bad is 0 and score > 2 and viewCount > 100000 and likeCount > 2000 and titleCount > 0 and j not in acceptable
+                  if viewCount > 100000 and likeCount > 1500 and j not in acceptable
                     acceptable.push j
 
                 #acceptable.sort (x, y) ->

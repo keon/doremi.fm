@@ -1,4 +1,4 @@
-@import "reset";
+@import "reset", "mixins";
 
 $base-size:         16px;
 $base-lineheight:   1.5;
@@ -130,7 +130,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 #topList {
   position: absolute;
-  top: 60px;
+  top: 40px;
   left: 0px;
   width: 0px;
   height: 70vh;
@@ -138,17 +138,29 @@ input[type="range"]::-webkit-slider-thumb {
   z-index: 3;
   transition: width 0.2s;
 
+  @include bp(huge) {
+    left: 16%;
+  }
+
+  @include bp(medium) {
+    height: 35vh;
+  }
 
   &.active {
     background: $off-white;
-    width: 400px;
+    width: 350px;
     transition: width 0.2s;
+
+    @include bp(medium) {
+      width: 100%;
+      height: 35vh;
+    }
 
     &:before {
       content: "Songs list (click to play)";
-      font-size: 1.25rem;
+      font-size: 1rem;
       position: absolute;
-      top: -29px;
+      top: -27px;
       left: 32px;
       color: $off-white;
       white-space: nowrap;
@@ -185,6 +197,77 @@ input[type="range"]::-webkit-slider-thumb {
   }
 }
 
+#badList {
+  position: absolute;
+  top: 40px;
+  right: 0px;
+  width: 0px;
+  height: 70vh;
+  background-color: $off-white;
+  z-index: 3;
+  transition: width 0.2s;
+
+  @include bp(huge) {
+    right: 16%;
+  }
+
+  @include bp(medium) {
+    height: 35vh;
+    top: 50vh;
+  }
+
+    &.active {
+      background: $off-white;
+      width: 350px;
+      transition: width 0.2s;
+
+      @include bp(medium) {
+        width: 100%;
+        height: 35vh;
+        top: 50vh;
+      }
+
+      &:before {
+        content: "Thumbs-downed (click to remove)";
+        font-size: 1rem;
+        position: absolute;
+        top: -27px;
+        left: 32px;
+        color: $off-white;
+        white-space: nowrap;
+        color: white;
+        font-weight: $bold;
+      }
+
+    }
+
+    ol {
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      font-size: 0.8rem;
+    }
+
+    ol li {
+      list-style-type: decimal;
+      margin-left: 2.25rem;
+      padding: 0;
+      cursor: pointer;
+      white-space: nowrap;
+
+      em {
+        font-size: 0.8rem;
+        font-style: italic;
+      }
+
+      strong {
+        font-size: 0.8rem;
+        font-style: normal;
+      }
+
+    }
+}
+
 #playerControls {
   z-index: 3;
   position: absolute;
@@ -195,6 +278,16 @@ input[type="range"]::-webkit-slider-thumb {
   display: flex;
   background: darken($dark-grey,20%);
   transition: height 0.2s;
+
+  @include bp(small) {
+    width: 100%;
+    left: 0;
+  }
+
+  @include bp(huge) {
+    width: 40%;
+    left: 30%;
+  }
 
   button {
     z-index: 3;
@@ -230,6 +323,12 @@ input[type="range"]::-webkit-slider-thumb {
       color: darken($pink,20%);
     }
   }
+
+  #volume {
+    &.active {
+      color: darken($pink,20%);
+    }
+  }
 }
 
 #screen {
@@ -242,6 +341,10 @@ input[type="range"]::-webkit-slider-thumb {
   &.active {
     opacity: 0.8;
   }
+  @media only screen
+    and (min-device-width : 414px)
+    and (max-device-width : 736px) { pointer-events: none; }
+
 }
 
 #songInfo {
@@ -260,6 +363,24 @@ input[type="range"]::-webkit-slider-thumb {
 
   &.active {
     height: 30px;
+    color: $off-white;
+  }
+}
+
+#volumeBar {
+  background: darken($off-white,40%);
+  position: absolute;
+  bottom: 53px;
+  width: 100%;
+  height: 0px;
+  padding: 0;
+  margin: 0;
+  transition: all 0.2s;
+  overflow: hidden;
+  outline: none;
+
+  &.active {
+    height: 20px;
     color: $off-white;
   }
 }

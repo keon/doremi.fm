@@ -1,6 +1,8 @@
 song_data  = null
+dont_play = JSON.parse(localStorage.getItem("dontPlay")) or []
 current_song = null
 player     = null
+song_history = []
 url_params = [
   "enablejsapi=1"
   "origin=http://localhost:8002"
@@ -71,13 +73,20 @@ resize = ->
 
 
 songDataReady = ->
-  for song in song_data
+  for song in song_data when song.query not in dont_play
     $("#topList ol").append("
       <li class='topSong' data-song=#{song.rank}>
       <strong>#{song.artist}</strong> / <em>#{song.title}</em>
       </li>
     ")
 
+  for query in dont_play
+    song = (song for song in song_data when song.query is query)[0]
+    $("#badList ol").append("
+      <li class='badSong' data-song=#{song.rank}>
+      <strong>#{song.artist}</strong> / <em>#{song.title}</em>
+      </li>
+    ")
   return
 
 onPlayerReady = (event) ->
@@ -123,14 +132,28 @@ pauseVideo = ->
 
 newSong = (song) ->
   song = randSong() unless song?
+  if song is current_song then newSong()
   player.loadVideoById(song.youtubeId)
   current_song = song
   $("#songInfo").text("
     #{current_song.artist} - #{current_song.title}
   ")
+  addToHistory(song)
+
+addToHistory = (song) ->
+  len = song_history.length
+  max = 19
+  song_history.unshift song.query
+  if len > max then song_history.splice max+1, len-max
+  return
 
 randSong = ->
-  song_data[Math.floor(Math.random()*song_data.length)]
+  songs = song_data.filter( (x) ->
+    x.query not in dont_play
+  ).filter( (y) ->
+    y.query not in song_history
+  )
+  songs[Math.floor(Math.random()*song_data.length)]
 
 HttpClient = ->
   @get = (url, callback) ->
@@ -148,6 +171,31 @@ HttpClient = ->
   return
 
 
+$("#dontPlay").on "click", ->
+  if current_song.query not in dont_play
+    dont_play.push current_song.query
+    localStorage.setItem("dontPlay", JSON.stringify(dont_play))
+    $("#badList ol").append("
+      <li class='badSong' data-song=#{current_song.rank}>
+      <strong>#{current_song.artist}</strong> / <em>#{current_song.title}</em>
+      </li>
+    ")
+
+    $("#topList ol > li:nth-child(#{current_song.rank})").remove()
+    newSong()
+
+$('#badList').on "click", ".badSong", ->
+  id = @getAttribute("data-song")
+  $(this).remove()
+  song = song_data[id-1]
+  dont_play = (q for q in dont_play when q isnt song.query)
+  localStorage.setItem("dontPlay", JSON.stringify(dont_play))
+  $("#topList ol > li:nth-child(#{id})").before("
+    <li class='topSong' data-song=#{song.rank}>
+    <strong>#{song.artist}</strong> / <em>#{song.title}</em>
+    </li>
+  ")
+
 
 $("#next").on "click", ->
   newSong()
@@ -156,8 +204,10 @@ $("#topListBtn").on "click", ->
   $("#screen").toggleClass("active")
   $("#topListBtn").toggleClass("active")
   $("#topList").toggleClass("active")
+  $("#badList").toggleClass("active")
   $("#info").removeClass("active")
   $("#songInfo").removeClass("active")
+  $("#volumeBar").removeClass("active")
 
 $('#topList').on "click", ".topSong", ->
   id = @getAttribute("data-song")
@@ -165,6 +215,9 @@ $('#topList').on "click", ".topSong", ->
   $("#screen").toggleClass("active")
   $("#topListBtn").toggleClass("active")
   $("#topList").toggleClass("active")
+  $("#badList").toggleClass("active")
+
+
 
 $('#progress').on "input", ->
   player.seekTo(@value)
@@ -182,9 +235,21 @@ $('#pause').on "click", ->
 $('#info').on "click", ->
   $("#topListBtn").removeClass("active")
   $("#topList").removeClass("active")
+  $("#badList").removeClass("active")
   $("#screen").removeClass("active")
+  $("#volumeBar").removeClass("active")
   $("#info").toggleClass("active")
   $("#songInfo").toggleClass("active")
+
+$('#volume').on "click", ->
+  $("#topListBtn").removeClass("active")
+  $("#topList").removeClass("active")
+  $("#badList").removeClass("active")
+  $("#screen").removeClass("active")
+  $("#info").removeClass("active")
+  $("#songInfo").removeClass("active")
+  $("#volume").toggleClass("active")
+  $("#volumeBar").toggleClass("active")
 
 $('#progress').on "change", ->
   player.seekTo(@value)

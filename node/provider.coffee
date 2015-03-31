@@ -2,7 +2,7 @@ express     = require "express"
 bodyParser  = require "body-parser"
 fs          = require "fs"
 app         = express()
-out_file    = "songs.json"
+out_file    = "../songs.json"
 songs       = []
 
 app.all "/*", (req, res, next) ->
