@@ -1,6 +1,8 @@
-var HttpClient, initData, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, player, randSong, resize, songDataReady, song_data, startVideo, stopVideo, url_params;
+var HttpClient, current_song, initData, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, startVideo, stopVideo, url_params;
 
 song_data = null;
+
+current_song = null;
 
 player = null;
 
@@ -16,13 +18,15 @@ initData = function() {
 };
 
 onYouTubeIframeAPIReady = function() {
-  var ratio, width;
+  var ratio, song, width;
   width = $(window).width();
   ratio = 16 / 9;
+  song = randSong();
+  current_song = song;
   player = new YT.Player('player', {
     width: $(window).width(),
     height: Math.ceil(width / ratio),
-    videoId: randSong().youtubeId,
+    videoId: song.youtubeId,
     playerVars: {
       controls: 0,
       showinfo: 0,
@@ -65,9 +69,17 @@ resize = function() {
   }
 };
 
-songDataReady = function() {};
+songDataReady = function() {
+  var song, _i, _len;
+  for (_i = 0, _len = song_data.length; _i < _len; _i++) {
+    song = song_data[_i];
+    $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
+  }
+};
 
-onPlayerReady = function(event) {};
+onPlayerReady = function(event) {
+  $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+};
 
 onPlayerStateChange = function(event) {
   var duration, progressTimer;
@@ -99,11 +111,17 @@ startVideo = function() {
   player.playVideo();
 };
 
-newSong = function() {
-  var song;
-  song = randSong();
-  console.log(song.query);
-  return player.loadVideoById(song.youtubeId);
+pauseVideo = function() {
+  player.pauseVideo();
+};
+
+newSong = function(song) {
+  if (song == null) {
+    song = randSong();
+  }
+  player.loadVideoById(song.youtubeId);
+  current_song = song;
+  return $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
 };
 
 randSong = function() {
@@ -128,8 +146,45 @@ $("#next").on("click", function() {
   return newSong();
 });
 
+$("#topListBtn").on("click", function() {
+  $("#screen").toggleClass("active");
+  $("#topListBtn").toggleClass("active");
+  $("#topList").toggleClass("active");
+  $("#info").removeClass("active");
+  return $("#songInfo").removeClass("active");
+});
+
+$('#topList').on("click", ".topSong", function() {
+  var id;
+  id = this.getAttribute("data-song");
+  newSong(song_data[id - 1]);
+  $("#screen").toggleClass("active");
+  $("#topListBtn").toggleClass("active");
+  return $("#topList").toggleClass("active");
+});
+
 $('#progress').on("input", function() {
-  player.seekTo(this.value);
+  return player.seekTo(this.value);
+});
+
+$('#play').on("click", function() {
+  $("#play").toggleClass("hidden");
+  $("#pause").toggleClass("hidden");
+  return startVideo();
+});
+
+$('#pause').on("click", function() {
+  $("#play").toggleClass("hidden");
+  $("#pause").toggleClass("hidden");
+  return pauseVideo();
+});
+
+$('#info').on("click", function() {
+  $("#topListBtn").removeClass("active");
+  $("#topList").removeClass("active");
+  $("#screen").removeClass("active");
+  $("#info").toggleClass("active");
+  return $("#songInfo").toggleClass("active");
 });
 
 $('#progress').on("change", function() {

@@ -161,8 +161,8 @@ get_data = function(url, callback) {
       if (url === mnet_url) {
         $("div.list_song tr").each(function(i, element) {
           var artist, mwave, query, rank, title;
-          artist = $(this).find(".tit_artist a:first-child").text().replace("(", "").replace(")", "").replace("'", "");
-          title = $(this).find(".tit_song a").text().replace("(", "").replace(")", "").replace("'", "");
+          artist = $(this).find(".tit_artist a:first-child").text().replace("(", " ").replace(")", " ").replace("'", "");
+          title = $(this).find(".tit_song a").text().replace("(", " ").replace(")", " ").replace("'", "");
           rank = $(this).find(".nb em").text();
           query = "" + artist + " " + title;
           if ((artist != null) && artist !== "") {
@@ -179,8 +179,8 @@ get_data = function(url, callback) {
       if (url === mnet_vote_url) {
         $(".vote_state_list tr").each(function(i, element) {
           var artist, mnet, query, rank, title;
-          artist = $(this).find(".artist a").text().replace("(", "").replace(")", "").replace("'", "");
-          title = $(this).find(".music_icon a:nth-child(2)").text().replace("(", "").replace(")", "").replace("'", "");
+          artist = $(this).find(".artist a").text().replace("(", " ").replace(")", " ").replace("'", "");
+          title = $(this).find(".music_icon a:nth-child(2)").text().replace("(", " ").replace(")", " ").replace("'", "");
           rank = $(this).find(".rank img").attr("alt");
           query = "" + artist + " " + title;
           if ((artist != null) && artist !== "") {
@@ -197,8 +197,8 @@ get_data = function(url, callback) {
       if (url === gaon_kor_url) {
         $(".chart tr").each(function(i, element) {
           var artist, gaon, query, rank, title;
-          artist = $(this).find(".subject p:nth-child(2)").text().split("|")[0].replace("(", "").replace(")", "").replace("'", "");
-          title = $(this).find(".subject p:first-child").text().replace("(", "").replace(")", "").replace("'", "");
+          artist = $(this).find(".subject p:nth-child(2)").text().split("|")[0].replace("(", " ").replace(")", " ").replace("'", "");
+          title = $(this).find(".subject p:first-child").text().replace("(", " ").replace(")", " ").replace("'", "");
           rank = $(this).find(".ranking span").text();
           if (rank === "") {
             rank = $(this).find(".ranking").text();
@@ -219,7 +219,7 @@ get_data = function(url, callback) {
         $(".MnetMusicList tr").each(function(i, element) {
           var artist, mnet_kor, query, rank, title;
           artist = $(this).find(".MMLIInfo_Artist").text().replace(/\s*\(.*?\)\s*/g, '');
-          title = $(this).find(".MMLI_Song").text().replace(/\s*\(.*?\)\s*/g, '').replace("(", "").replace(")", "").replace("'", "");
+          title = $(this).find(".MMLI_Song").text().replace(/\s*\(.*?\)\s*/g, '').replace("(", " ").replace(")", " ").replace("'", "");
           rank = $(this).find(".MMLI_RankNum").text().replace(/\D/g, '');
           query = "" + artist + " " + title;
           if ((artist != null) && artist !== "") {

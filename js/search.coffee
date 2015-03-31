@@ -1,4 +1,5 @@
 song_data  = null
+current_song = null
 player     = null
 url_params = [
   "enablejsapi=1"
@@ -28,11 +29,12 @@ initData = ->
 onYouTubeIframeAPIReady = ->
   width = $(window).width()
   ratio = 16/9
-
+  song = randSong()
+  current_song = song
   player = new (YT.Player)('player',
     width: $(window).width()
     height: Math.ceil(width / ratio)
-    videoId: randSong().youtubeId
+    videoId: song.youtubeId
     playerVars:
       controls: 0
       showinfo: 0
@@ -69,9 +71,19 @@ resize = ->
 
 
 songDataReady = ->
+  for song in song_data
+    $("#topList ol").append("
+      <li class='topSong' data-song=#{song.rank}>
+      <strong>#{song.artist}</strong> / <em>#{song.title}</em>
+      </li>
+    ")
+
   return
 
 onPlayerReady = (event) ->
+  $("#songInfo").text("
+    #{current_song.artist} - #{current_song.title}
+  ")
   return
 
 onPlayerStateChange = (event) ->
@@ -105,10 +117,17 @@ startVideo = ->
   player.playVideo()
   return
 
-newSong = ->
-  song = randSong()
-  console.log song.query
+pauseVideo = ->
+  player.pauseVideo()
+  return
+
+newSong = (song) ->
+  song = randSong() unless song?
   player.loadVideoById(song.youtubeId)
+  current_song = song
+  $("#songInfo").text("
+    #{current_song.artist} - #{current_song.title}
+  ")
 
 randSong = ->
   song_data[Math.floor(Math.random()*song_data.length)]
@@ -133,9 +152,39 @@ HttpClient = ->
 $("#next").on "click", ->
   newSong()
 
+$("#topListBtn").on "click", ->
+  $("#screen").toggleClass("active")
+  $("#topListBtn").toggleClass("active")
+  $("#topList").toggleClass("active")
+  $("#info").removeClass("active")
+  $("#songInfo").removeClass("active")
+
+$('#topList').on "click", ".topSong", ->
+  id = @getAttribute("data-song")
+  newSong(song_data[id-1])
+  $("#screen").toggleClass("active")
+  $("#topListBtn").toggleClass("active")
+  $("#topList").toggleClass("active")
+
 $('#progress').on "input", ->
   player.seekTo(@value)
-  return
+
+$('#play').on "click", ->
+  $("#play").toggleClass("hidden")
+  $("#pause").toggleClass("hidden")
+  startVideo()
+
+$('#pause').on "click", ->
+  $("#play").toggleClass("hidden")
+  $("#pause").toggleClass("hidden")
+  pauseVideo()
+
+$('#info').on "click", ->
+  $("#topListBtn").removeClass("active")
+  $("#topList").removeClass("active")
+  $("#screen").removeClass("active")
+  $("#info").toggleClass("active")
+  $("#songInfo").toggleClass("active")
 
 $('#progress').on "change", ->
   player.seekTo(@value)
@@ -143,6 +192,8 @@ $('#progress').on "change", ->
 $(window).on('resize', ->
   resize()
 )
+
+
 
 $(document).ready ->
   initData()

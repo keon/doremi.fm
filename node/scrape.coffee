@@ -109,14 +109,14 @@ get_data = (url, callback) ->
       if url is mnet_url
         $("div.list_song tr").each (i, element) ->
           artist = $(this).find(".tit_artist a:first-child").text()
-                    .replace("(", "")
-                    .replace(")", "")
+                    .replace("(", " ")
+                    .replace(")", " ")
                     .replace("'", "")
 
 
           title =  $(this).find(".tit_song a").text()
-                    .replace("(", "")
-                    .replace(")", "")
+                    .replace("(", " ")
+                    .replace(")", " ")
                     .replace("'", "")
 
 
@@ -130,14 +130,14 @@ get_data = (url, callback) ->
       if url is mnet_vote_url
         $(".vote_state_list tr").each (i, element) ->
           artist = $(this).find(".artist a").text()
-                    .replace("(", "")
-                    .replace(")", "")
+                    .replace("(", " ")
+                    .replace(")", " ")
                     .replace("'", "")
 
 
           title = $(this).find(".music_icon a:nth-child(2)").text()
-                    .replace("(", "")
-                    .replace(")", "")
+                    .replace("(", " ")
+                    .replace(")", " ")
                     .replace("'", "")
 
 
@@ -154,14 +154,14 @@ get_data = (url, callback) ->
 
           artist = $(this).find(".subject p:nth-child(2)").text()
                     .split("|")[0]
-                    .replace("(", "")
-                    .replace(")", "")
+                    .replace("(", " ")
+                    .replace(")", " ")
                     .replace("'", "")
 
 
           title = $(this).find(".subject p:first-child").text()
-                    .replace("(", "")
-                    .replace(")", "")
+                    .replace("(", " ")
+                    .replace(")", " ")
                     .replace("'", "")
 
 
@@ -185,8 +185,8 @@ get_data = (url, callback) ->
 
           title = $(this).find(".MMLI_Song").text()
                     .replace(/\s*\(.*?\)\s*/g, '')
-                    .replace("(", "")
-                    .replace(")", "")
+                    .replace("(", " ")
+                    .replace(")", " ")
                     .replace("'", "")
 
 
