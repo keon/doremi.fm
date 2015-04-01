@@ -1,4 +1,4 @@
-var HttpClient, addToHistory, current_song, dont_play, initData, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, song_history, startVideo, stopVideo, url_params,
+var HttpClient, addToHistory, current_song, dont_play, initData, isPlaying, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, song_history, startVideo, stopVideo, url_params,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 song_data = null;
@@ -9,9 +9,11 @@ current_song = null;
 
 player = null;
 
+isPlaying = false;
+
 song_history = [];
 
-url_params = ["enablejsapi=1", "origin=http://localhost:8002", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "disablekb=1", "iv_load_policy=3", "origin=http://localhost:8002", "playsinline=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
+url_params = ["enablejsapi=1", "origin=http://localhost:8002", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://localhost:8002", "playsinline=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
 initData = function() {
   var client;
@@ -38,7 +40,6 @@ onYouTubeIframeAPIReady = function() {
       modestbranding: 1,
       autoplay: 1,
       cc_load_policy: 0,
-      disablekb: 1,
       iv_load_policy: 3,
       origin: "http://localhost:8002",
       playsinline: 1,
@@ -107,6 +108,7 @@ onPlayerStateChange = function(event) {
   var duration, progressTimer;
   player = event.target;
   if (event.data === YT.PlayerState.PLAYING) {
+    isPlaying = true;
     duration = player.getDuration();
     $("#progress").attr("max", duration);
     $("#play").addClass("hidden");
@@ -123,6 +125,7 @@ onPlayerStateChange = function(event) {
     newSong();
   }
   if (event.data === YT.PlayerState.PAUSED) {
+    isPlaying = false;
     $("#play").removeClass("hidden");
     $("#pause").addClass("hidden");
     clearTimeout(progressTimer);
@@ -315,12 +318,35 @@ $('#volume').on("click", function() {
   }
 });
 
-$('#volumeBar').on("change, input", function() {
+$('#volumeBar').on("change input", function() {
   return player.setVolume(this.value);
 });
 
 $(window).on('resize', function() {
   return resize();
+});
+
+$(window).on('focus load', function() {
+  var timeout;
+  $("#playerControls").addClass("show");
+  return timeout = setTimeout((function() {
+    if ($('#controlsContainer').is(":hover") !== true) {
+      return $("#playerControls").removeClass("show");
+    }
+  }), 5000);
+});
+
+$('body').keyup(function(e) {
+  if (e.keyCode === 32) {
+    if (isPlaying === true) {
+      pauseVideo();
+    } else {
+      startVideo();
+    }
+  }
+  if (e.keyCode === 39) {
+    newSong();
+  }
 });
 
 $(document).ready(function() {

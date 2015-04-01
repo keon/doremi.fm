@@ -2,6 +2,7 @@ song_data  = null
 dont_play = JSON.parse(localStorage.getItem("dontPlay")) or []
 current_song = null
 player     = null
+isPlaying = false
 song_history = []
 url_params = [
   "enablejsapi=1"
@@ -11,7 +12,6 @@ url_params = [
   "modestbranding=0"
   "autoplay=1"
   "cc_load_policy=0"
-  "disablekb=1"
   "iv_load_policy=3"
   "origin=http://localhost:8002"
   "playsinline=1"
@@ -43,7 +43,6 @@ onYouTubeIframeAPIReady = ->
       modestbranding: 1
       autoplay: 1
       cc_load_policy: 0
-      disablekb: 1
       iv_load_policy: 3
       origin: "http://localhost:8002"
       playsinline: 1
@@ -99,6 +98,7 @@ onPlayerStateChange = (event) ->
   player = event.target
 
   if event.data is YT.PlayerState.PLAYING
+    isPlaying = true
     duration = player.getDuration()
     $("#progress").attr "max", duration
     $("#play").addClass("hidden")
@@ -115,6 +115,7 @@ onPlayerStateChange = (event) ->
     newSong()
 
   if event.data is YT.PlayerState.PAUSED
+    isPlaying = false
     $("#play").removeClass("hidden")
     $("#pause").addClass("hidden")
     clearTimeout(progressTimer)
@@ -288,7 +289,7 @@ $('#volume').on "click", ->
     $("#playerControls").removeClass("squareTop")
 
 
-$('#volumeBar').on "change, input", ->
+$('#volumeBar').on "change input", ->
   player.setVolume(@value)
 
 
@@ -296,7 +297,21 @@ $(window).on('resize', ->
   resize()
 )
 
+$(window).on 'focus load', ->
+  $("#playerControls").addClass("show")
+  timeout = setTimeout( (->
+      $("#playerControls").removeClass("show") unless $('#controlsContainer').is(":hover") is true
+  ), 5000)
 
+$('body').keyup (e) ->
+  if e.keyCode == 32 # space
+    if isPlaying is true
+      pauseVideo()
+    else startVideo()
+
+  if e.keyCode == 39 # right arrow
+    newSong()
+  return
 
 $(document).ready ->
   initData()
