@@ -109,6 +109,8 @@ onPlayerStateChange = function(event) {
   if (event.data === YT.PlayerState.PLAYING) {
     duration = player.getDuration();
     $("#progress").attr("max", duration);
+    $("#play").addClass("hidden");
+    $("#pause").removeClass("hidden");
     progressTimer = setInterval(function() {
       var currentTime, timeDiff;
       currentTime = player.getCurrentTime();
@@ -121,6 +123,8 @@ onPlayerStateChange = function(event) {
     newSong();
   }
   if (event.data === YT.PlayerState.PAUSED) {
+    $("#play").removeClass("hidden");
+    $("#pause").addClass("hidden");
     clearTimeout(progressTimer);
   }
 };
@@ -222,26 +226,47 @@ $("#next").on("click", function() {
 });
 
 $("#topListBtn").on("click", function() {
-  $("#screen").toggleClass("active");
+  $("#screen").toggle();
   $("#topListBtn").toggleClass("active");
   $("#topList").toggleClass("active");
   $("#badList").toggleClass("active");
   $("#info").removeClass("active");
   $("#songInfo").removeClass("active");
-  return $("#volumeBar").removeClass("active");
+  $("#volumeBar").removeClass("active");
+  $("#volume").removeClass("active");
+  $('#playerControls').addClass("show");
+  return $('#playerControls').removeClass("squareTop");
 });
 
 $('#topList').on("click", ".topSong", function() {
   var id;
   id = this.getAttribute("data-song");
   newSong(song_data[id - 1]);
-  $("#screen").toggleClass("active");
+  $("#screen").hide();
   $("#topListBtn").toggleClass("active");
   $("#topList").toggleClass("active");
-  return $("#badList").toggleClass("active");
+  $("#badList").toggleClass("active");
+  return $('#playerControls').removeClass("show");
+});
+
+$('#controlsContainer').hover((function() {
+  $('#playerControls').addClass("show");
+}), function() {
+  if ($("#topListBtn").hasClass("active") === false) {
+    $('#playerControls').removeClass("show");
+    $("#info").removeClass("active");
+    $("#songInfo").removeClass("active");
+    $("#volumeBar").removeClass("active");
+    $("#volume").removeClass("active");
+    $('#playerControls').removeClass("squareTop");
+  }
 });
 
 $('#progress').on("input", function() {
+  return player.seekTo(this.value);
+});
+
+$('#progress').on("change", function() {
   return player.seekTo(this.value);
 });
 
@@ -261,25 +286,37 @@ $('#info').on("click", function() {
   $("#topListBtn").removeClass("active");
   $("#topList").removeClass("active");
   $("#badList").removeClass("active");
-  $("#screen").removeClass("active");
+  $("#screen").hide();
   $("#volumeBar").removeClass("active");
+  $("#volume").removeClass("active");
   $("#info").toggleClass("active");
-  return $("#songInfo").toggleClass("active");
+  $("#songInfo").toggleClass("active");
+  if ($("#volume").hasClass("active") === true || $("#info").hasClass("active") === true) {
+    return $("#playerControls").addClass("squareTop");
+  } else {
+    return $("#playerControls").removeClass("squareTop");
+  }
 });
 
 $('#volume').on("click", function() {
   $("#topListBtn").removeClass("active");
   $("#topList").removeClass("active");
   $("#badList").removeClass("active");
-  $("#screen").removeClass("active");
+  $("#screen").hide();
   $("#info").removeClass("active");
   $("#songInfo").removeClass("active");
   $("#volume").toggleClass("active");
-  return $("#volumeBar").toggleClass("active");
+  $("#volumeBar").toggleClass("active");
+  $("#playerControls").toggleClass("squareTop");
+  if ($("#volume").hasClass("active") === true || $("#info").hasClass("active") === true) {
+    return $("#playerControls").addClass("squareTop");
+  } else {
+    return $("#playerControls").removeClass("squareTop");
+  }
 });
 
-$('#progress').on("change", function() {
-  return player.seekTo(this.value);
+$('#volumeBar').on("change, input", function() {
+  return player.setVolume(this.value);
 });
 
 $(window).on('resize', function() {

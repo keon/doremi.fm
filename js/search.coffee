@@ -101,6 +101,8 @@ onPlayerStateChange = (event) ->
   if event.data is YT.PlayerState.PLAYING
     duration = player.getDuration()
     $("#progress").attr "max", duration
+    $("#play").addClass("hidden")
+    $("#pause").removeClass("hidden")
 
     progressTimer = setInterval( ->
       currentTime = player.getCurrentTime()
@@ -113,6 +115,8 @@ onPlayerStateChange = (event) ->
     newSong()
 
   if event.data is YT.PlayerState.PAUSED
+    $("#play").removeClass("hidden")
+    $("#pause").addClass("hidden")
     clearTimeout(progressTimer)
 
 
@@ -201,25 +205,45 @@ $("#next").on "click", ->
   newSong()
 
 $("#topListBtn").on "click", ->
-  $("#screen").toggleClass("active")
+  $("#screen").toggle()
   $("#topListBtn").toggleClass("active")
   $("#topList").toggleClass("active")
   $("#badList").toggleClass("active")
   $("#info").removeClass("active")
   $("#songInfo").removeClass("active")
   $("#volumeBar").removeClass("active")
+  $("#volume").removeClass("active")
+  $('#playerControls').addClass("show")
+  $('#playerControls').removeClass("squareTop")
+
 
 $('#topList').on "click", ".topSong", ->
   id = @getAttribute("data-song")
   newSong(song_data[id-1])
-  $("#screen").toggleClass("active")
+  $("#screen").hide()
   $("#topListBtn").toggleClass("active")
   $("#topList").toggleClass("active")
   $("#badList").toggleClass("active")
+  $('#playerControls').removeClass("show")
 
+$('#controlsContainer').hover (->
+  $('#playerControls').addClass("show")
+  return
+), ->
+  if $("#topListBtn").hasClass("active") is false
+    $('#playerControls').removeClass("show")
+    $("#info").removeClass("active")
+    $("#songInfo").removeClass("active")
+    $("#volumeBar").removeClass("active")
+    $("#volume").removeClass("active")
+    $('#playerControls').removeClass("squareTop")
+  return
 
 
 $('#progress').on "input", ->
+  player.seekTo(@value)
+
+$('#progress').on "change", ->
   player.seekTo(@value)
 
 $('#play').on "click", ->
@@ -236,23 +260,37 @@ $('#info').on "click", ->
   $("#topListBtn").removeClass("active")
   $("#topList").removeClass("active")
   $("#badList").removeClass("active")
-  $("#screen").removeClass("active")
+  $("#screen").hide()
   $("#volumeBar").removeClass("active")
+  $("#volume").removeClass("active")
   $("#info").toggleClass("active")
   $("#songInfo").toggleClass("active")
+
+  if $("#volume").hasClass("active") is true or $("#info").hasClass("active") is true
+    $("#playerControls").addClass("squareTop")
+  else
+    $("#playerControls").removeClass("squareTop")
 
 $('#volume').on "click", ->
   $("#topListBtn").removeClass("active")
   $("#topList").removeClass("active")
   $("#badList").removeClass("active")
-  $("#screen").removeClass("active")
+  $("#screen").hide()
   $("#info").removeClass("active")
   $("#songInfo").removeClass("active")
   $("#volume").toggleClass("active")
   $("#volumeBar").toggleClass("active")
+  $("#playerControls").toggleClass("squareTop")
 
-$('#progress').on "change", ->
-  player.seekTo(@value)
+  if $("#volume").hasClass("active") is true or $("#info").hasClass("active") is true
+    $("#playerControls").addClass("squareTop")
+  else
+    $("#playerControls").removeClass("squareTop")
+
+
+$('#volumeBar').on "change, input", ->
+  player.setVolume(@value)
+
 
 $(window).on('resize', ->
   resize()
