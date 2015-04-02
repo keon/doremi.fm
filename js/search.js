@@ -13,7 +13,7 @@ isPlaying = false;
 
 song_history = [];
 
-url_params = ["enablejsapi=1", "origin=http://localhost:8002", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://localhost:8002", "playsinline=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
+url_params = ["enablejsapi=1", "origin=http://localhost:8002", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://localhost:8002", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
 initData = function() {
   var client;
@@ -38,6 +38,7 @@ onYouTubeIframeAPIReady = function() {
       controls: 0,
       showinfo: 0,
       modestbranding: 1,
+      disablekb: 1,
       autoplay: 1,
       cc_load_policy: 0,
       iv_load_policy: 3,
@@ -336,7 +337,8 @@ $(window).on('focus load', function() {
   }), 5000);
 });
 
-$('body').keyup(function(e) {
+$(document).on("keyup", function(e) {
+  console.log(e);
   if (e.keyCode === 32) {
     if (isPlaying === true) {
       pauseVideo();

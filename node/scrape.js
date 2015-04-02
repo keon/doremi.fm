@@ -1,4 +1,4 @@
-var CronJob, LD, YouTube, async, blacklist, checkWhitelist, cheerio, date, fs, gaon_kor_url, gapi_key, get_data, has_korean, http, mnet_kor_url, mnet_url, mnet_vote_url, moment, out_file, request, songDataReady, songs, superlist, update_data, urls, whitelist, youTube,
+var CronJob, LD, YouTube, async, blacklist, checkWhitelist, cheerio, date, fs, gaon_kor_url, gapi_key, get_data, has_korean, http, kbs_eng_url, mnet_kor_url, mnet_url, mnet_vote_url, moment, out_file, request, songDataReady, songs, superlist, update_data, urls, whitelist, youTube,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 gapi_key = "AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg";
@@ -33,11 +33,13 @@ gaon_kor_url = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn
 
 mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m";
 
-urls = [mnet_url, mnet_vote_url, gaon_kor_url, mnet_kor_url];
+kbs_eng_url = "http://world.kbs.co.kr/english/program/program_musictop10.htm";
+
+urls = [mnet_url, mnet_vote_url, kbs_eng_url, gaon_kor_url];
 
 date = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
 
-blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito"];
+blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame"];
 
 whitelist = ["kpop", "k pop", "k-pop", "korea", "kr"];
 
@@ -93,58 +95,41 @@ LD = function(s, t) {
 };
 
 checkWhitelist = function(song, query) {
-  var cleaned_description, cleaned_query, cleaned_title, description, descriptionCount, description_array, goodDescription, goodTitle, query_array, query_count, score, term, title, titleCount, title_array, word, _i, _j, _k, _len, _len1, _len2;
+  var cleaned_query, cleaned_title, goodTitle, query_array, query_count, score, term, title, titleCount, title_array, word, _i, _j, _k, _len, _len1, _len2;
   title = song.snippet.title;
-  description = song.snippet.description;
   score = 0;
   query_count = 0;
-  cleaned_title = title.replace(/[^A-Za-z0-9\s]+/g, "").replace(/\s+/g, ' ').toLowerCase().trim();
-  cleaned_description = description.replace(/[^A-Za-z0-9\s]+/g, "").replace(/\s+/g, ' ').toLowerCase().trim();
-  cleaned_query = query.replace(/[^A-Za-z0-9\s]+/g, "").replace(/\s+/g, ' ').toLowerCase().trim();
+  cleaned_title = title.replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ").toLowerCase().trim();
+  cleaned_query = query.replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ").toLowerCase().trim();
   if (has_korean.test(title) === true) {
     score++;
   }
-  if (has_korean.test(description) === true) {
-    score++;
-  }
   goodTitle = 0;
-  goodDescription = 0;
   for (_i = 0, _len = whitelist.length; _i < _len; _i++) {
     term = whitelist[_i];
-    if (title.indexOf(term) !== -1) {
+    if (cleaned_title.indexOf(term) !== -1) {
       goodTitle++;
-    }
-    if (description.indexOf(term) !== -1) {
-      goodDescription++;
     }
   }
   if (goodTitle > 0) {
     score++;
   }
-  if (goodDescription > 0) {
-    score++;
-  }
   for (_j = 0, _len1 = superlist.length; _j < _len1; _j++) {
     term = superlist[_j];
-    if (title.indexOf(term) !== -1) {
+    if (cleaned_title.indexOf(term) !== -1) {
       score += 5;
     }
   }
   title_array = cleaned_title.split(" ");
-  description_array = cleaned_description.split(" ");
   query_array = cleaned_query.split(" ");
   titleCount = 0;
-  descriptionCount = 0;
   for (_k = 0, _len2 = query_array.length; _k < _len2; _k++) {
     word = query_array[_k];
     if (__indexOf.call(title_array, word) >= 0) {
       titleCount++;
     }
-    if (__indexOf.call(description_array, word) >= 0) {
-      descriptionCount++;
-    }
   }
-  if (titleCount = query_array.length || (descriptionCount = query_array.length)) {
+  if (titleCount = query_array.length) {
     score += 3;
   }
   return score;
@@ -161,8 +146,8 @@ get_data = function(url, callback) {
       if (url === mnet_url) {
         $("div.list_song tr").each(function(i, element) {
           var artist, mwave, query, rank, title;
-          artist = $(this).find(".tit_artist a:first-child").text().replace("(", " ").replace(")", " ").replace("'", "");
-          title = $(this).find(".tit_song a").text().replace("(", "").replace(")", "").replace("'", "");
+          artist = $(this).find(".tit_artist a:first-child").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
+          title = $(this).find(".tit_song a").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
           rank = $(this).find(".nb em").text();
           query = "" + artist + " " + title;
           if ((artist != null) && artist !== "") {
@@ -179,8 +164,8 @@ get_data = function(url, callback) {
       if (url === mnet_vote_url) {
         $(".vote_state_list tr").each(function(i, element) {
           var artist, mnet, query, rank, title;
-          artist = $(this).find(".artist a").text().replace("(", "").replace(")", "").replace("'", "");
-          title = $(this).find(".music_icon a:nth-child(2)").text().replace("(", "").replace(")", "").replace("'", "");
+          artist = $(this).find(".artist a").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
+          title = $(this).find(".music_icon a:nth-child(2)").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
           rank = $(this).find(".rank img").attr("alt");
           query = "" + artist + " " + title;
           if ((artist != null) && artist !== "") {
@@ -197,8 +182,8 @@ get_data = function(url, callback) {
       if (url === gaon_kor_url) {
         $(".chart tr").each(function(i, element) {
           var artist, gaon, query, rank, title;
-          artist = $(this).find(".subject p:nth-child(2)").text().split("|")[0].replace("(", "").replace(")", "").replace("'", "");
-          title = $(this).find(".subject p:first-child").text().replace("(", "").replace(")", "").replace("'", "");
+          artist = $(this).find(".subject p:nth-child(2)").text().split("|")[0].replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
+          title = $(this).find(".subject p:first-child").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
           rank = $(this).find(".ranking span").text();
           if (rank === "") {
             rank = $(this).find(".ranking").text();
@@ -219,7 +204,7 @@ get_data = function(url, callback) {
         $(".MnetMusicList tr").each(function(i, element) {
           var artist, mnet_kor, query, rank, title;
           artist = $(this).find(".MMLIInfo_Artist").text().replace(/\s*\(.*?\)\s*/g, '');
-          title = $(this).find(".MMLI_Song").text().replace(/\s*\(.*?\)\s*/g, '').replace("(", "").replace(")", "").replace("'", "");
+          title = $(this).find(".MMLI_Song").text().replace(/\s*\(.*?\)\s*/g, '').replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
           rank = $(this).find(".MMLI_RankNum").text().replace(/\D/g, '');
           query = "" + artist + " " + title;
           if ((artist != null) && artist !== "") {
@@ -230,6 +215,24 @@ get_data = function(url, callback) {
               rank: rank
             };
             return songs.push(mnet_kor);
+          }
+        });
+      }
+      if (url === kbs_eng_url) {
+        $(".top10_list_1 ul").each(function(i, element) {
+          var artist, kbs_eng, query, rank, title;
+          artist = $(this).find(".tit span").text().replace(/\s*\(.*?\)\s*/g, '');
+          title = $(this).find(".tit strong").text().replace(/\s*\(.*?\)\s*/g, '').replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
+          rank = $(this).find(".num img").attr("alt").replace(/\D/g, '');
+          query = "" + artist + " " + title;
+          if ((artist != null) && artist !== "") {
+            kbs_eng = {
+              artist: artist,
+              title: title,
+              query: query.toLowerCase(),
+              rank: rank
+            };
+            return songs.push(kbs_eng);
           }
         });
       }
@@ -255,7 +258,7 @@ update_data = function() {
         x = songs[_i];
         x.title = x.title.toLowerCase();
         x.artist = x.artist.toLowerCase();
-        x.query = x.query.toLowerCase() + " mv";
+        x.query = x.query.toLowerCase() + " official mv";
         unique_queries = (function() {
           var _j, _len1, _results;
           _results = [];
@@ -328,7 +331,7 @@ update_data = function() {
               return _results;
             })();
             return youTube.getById(s.join(","), (function(error, r2) {
-              var acceptable, bad, description, good, j, likeCount, query_array, score, term, title, titleCount, title_array, viewCount, word, _j, _k, _l, _len1, _len2, _len3, _ref;
+              var acceptable, bad, description, j, likeCount, query_array, score, term, title, titleCount, title_array, viewCount, word, _j, _k, _l, _len1, _len2, _len3, _ref;
               if (error) {
                 console.log(error);
                 return callback();
@@ -337,8 +340,8 @@ update_data = function() {
                 _ref = r2.items;
                 for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                   j = _ref[_j];
-                  title = j.snippet.title.toLowerCase().replace("(", "").replace(")", "").replace("'", "");
-                  description = j.snippet.description.toLowerCase().replace("(", "").replace(")", "").replace("'", "");
+                  title = j.snippet.title.toLowerCase().replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
+                  description = j.snippet.description.toLowerCase().replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ");
                   viewCount = j.statistics.viewCount;
                   likeCount = j.statistics.likeCount;
                   title_array = title.split(" ");
@@ -351,15 +354,17 @@ update_data = function() {
                     }
                   }
                   bad = 0;
-                  good = 0;
                   for (_l = 0, _len3 = blacklist.length; _l < _len3; _l++) {
                     term = blacklist[_l];
                     if (title.indexOf(term) !== -1) {
                       bad++;
                     }
+                    if (description.indexOf(term) !== -1) {
+                      bad++;
+                    }
                   }
                   score = checkWhitelist(j, song.query);
-                  if (viewCount > 100000 && likeCount > 1500 && __indexOf.call(acceptable, j) < 0) {
+                  if (viewCount > 200000 && likeCount > 2000 && bad < 3) {
                     acceptable.push(j);
                   }
                 }

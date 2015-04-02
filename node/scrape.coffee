@@ -17,11 +17,12 @@ mnet_url      = "http://mwave.interest.me/kpop/chart.m"
 mnet_kor_url  = "http://www.mnet.com/chart/Kpop/all/"
 gaon_kor_url  = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=S1040&termGbn=week&hitYear=2015&targetTime=13&nationGbn=K"
 mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m"
-urls          = [mnet_url, mnet_vote_url, gaon_kor_url, mnet_kor_url]
+kbs_eng_url   = "http://world.kbs.co.kr/english/program/program_musictop10.htm"
+urls          = [mnet_url, mnet_vote_url, kbs_eng_url, gaon_kor_url]
 
 date          = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
 
-blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito"]
+blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame"]
 
 whitelist     = ["kpop", "k pop", "k-pop", "korea", "kr"]
 
@@ -60,43 +61,38 @@ LD = (s, t) ->
 
 checkWhitelist = (song, query) ->
   title = song.snippet.title
-  description = song.snippet.description
   score = 0
   query_count = 0
-  cleaned_title = title.replace(/[^A-Za-z0-9\s]+/g, "").replace(/\s+/g, ' ').toLowerCase().trim()
-  cleaned_description = description.replace(/[^A-Za-z0-9\s]+/g, "").replace(/\s+/g, ' ').toLowerCase().trim()
-  cleaned_query = query.replace(/[^A-Za-z0-9\s]+/g, "").replace(/\s+/g, ' ').toLowerCase().trim()
+  cleaned_title = title
+        .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
+        .toLowerCase().trim()
+  cleaned_query = query
+        .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
+        .toLowerCase().trim()
 
   # Give a point if the song title has korean in it
   if has_korean.test(title) is true then score++
-  if has_korean.test(description) is true then score++
 
   # Give a point if the title or description has whitelist words in it
   goodTitle = 0
-  goodDescription = 0
   for term in whitelist
-    if title.indexOf(term) isnt -1 then goodTitle++
-    if description.indexOf(term) isnt -1 then goodDescription++
+    if cleaned_title.indexOf(term) isnt -1 then goodTitle++
 
   if goodTitle > 0 then score++
-  if goodDescription > 0 then score++
 
   for term in superlist
-    if title.indexOf(term) isnt -1 then score+=5
+    if cleaned_title.indexOf(term) isnt -1 then score+=5
 
   # Give a point if all of the query's words are in song title
   title_array = cleaned_title.split " "
-  description_array = cleaned_description.split " "
   query_array = cleaned_query.split " "
 
   titleCount = 0
-  descriptionCount = 0
 
   for word in query_array
     if word in title_array then titleCount++
-    if word in description_array then descriptionCount++
 
-  if titleCount = query_array.length or descriptionCount = query_array.length then score += 3
+  if titleCount = query_array.length then score += 3
 
   return score
 
@@ -109,15 +105,11 @@ get_data = (url, callback) ->
       if url is mnet_url
         $("div.list_song tr").each (i, element) ->
           artist = $(this).find(".tit_artist a:first-child").text()
-                    .replace("(", " ")
-                    .replace(")", " ")
-                    .replace("'", "")
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
           title =  $(this).find(".tit_song a").text()
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("'", "")
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
           rank = $(this).find(".nb em").text()
@@ -130,15 +122,11 @@ get_data = (url, callback) ->
       if url is mnet_vote_url
         $(".vote_state_list tr").each (i, element) ->
           artist = $(this).find(".artist a").text()
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("'", "")
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
           title = $(this).find(".music_icon a:nth-child(2)").text()
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("'", "")
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
           rank = $(this).find(".rank img").attr("alt")
@@ -154,15 +142,11 @@ get_data = (url, callback) ->
 
           artist = $(this).find(".subject p:nth-child(2)").text()
                     .split("|")[0]
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("'", "")
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
           title = $(this).find(".subject p:first-child").text()
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("'", "")
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
           rank = $(this).find(".ranking span").text()
@@ -185,9 +169,7 @@ get_data = (url, callback) ->
 
           title = $(this).find(".MMLI_Song").text()
                     .replace(/\s*\(.*?\)\s*/g, '')
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("'", "")
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
           rank = $(this).find(".MMLI_RankNum").text()
@@ -199,6 +181,26 @@ get_data = (url, callback) ->
           if artist? and artist isnt ""
             mnet_kor = { artist: artist, title: title, query: query.toLowerCase(), rank: rank }
             songs.push mnet_kor
+
+      if url is kbs_eng_url
+        $(".top10_list_1 ul").each (i, element) ->
+
+          artist = $(this).find(".tit span").text()
+                    .replace(/\s*\(.*?\)\s*/g, '')
+
+          title = $(this).find(".tit strong").text()
+                    .replace(/\s*\(.*?\)\s*/g, '')
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
+
+          rank = $(this).find(".num img").attr("alt")
+                    .replace(/\D/g,'')
+
+          query = "#{artist} #{title}"
+
+          if artist? and artist isnt ""
+            kbs_eng = { artist: artist, title: title, query: query.toLowerCase(), rank: rank }
+            songs.push kbs_eng
+
 
       callback()
   )
@@ -217,7 +219,7 @@ update_data = ->
       for x in songs
         x.title = x.title.toLowerCase()
         x.artist = x.artist.toLowerCase()
-        x.query = x.query.toLowerCase()+" mv"
+        x.query = x.query.toLowerCase()+" official mv"
 
         unique_queries = (q.query for q in unique)
         unique_titles  = (t.title for t in unique)
@@ -257,23 +259,17 @@ update_data = ->
 
               else
                 acceptable = []
+
                 for j in r2.items
                   title = j.snippet.title.toLowerCase()
-                  .replace("(", "")
-                  .replace(")", "")
-                  .replace("'", "")
+                          .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
 
                   description = j.snippet.description.toLowerCase()
-                  .replace("(", "")
-                  .replace(")", "")
-                  .replace("'", "")
-
+                          .replace(/[\,\(\)\[\]\\\/\<\>\;\"\'\-]/ig, " ")
 
                   viewCount = j.statistics.viewCount
                   likeCount = j.statistics.likeCount
-
-
 
                   # Give a point if all of the query's words are in song title
                   title_array = title.split " "
@@ -284,15 +280,13 @@ update_data = ->
                     if word in title_array then titleCount++
 
                   bad = 0
-                  good = 0
                   for term in blacklist
                     if title.indexOf(term) isnt -1 then bad++
+                    if description.indexOf(term) isnt -1 then bad++
 
                   score = checkWhitelist(j,song.query)
-                  #for term in superlist
-                  #  if title.indexOf(term) isnt -1 then good++
 
-                  if viewCount > 100000 and likeCount > 1500 and j not in acceptable
+                  if viewCount > 200000 and likeCount > 2000 and bad < 3
                     acceptable.push j
 
                 #acceptable.sort (x, y) ->

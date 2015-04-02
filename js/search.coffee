@@ -15,6 +15,7 @@ url_params = [
   "iv_load_policy=3"
   "origin=http://localhost:8002"
   "playsinline=1"
+  "disablekb=1"
   "fs=0"
   "rel=0"
   "wmode=transparent"
@@ -41,6 +42,7 @@ onYouTubeIframeAPIReady = ->
       controls: 0
       showinfo: 0
       modestbranding: 1
+      disablekb: 1
       autoplay: 1
       cc_load_policy: 0
       iv_load_policy: 3
@@ -303,7 +305,8 @@ $(window).on 'focus load', ->
       $("#playerControls").removeClass("show") unless $('#controlsContainer').is(":hover") is true
   ), 5000)
 
-$('body').keyup (e) ->
+$(document).on "keyup", (e) ->
+  console.log e
   if e.keyCode == 32 # space
     if isPlaying is true
       pauseVideo()
