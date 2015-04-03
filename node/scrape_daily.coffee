@@ -18,7 +18,7 @@ mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m"
 kbs_eng_url   = "http://world.kbs.co.kr/english/program/program_musictop10.htm"
 urls          = [mnet_url, mnet_vote_url, kbs_eng_url, gaon_kor_url, mnet_kor_url]
 date          = moment().subtract(6, "months").format("YYYY-MM-DDTHH:mm:ssZ")
-blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "MAMA", "event", "fail", "fails", "full album"]
+blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation"]
 
 whitelist     = ["kpop", "k pop", "k-pop", "korea", "kr"]
 
@@ -214,7 +214,6 @@ scrape = ->
           done()
 
         else if has_korean.test(song.artist) is true
-          console.log "translating"
           googleTranslate.translate song.artist, 'en', (err, transArtist) ->
             transArtist  = transArtist.translatedText.toLowerCase()
 
@@ -306,7 +305,6 @@ scrape = ->
 
             else
               acceptable = []
-
               for j in r2.items
                 title       = j.snippet.title.toLowerCase()
                   .toLowerCase()
@@ -317,6 +315,13 @@ scrape = ->
                   .replace(/\s+/g," ")
                   .trim()
 
+                duration    = j.contentDetails.duration
+                  .replace("PT","")
+
+                min_pos     = duration.indexOf("M")
+                sec_pos     = duration.indexOf("S")
+                min         = duration.substring(0,min_pos)
+                sec         = duration.substring(min_pos+1,sec)
                 viewCount   = j.statistics.viewCount
                 likeCount   = j.statistics.likeCount
                 title_arr   = title.split " "
@@ -328,7 +333,8 @@ scrape = ->
                 if  viewCount  >  200000 and
                     likeCount  >  2000 and
                     titleCount >  0 and
-                    badCount   is 0
+                    badCount   is 0 and
+                    min        <  5
                   acceptable.push j
 
               #acceptable.sort (x, y) -> y.statistics.viewCount - x.statistics.viewCount

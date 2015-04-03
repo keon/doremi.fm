@@ -41,7 +41,7 @@ urls = [mnet_url, mnet_vote_url, kbs_eng_url, gaon_kor_url, mnet_kor_url];
 
 date = moment().subtract(6, "months").format("YYYY-MM-DDTHH:mm:ssZ");
 
-blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "MAMA", "event", "fail", "fails", "full album"];
+blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation"];
 
 whitelist = ["kpop", "k pop", "k-pop", "korea", "kr"];
 
@@ -221,7 +221,6 @@ scrape = function() {
           song.artist = song.artist.toLowerCase().replace(/[^a-zA-z0-9\s\.\,\-]/g, "").replace(/\s+/g, " ").trim();
           done();
         } else if (has_korean.test(song.artist) === true) {
-          console.log("translating");
           googleTranslate.translate(song.artist, 'en', function(err, transArtist) {
             var deDupeArtist;
             transArtist = transArtist.translatedText.toLowerCase();
@@ -332,7 +331,7 @@ scrape = function() {
             return _results;
           })();
           return youTube.getById(s.join(","), (function(error, r2) {
-            var acceptable, badCount, j, likeCount, query_arr, title, titleCount, title_arr, viewCount, w, _i, _len, _ref;
+            var acceptable, badCount, duration, j, likeCount, min, min_pos, query_arr, sec, sec_pos, title, titleCount, title_arr, viewCount, w, _i, _len, _ref;
             if (error) {
               console.log(error);
               return callback();
@@ -342,6 +341,11 @@ scrape = function() {
               for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 j = _ref[_i];
                 title = j.snippet.title.toLowerCase().toLowerCase().replace(/[\!\@\#\$\%\^\&\*\(\)\-\_\;\:\"\\\/\[\]\{\}\<\>\|\,\+\=]/g, "").replace(/feat.\s*([^\n\r]*)/ig, "").replace(/ft.\s*([^\n\r]*)/ig, "").replace(/prod.\s*([^\n\r]*)/ig, "").replace(/\s+/g, " ").trim();
+                duration = j.contentDetails.duration.replace("PT", "");
+                min_pos = duration.indexOf("M");
+                sec_pos = duration.indexOf("S");
+                min = duration.substring(0, min_pos);
+                sec = duration.substring(min_pos + 1, sec);
                 viewCount = j.statistics.viewCount;
                 likeCount = j.statistics.likeCount;
                 title_arr = title.split(" ");
@@ -368,7 +372,7 @@ scrape = function() {
                   }
                   return _results;
                 })()).length;
-                if (viewCount > 200000 && likeCount > 2000 && titleCount > 0 && badCount === 0) {
+                if (viewCount > 200000 && likeCount > 2000 && titleCount > 0 && badCount === 0 && min < 5) {
                   acceptable.push(j);
                 }
               }
