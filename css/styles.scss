@@ -571,7 +571,7 @@ input[type=range]:focus::-ms-fill-upper {
   width: 100%;
   height: auto;
   background: $off-white;
-  z-index: 9999;
+  z-index: 2;
   position: absolute;
   top: 40px;
   padding: 0.5rem;
