@@ -114,6 +114,13 @@ strong {
   margin: 0;
   cursor: pointer;
   overflow: hidden;
+
+  @include bp(small) {
+    height: 25px;
+    &::-webkit-slider-thumb {
+      width: 15px;
+    }
+  }
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -129,7 +136,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 #topList {
   position: absolute;
-  top: 40px;
+  top: 70px;
   left: 0px;
   width: 0px;
   height: 70vh;
@@ -199,7 +206,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 #badList {
   position: absolute;
-  top: 40px;
+  top: 70px;
   right: 0px;
   width: 0px;
   height: 70vh;
@@ -316,16 +323,6 @@ input[type="range"]::-webkit-slider-thumb {
     }
   }
 
-  @include bp(small) {
-    width: 100%;
-    left: 0;
-  }
-
-  @include bp(huge) {
-    width: 40%;
-    left: 30%;
-  }
-
   button {
     visibility: hidden;
     padding: 0;
@@ -368,6 +365,30 @@ input[type="range"]::-webkit-slider-thumb {
       color: darken($pink,20%);
     }
   }
+
+  @include bp(small) {
+    width: 100%;
+    left: 0;
+    height: 80px;
+    &.show {
+      height: 80px;
+    }
+    button {
+      visibility: visible;
+    }
+
+    &:before {
+      display: none;
+    }
+
+
+  }
+
+  @include bp(huge) {
+    width: 40%;
+    left: 30%;
+  }
+
 }
 
 #screen {
@@ -403,6 +424,11 @@ input[type="range"]::-webkit-slider-thumb {
     color: $off-white;
     border-bottom: 1px solid rgba($off-white,0.1);
   }
+
+  @include bp(small) {
+    bottom: 80px;
+  }
+
 }
 
 #volumeBar {
@@ -428,5 +454,9 @@ input[type="range"]::-webkit-slider-thumb {
       height: 24px;
       width: 24px;
     }
+  }
+
+  @include bp(small) {
+    bottom: 80px;
   }
 }
