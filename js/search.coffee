@@ -6,14 +6,13 @@ isPlaying = false
 song_history = []
 url_params = [
   "enablejsapi=1"
-  "origin=http://localhost:8002"
   "controls=0"
   "showinfo=0"
   "modestbranding=0"
   "autoplay=1"
   "cc_load_policy=0"
   "iv_load_policy=3"
-  "origin=http://localhost:8002"
+  "origin=http://www.jombly.com/"
   "playsinline=1"
   "disablekb=1"
   "fs=0"
@@ -21,39 +20,37 @@ url_params = [
   "wmode=transparent"
 ].join("&")
 
-
-initData = ->
+onYouTubeIframeAPIReady = ->
   client = new HttpClient()
   client.get("http://jombly.com:3000/today", (result) ->
     song_data = JSON.parse result
     songDataReady()
-  )
 
-onYouTubeIframeAPIReady = ->
-  width = $(window).width()
-  ratio = 16/9
-  song = randSong()
-  current_song = song
-  player = new (YT.Player)('player',
-    width: $(window).width()
-    height: Math.ceil(width / ratio)
-    videoId: song.youtubeId
-    playerVars:
-      controls: 0
-      showinfo: 0
-      modestbranding: 1
-      disablekb: 1
-      autoplay: 1
-      cc_load_policy: 0
-      iv_load_policy: 3
-      origin: "http://localhost:8002"
-      playsinline: 1
-      fs: 0
-      rel: 0
-      wmode: "transparent"
-    events:
-      'onReady': onPlayerReady
-      'onStateChange': onPlayerStateChange
+    width = $(window).width()
+    ratio = 16/9
+    song = randSong()
+    current_song = song
+    player = new (YT.Player)('player',
+      width: $(window).width()
+      height: Math.ceil(width / ratio)
+      videoId: song.youtubeId
+      playerVars:
+        controls: 0
+        showinfo: 0
+        modestbranding: 1
+        disablekb: 1
+        autoplay: 1
+        cc_load_policy: 0
+        iv_load_policy: 3
+        origin: "http://www.jombly.com/"
+        playsinline: 1
+        fs: 0
+        rel: 0
+        wmode: "transparent"
+      events:
+        'onReady': onPlayerReady
+        'onStateChange': onPlayerStateChange
+    )
   )
   return
 
@@ -91,6 +88,7 @@ songDataReady = ->
   return
 
 onPlayerReady = (event) ->
+  event.target.playVideo()
   $("#songInfo").text("
     #{current_song.artist} - #{current_song.title}
   ")
@@ -242,6 +240,12 @@ $('#controlsContainer').hover (->
     $('#playerControls').removeClass("squareTop")
   return
 
+$('#progressContainer').hover (->
+  $('#progress').addClass("show")
+  return
+), ->
+  $('#progress').removeClass("show")
+  return
 
 $('#progress').on "input", ->
   player.seekTo(@value)
@@ -305,17 +309,6 @@ $(window).on 'focus load', ->
       $("#playerControls").removeClass("show") unless $('#controlsContainer').is(":hover") is true
   ), 5000)
 
-$(document).on "keyup", (e) ->
-  console.log e
-  if e.keyCode == 32 # space
-    if isPlaying is true
-      pauseVideo()
-    else startVideo()
-
-  if e.keyCode == 39 # right arrow
-    newSong()
-  return
 
 $(document).ready ->
-  initData()
   resize()

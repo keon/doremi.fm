@@ -85,22 +85,12 @@ strong {
 }
 
 #progressContainer {
-  height: 70px;
+  height: 20vh;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 3;
   width: 100%;
-
-  &:hover {
-    #progress {
-      opacity: 1;
-      height: 25px;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      width: 15px;
-    }
-  }
 }
 
 #progress {
@@ -117,6 +107,15 @@ strong {
 
   @include bp(small) {
     height: 25px;
+    &::-webkit-slider-thumb {
+      width: 15px;
+    }
+  }
+
+  &.show {
+    opacity: 1;
+    height: 25px;
+
     &::-webkit-slider-thumb {
       width: 15px;
     }
@@ -139,6 +138,7 @@ input[type="range"]::-webkit-slider-thumb {
   top: 70px;
   left: 0px;
   width: 0px;
+  visibility: hidden;
   height: 70vh;
   background-color: $off-white;
   z-index: 3;
@@ -153,6 +153,7 @@ input[type="range"]::-webkit-slider-thumb {
   }
 
   &.active {
+    visibility: visible;
     background: $off-white;
     width: 350px;
     transition: width 0.2s;

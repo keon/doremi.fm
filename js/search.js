@@ -1,4 +1,4 @@
-var HttpClient, addToHistory, current_song, dont_play, initData, isPlaying, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, song_history, startVideo, stopVideo, url_params,
+var HttpClient, addToHistory, current_song, dont_play, isPlaying, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, song_history, startVideo, stopVideo, url_params,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 song_data = null;
@@ -13,45 +13,42 @@ isPlaying = false;
 
 song_history = [];
 
-url_params = ["enablejsapi=1", "origin=http://localhost:8002", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://localhost:8002", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
-
-initData = function() {
-  var client;
-  client = new HttpClient();
-  return client.get("http://jombly.com:3000/today", function(result) {
-    song_data = JSON.parse(result);
-    return songDataReady();
-  });
-};
+url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://www.jombly.com/", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
 onYouTubeIframeAPIReady = function() {
-  var ratio, song, width;
-  width = $(window).width();
-  ratio = 16 / 9;
-  song = randSong();
-  current_song = song;
-  player = new YT.Player('player', {
-    width: $(window).width(),
-    height: Math.ceil(width / ratio),
-    videoId: song.youtubeId,
-    playerVars: {
-      controls: 0,
-      showinfo: 0,
-      modestbranding: 1,
-      disablekb: 1,
-      autoplay: 1,
-      cc_load_policy: 0,
-      iv_load_policy: 3,
-      origin: "http://localhost:8002",
-      playsinline: 1,
-      fs: 0,
-      rel: 0,
-      wmode: "transparent"
-    },
-    events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
-    }
+  var client;
+  client = new HttpClient();
+  client.get("http://jombly.com:3000/today", function(result) {
+    var ratio, song, width;
+    song_data = JSON.parse(result);
+    songDataReady();
+    width = $(window).width();
+    ratio = 16 / 9;
+    song = randSong();
+    current_song = song;
+    return player = new YT.Player('player', {
+      width: $(window).width(),
+      height: Math.ceil(width / ratio),
+      videoId: song.youtubeId,
+      playerVars: {
+        controls: 0,
+        showinfo: 0,
+        modestbranding: 1,
+        disablekb: 1,
+        autoplay: 1,
+        cc_load_policy: 0,
+        iv_load_policy: 3,
+        origin: "http://www.jombly.com/",
+        playsinline: 1,
+        fs: 0,
+        rel: 0,
+        wmode: "transparent"
+      },
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      }
+    });
   });
 };
 
@@ -102,6 +99,7 @@ songDataReady = function() {
 };
 
 onPlayerReady = function(event) {
+  event.target.playVideo();
   $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
 };
 
@@ -266,6 +264,12 @@ $('#controlsContainer').hover((function() {
   }
 });
 
+$('#progressContainer').hover((function() {
+  $('#progress').addClass("show");
+}), function() {
+  $('#progress').removeClass("show");
+});
+
 $('#progress').on("input", function() {
   return player.seekTo(this.value);
 });
@@ -337,21 +341,6 @@ $(window).on('focus load', function() {
   }), 5000);
 });
 
-$(document).on("keyup", function(e) {
-  console.log(e);
-  if (e.keyCode === 32) {
-    if (isPlaying === true) {
-      pauseVideo();
-    } else {
-      startVideo();
-    }
-  }
-  if (e.keyCode === 39) {
-    newSong();
-  }
-});
-
 $(document).ready(function() {
-  initData();
   return resize();
 });
