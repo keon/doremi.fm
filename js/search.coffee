@@ -310,5 +310,10 @@ $(window).on 'focus load', ->
   ), 5000)
 
 
+
+
+
 $(document).ready ->
   resize()
+  if navigator.userAgent.match(/iPhone/i) or navigator.userAgent.match(/iPod/i)
+    $("#iosWarning").addClass("show")

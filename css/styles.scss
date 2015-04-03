@@ -565,3 +565,18 @@ input[type=range]:focus::-ms-fill-upper {
     bottom: 80px;
   }
 }
+
+#iosWarning {
+  display: none;
+  width: 100%;
+  height: auto;
+  background: $off-white;
+  z-index: 9999;
+  position: absolute;
+  top: 40px;
+  padding: 0.5rem;
+
+  &.show {
+    display: block;
+  }
+}

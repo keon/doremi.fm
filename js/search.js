@@ -342,5 +342,8 @@ $(window).on('focus load', function() {
 });
 
 $(document).ready(function() {
-  return resize();
+  resize();
+  if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
+    return $("#iosWarning").addClass("show");
+  }
 });
