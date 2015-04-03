@@ -60,17 +60,105 @@ strong {
   font-weight: $bold;
 }
 
-::-webkit-scrollbar {
-    width: 4px;
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
 }
 
-::-webkit-scrollbar-track {
-    background: rgba($off-white,0.1);
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
 }
 
-::-webkit-scrollbar-thumb {
-    background: darken($pink,20%);
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
 }
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+  background: transparent; /* Hides the slider so custom styles can be added */
+  border-color: transparent;
+  color: transparent;
+}
+
+
+input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+  -webkit-appearance: none;
+  background-color: darken($pink,20%);
+  border: none;
+  width: 6px;
+  height: 28px;
+  top: 0px;
+  cursor: ew-resize;
+  transition: width 0.2s;
+}
+
+input[type="range"]::-moz-range-thumb {
+  position: relative;
+  -webkit-appearance: none;
+  background-color: darken($pink,20%);
+  border: none;
+  top: 0px;
+  cursor: ew-resize;
+  transition: width 0.2s;
+}
+
+input[type="range"]::-ms-thumb {
+  -webkit-appearance: none;
+  background: darken($pink,20%);
+  border: none;
+  top: 0px;
+  cursor: ew-resize;
+  transition: width 0.2s;
+}
+
+input[type=range]::-moz-range-track {
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-ms-track {
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]:focus::-ms-fill-lower {
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-upper {
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]:focus::-ms-fill-upper {
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+
+
+::-webkit-scrollbar { width: 4px; }
+
+::-webkit-scrollbar-track { background: rgba($off-white,0.1); }
+
+::-webkit-scrollbar-thumb { background: darken($pink,20%); }
 
 #video-container {
   overflow: hidden;
@@ -107,31 +195,19 @@ strong {
 
   @include bp(small) {
     height: 25px;
-    &::-webkit-slider-thumb {
-      width: 15px;
-    }
+    &::-webkit-slider-thumb { width: 15px; }
+    &::-ms-thumb { width: 15px; }
+    &::-moz-range-thumb { width: 15px; }
   }
 
   &.show {
-    opacity: 1;
     height: 25px;
-
-    &::-webkit-slider-thumb {
-      width: 15px;
-    }
+    &::-webkit-slider-thumb { width: 15px; }
+    &::-ms-thumb { width: 15px; }
+    &::-moz-range-thumb { width: 15px; }
   }
 }
 
-input[type="range"]::-webkit-slider-thumb {
-  position: relative;
-  -webkit-appearance: none;
-  background-color: darken($pink,20%);
-  width: 6px;
-  height: 28px;
-  top: 0px;
-  cursor: ew-resize;
-  transition: width 0.2s;
-}
 
 #topList {
   position: absolute;
@@ -452,6 +528,14 @@ input[type="range"]::-webkit-slider-thumb {
     border-bottom: 1px solid rgba($off-white,0.1);
 
     &::-webkit-slider-thumb {
+      height: 24px;
+      width: 24px;
+    }
+    &::-ms-thumb {
+      height: 24px;
+      width: 24px;
+    }
+    &::-moz-range-thumb {
       height: 24px;
       width: 24px;
     }
