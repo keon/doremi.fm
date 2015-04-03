@@ -113,7 +113,7 @@ get_data = (url, callback) ->
             rank = $(this).find(".ranking").text()
 
 
-          if artist? and artist isnt "" and rank >= 50
+          if artist? and artist isnt ""
             gaon = { artist: artist, title: title, rank: rank }
             songs.push gaon
 

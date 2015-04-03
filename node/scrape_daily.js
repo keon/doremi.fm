@@ -51,7 +51,7 @@ has_korean = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF
 
 has_english = /[A-Za-z]/g;
 
-add_to_query = " kpop";
+add_to_query = "";
 
 youTube.setKey(gapi_key);
 
@@ -147,7 +147,7 @@ get_data = function(url, callback) {
           if (rank === "") {
             rank = $(this).find(".ranking").text();
           }
-          if ((artist != null) && artist !== "" && rank >= 50) {
+          if ((artist != null) && artist !== "") {
             gaon = {
               artist: artist,
               title: title,

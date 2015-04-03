@@ -147,7 +147,7 @@ get_data = function(url, callback) {
           if (rank === "") {
             rank = $(this).find(".ranking").text();
           }
-          if ((artist != null) && artist !== "" && rank >= 50) {
+          if ((artist != null) && artist !== "") {
             gaon = {
               artist: artist,
               title: title,

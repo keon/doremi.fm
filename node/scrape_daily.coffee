@@ -27,7 +27,7 @@ superlist     = ["mv", "m v", "m/v", "musicvideo", "music video", "full audio", 
 has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 has_english   = /[A-Za-z]/g
 
-add_to_query  = " kpop"
+add_to_query  = ""
 
 youTube.setKey   gapi_key
 youTube.addParam "type"             , "video"
@@ -113,7 +113,7 @@ get_data = (url, callback) ->
             rank = $(this).find(".ranking").text()
 
 
-          if artist? and artist isnt "" and rank >= 50
+          if artist? and artist isnt ""
             gaon = { artist: artist, title: title, rank: rank }
             songs.push gaon
 
