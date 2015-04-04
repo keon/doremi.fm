@@ -20,6 +20,11 @@ url_params = [
   "wmode=transparent"
 ].join("&")
 
+ReplaceNumberWithCommas = (yourNumber) ->
+  components = yourNumber.toString().split(".")
+  components[0] = components[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  components.join "."
+
 onYouTubeIframeAPIReady = ->
   client = new HttpClient()
   client.get("http://jombly.com:3000/today", (result) ->
@@ -315,5 +320,15 @@ $(window).on 'focus load', ->
 
 $(document).ready ->
   resize()
+    # Facebook Shares Count
+  $.getJSON "http://graph.facebook.com/?id=http://www.jombly.com", (fbdata) ->
+    $("#facebook-count").text ReplaceNumberWithCommas(fbdata.shares)
+    return
+
+  # Twitter Shares Count
+  $.getJSON "http://cdn.api.twitter.com/1/urls/count.json?url=http://www.jombly.com&callback=?", (twitdata) ->
+    $("#twitter-count").text ReplaceNumberWithCommas(twitdata.count)
+    return
+
   if navigator.userAgent.match(/iPhone/i) or navigator.userAgent.match(/iPod/i)
     $("#iosWarning").addClass("show")

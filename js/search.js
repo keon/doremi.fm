@@ -1,4 +1,4 @@
-var HttpClient, addToHistory, current_song, dont_play, isPlaying, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, song_history, startVideo, stopVideo, url_params,
+var HttpClient, ReplaceNumberWithCommas, addToHistory, current_song, dont_play, isPlaying, newSong, onPlayerReady, onPlayerStateChange, onYouTubeIframeAPIReady, pauseVideo, player, randSong, resize, songDataReady, song_data, song_history, startVideo, stopVideo, url_params,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 song_data = null;
@@ -14,6 +14,13 @@ isPlaying = false;
 song_history = [];
 
 url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://www.jombly.com/", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
+
+ReplaceNumberWithCommas = function(yourNumber) {
+  var components;
+  components = yourNumber.toString().split(".");
+  components[0] = components[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return components.join(".");
+};
 
 onYouTubeIframeAPIReady = function() {
   var client;
@@ -343,6 +350,12 @@ $(window).on('focus load', function() {
 
 $(document).ready(function() {
   resize();
+  $.getJSON("http://graph.facebook.com/?id=http://www.jombly.com", function(fbdata) {
+    $("#facebook-count").text(ReplaceNumberWithCommas(fbdata.shares));
+  });
+  $.getJSON("http://cdn.api.twitter.com/1/urls/count.json?url=http://www.jombly.com&callback=?", function(twitdata) {
+    $("#twitter-count").text(ReplaceNumberWithCommas(twitdata.count));
+  });
   if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
     return $("#iosWarning").addClass("show");
   }
