@@ -610,4 +610,8 @@ input[type=range]:focus::-ms-fill-upper {
     left: 10px;
     padding-left: 0;
   }
+
+  @include bp(small) {
+    bottom: 80px;
+  }
 }
