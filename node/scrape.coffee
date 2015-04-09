@@ -13,7 +13,7 @@ songs         = []
 out_file      = "../songs.json"
 mnet_url      = "http://mwave.interest.me/kpop/chart.m"
 mnet_kor_url  = "http://www.mnet.com/chart/Kpop/all/"
-gaon_kor_url  = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=S1040&termGbn=week&hitYear=2015&targetTime=13&nationGbn=K"
+gaon_kor_url  = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=&termGbn=week&hitYear=&targetTime=&nationGbn=K"
 mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m"
 kbs_eng_url   = "http://world.kbs.co.kr/english/program/program_musictop10.htm"
 urls          = [mnet_url, mnet_vote_url, kbs_eng_url, gaon_kor_url, mnet_kor_url]
@@ -27,7 +27,7 @@ superlist     = ["mv", "m v", "m/v", "musicvideo", "music video", "full audio", 
 has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 has_english   = /[A-Za-z]/g
 
-add_to_query  = " kpop"
+add_to_query  = ""
 
 youTube.setKey   gapi_key
 youTube.addParam "type"             , "video"
@@ -155,6 +155,7 @@ get_data = (url, callback) ->
             songs.push kbs_eng
 
       callback()
+    else callback()
   )
 
 

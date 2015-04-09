@@ -27,7 +27,7 @@ superlist     = ["mv", "m v", "m/v", "musicvideo", "music video", "full audio", 
 has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 has_english   = /[A-Za-z]/g
 
-add_to_query  = ""
+add_to_query  = " kpop"
 
 youTube.setKey   gapi_key
 youTube.addParam "type"             , "video"
@@ -379,6 +379,7 @@ songDataReady = ->
     console.log "error code: #{error}"
     console.log "status code: #{response.statusCode}"
     return
+
 
 # Once per day at midnight
 new CronJob("0 0 * * *", ->
