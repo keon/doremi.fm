@@ -1,4 +1,4 @@
-var CronJob, LD, YouTube, add_to_query, async, blacklist, cheerio, date, fs, gaon_kor_url, gapi_key, get_data, googleTranslate, has_english, has_korean, http, kbs_eng_url, mnet_kor_url, mnet_url, mnet_vote_url, moment, out_file, request, scrape, songDataReady, songs, superlist, urls, whitelist, youTube,
+var CronJob, LD, YouTube, add_to_query, async, blacklist, cheerio, date, fs, gaon_kor_url, gapi_key, get_data, googleTranslate, has_english, has_korean, http, kbs_eng_url, mnet_kor_url, mnet_url, moment, out_file, request, scrape, songDataReady, songs, superlist, urls, whitelist, youTube,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 gapi_key = "AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg";
@@ -27,21 +27,19 @@ songs = [];
 
 out_file = "../songs.json";
 
-mnet_url = "http://mwave.interest.me/kpop/chart.m";
+mnet_url = "http://mwave.interest.me/mcountdown/vote/mcdChart";
 
 mnet_kor_url = "http://www.mnet.com/chart/Kpop/all/";
 
 gaon_kor_url = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=&termGbn=week&hitYear=&targetTime=&nationGbn=K";
 
-mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m";
-
 kbs_eng_url = "http://world.kbs.co.kr/english/program/program_musictop10.htm";
 
-urls = [mnet_url, mnet_vote_url, kbs_eng_url, gaon_kor_url, mnet_kor_url];
+urls = [mnet_url, kbs_eng_url, gaon_kor_url, mnet_kor_url];
 
-date = moment().subtract(6, "months").format("YYYY-MM-DDTHH:mm:ssZ");
+date = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
 
-blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation"];
+blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation", "one direction"];
 
 whitelist = ["kpop", "k pop", "k-pop", "korea", "kr"];
 
@@ -51,7 +49,7 @@ has_korean = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF
 
 has_english = /[A-Za-z]/g;
 
-add_to_query = "";
+add_to_query = " official MV";
 
 youTube.setKey(gapi_key);
 
@@ -64,6 +62,8 @@ youTube.addParam("order", "relevance");
 youTube.addParam("publishedAfter", date);
 
 youTube.addParam("videoDefinition", "high");
+
+youTube.addParam("videoEmbeddable", "true");
 
 youTube.addParam("videoCategoryId", 10);
 
@@ -107,11 +107,11 @@ get_data = function(url, callback) {
     if (!error && response.statusCode === 200) {
       $ = cheerio.load(html);
       if (url === mnet_url) {
-        $("div.list_song tr").each(function(i, element) {
+        $("div.voteWeekListResult li").each(function(i, element) {
           var artist, mwave, rank, title;
-          artist = $(this).find(".tit_artist a:first-child").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          title = $(this).find(".tit_song a").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          rank = $(this).find(".nb em").text();
+          artist = $(this).find(".artist").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ").trim().toLowerCase();
+          title = $(this).find(".title").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ").trim().toLowerCase();
+          rank = $(this).find(".rank").text();
           if ((artist != null) && artist !== "") {
             mwave = {
               artist: artist,
@@ -119,22 +119,6 @@ get_data = function(url, callback) {
               rank: rank
             };
             return songs.push(mwave);
-          }
-        });
-      }
-      if (url === mnet_vote_url) {
-        $(".vote_state_list tr").each(function(i, element) {
-          var artist, mnet, rank, title;
-          artist = $(this).find(".artist a").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          title = $(this).find(".music_icon a:nth-child(2)").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          rank = $(this).find(".rank img").attr("alt");
-          if ((artist != null) && artist !== "") {
-            mnet = {
-              artist: artist,
-              title: title,
-              rank: rank
-            };
-            return songs.push(mnet);
           }
         });
       }
@@ -243,7 +227,7 @@ scrape = function() {
       var song, _i, _len;
       for (_i = 0, _len = songs.length; _i < _len; _i++) {
         song = songs[_i];
-        song.query = "" + song.artist + " " + song.title + add_to_query;
+        song.query = "k-pop " + song.artist + " " + song.title + add_to_query;
       }
       console.log("done adding queries");
       return callback(null, 'query adding succeeded');
@@ -342,6 +326,9 @@ scrape = function() {
               _ref = r2.items;
               for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 j = _ref[_i];
+                if (!(j.status.publicStatsViewable === true)) {
+                  continue;
+                }
                 title = j.snippet.title.toLowerCase().toLowerCase().replace(/[\!\@\#\$\%\^\&\*\(\)\-\_\;\:\"\\\/\[\]\{\}\<\>\|\,\+\=]/g, "").replace(/feat.\s*([^\n\r]*)/ig, "").replace(/ft.\s*([^\n\r]*)/ig, "").replace(/prod.\s*([^\n\r]*)/ig, "").replace(/\s+/g, " ").trim();
                 duration = j.contentDetails.duration.replace("PT", "");
                 min_pos = duration.indexOf("M");
@@ -374,7 +361,7 @@ scrape = function() {
                   }
                   return _results;
                 })()).length;
-                if (viewCount > 200000 && likeCount > 2000 && titleCount > 0 && badCount === 0 && min < 5) {
+                if (viewCount > 50000 && likeCount > 2000 && titleCount > 0 && badCount === 0 && min < 5) {
                   acceptable.push(j);
                 }
               }

@@ -11,14 +11,13 @@ googleTranslate = require('google-translate')(gapi_key)
 youTube       = new YouTube()
 songs         = []
 out_file      = "../songs.json"
-mnet_url      = "http://mwave.interest.me/kpop/chart.m"
+mnet_url      = "http://mwave.interest.me/mcountdown/vote/mcdChart"
 mnet_kor_url  = "http://www.mnet.com/chart/Kpop/all/"
 gaon_kor_url  = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGbn=&termGbn=week&hitYear=&targetTime=&nationGbn=K"
-mnet_vote_url = "http://mwave.interest.me/mcountdown/voteState.m"
 kbs_eng_url   = "http://world.kbs.co.kr/english/program/program_musictop10.htm"
-urls          = [mnet_url, mnet_vote_url, kbs_eng_url, gaon_kor_url, mnet_kor_url]
-date          = moment().subtract(6, "months").format("YYYY-MM-DDTHH:mm:ssZ")
-blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation"]
+urls          = [mnet_url, kbs_eng_url, gaon_kor_url, mnet_kor_url]
+date          = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
+blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation", "one direction"]
 
 whitelist     = ["kpop", "k pop", "k-pop", "korea", "kr"]
 
@@ -27,7 +26,7 @@ superlist     = ["mv", "m v", "m/v", "musicvideo", "music video", "full audio", 
 has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 has_english   = /[A-Za-z]/g
 
-add_to_query  = ""
+add_to_query  = " official MV"
 
 youTube.setKey   gapi_key
 youTube.addParam "type"             , "video"
@@ -35,7 +34,7 @@ youTube.addParam "part"             , "id"
 youTube.addParam "order"            , "relevance"
 youTube.addParam "publishedAfter"   , date
 youTube.addParam "videoDefinition"  , "high"
-#youTube.addParam "videoEmbeddable"  , "true"
+youTube.addParam "videoEmbeddable"  , "true"
 #youTube.addParam "relevanceLanguage", "ko"
 youTube.addParam "videoCategoryId"  , 10
 
@@ -64,37 +63,23 @@ get_data = (url, callback) ->
       $ = cheerio.load(html)
 
       if url is mnet_url
-        $("div.list_song tr").each (i, element) ->
-          artist = $(this).find(".tit_artist a:first-child").text()
-                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ")
+        $("div.voteWeekListResult li").each (i, element) ->
+          artist = $(this).find(".artist").text()
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ")
+                    .trim()
+                    .toLowerCase()
 
 
-          title =  $(this).find(".tit_song a").text()
-                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ")
+          title =  $(this).find(".title").text()
+                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ")
+                    .trim()
+                    .toLowerCase()
 
-
-          rank = $(this).find(".nb em").text()
+          rank = $(this).find(".rank").text()
 
           if artist? and artist isnt ""
             mwave = { artist: artist, title: title, rank: rank }
             songs.push mwave
-
-      if url is mnet_vote_url
-        $(".vote_state_list tr").each (i, element) ->
-          artist = $(this).find(".artist a").text()
-                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ")
-
-
-          title = $(this).find(".music_icon a:nth-child(2)").text()
-                    .replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ")
-
-
-          rank = $(this).find(".rank img").attr("alt")
-
-          if artist? and artist isnt ""
-            mnet = { artist: artist, title: title, rank: rank }
-            songs.push mnet
-
 
       if url is gaon_kor_url
         $(".chart tr").each (i, element) ->
@@ -242,7 +227,7 @@ scrape = ->
     # Add in query by combining artist and title
     ( (callback) ->
       for song in songs
-        song.query = "#{song.artist} #{song.title}#{add_to_query}"
+        song.query = "k-pop #{song.artist} #{song.title}#{add_to_query}"
 
       console.log "done adding queries"
       callback null, 'query adding succeeded'
@@ -306,7 +291,8 @@ scrape = ->
 
             else
               acceptable = []
-              for j in r2.items
+              for j in r2.items when j.status.publicStatsViewable is true
+
                 title       = j.snippet.title.toLowerCase()
                   .toLowerCase()
                   .replace(/[\!\@\#\$\%\^\&\*\(\)\-\_\;\:\"\\\/\[\]\{\}\<\>\|\,\+\=]/g, "")
@@ -331,7 +317,7 @@ scrape = ->
                 badCount    = (w for w in title_arr when w in blacklist).length
 
                 #console.log "#{titleCount}, #{badCount}: #{title}, #{song.query}"
-                if  viewCount  >  200000 and
+                if  viewCount  >  50000 and
                     likeCount  >  2000 and
                     titleCount >  0 and
                     badCount   is 0 and
