@@ -17,7 +17,7 @@ gaon_kor_url  = "http://gaonchart.co.kr/main/section/chart/online.gaon?serviceGb
 kbs_eng_url   = "http://world.kbs.co.kr/english/program/program_musictop10.htm"
 urls          = [mnet_url, kbs_eng_url, gaon_kor_url, mnet_kor_url]
 date          = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ")
-blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation", "one direction"]
+blacklist     = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation", "one direction", "stage", "comeback", "comeback stage"]
 
 whitelist     = ["kpop", "k pop", "k-pop", "korea", "kr"]
 
@@ -26,7 +26,7 @@ superlist     = ["mv", "m v", "m/v", "musicvideo", "music video", "full audio", 
 has_korean    = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 has_english   = /[A-Za-z]/g
 
-add_to_query  = " official MV"
+add_to_query  = " korean MV"
 
 youTube.setKey   gapi_key
 youTube.addParam "type"             , "video"
@@ -227,7 +227,7 @@ scrape = ->
     # Add in query by combining artist and title
     ( (callback) ->
       for song in songs
-        song.query = "k-pop #{song.artist} #{song.title}#{add_to_query}"
+        song.query = "#{song.artist} - #{song.title}#{add_to_query}"
 
       console.log "done adding queries"
       callback null, 'query adding succeeded'
@@ -268,7 +268,7 @@ scrape = ->
           console.log error
           callback()
 
-        else if r1.pageInfo.totalResults < 10
+        else if r1.pageInfo.totalResults < 20
           console.log "not enough songs for #{song.query}"
           callback()
 
@@ -317,11 +317,10 @@ scrape = ->
                 badCount    = (w for w in title_arr when w in blacklist).length
 
                 #console.log "#{titleCount}, #{badCount}: #{title}, #{song.query}"
-                if  viewCount  >  50000 and
+                if  viewCount  >  200000 and
                     likeCount  >  2000 and
-                    titleCount >  0 and
                     badCount   is 0 and
-                    min        <  5
+                    min        <  4
                   acceptable.push j
 
               #acceptable.sort (x, y) -> y.statistics.viewCount - x.statistics.viewCount

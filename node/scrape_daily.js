@@ -39,7 +39,7 @@ urls = [mnet_url, kbs_eng_url, gaon_kor_url, mnet_kor_url];
 
 date = moment().subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
 
-blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "practice", "dance practice", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation", "one direction"];
+blacklist = ["simply k-pop", "tease", "teaser", "phone", "iphone", "ipad", "gameplay", "cover", "acoustic", "instrumental", "remix", "mix", "re mix", "re-mix", "version", "ver.", "live", "live cover", "accapella", "cvr", "inkigayo", "reaction", "highlight", "medley", "dorito", "english version", "japanese version", "vietnamese version", "chinese version", "student", "college", "highschool", "tribute", "nom", "fame", "fame us", "fameus", "famous", "trailer", "music bank", "music core", "show", "exodus", "funny", "mama", "event", "fail", "fails", "full album", "mix", "megamix", "compilation", "one direction", "stage", "comeback", "comeback stage"];
 
 whitelist = ["kpop", "k pop", "k-pop", "korea", "kr"];
 
@@ -49,7 +49,7 @@ has_korean = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF
 
 has_english = /[A-Za-z]/g;
 
-add_to_query = " official MV";
+add_to_query = " korean MV";
 
 youTube.setKey(gapi_key);
 
@@ -227,7 +227,7 @@ scrape = function() {
       var song, _i, _len;
       for (_i = 0, _len = songs.length; _i < _len; _i++) {
         song = songs[_i];
-        song.query = "k-pop " + song.artist + " " + song.title + add_to_query;
+        song.query = "" + song.artist + " - " + song.title + add_to_query;
       }
       console.log("done adding queries");
       return callback(null, 'query adding succeeded');
@@ -296,7 +296,7 @@ scrape = function() {
         if (error) {
           console.log(error);
           return callback();
-        } else if (r1.pageInfo.totalResults < 10) {
+        } else if (r1.pageInfo.totalResults < 20) {
           console.log("not enough songs for " + song.query);
           return callback();
         } else if (!r1.items[0]) {
@@ -361,7 +361,7 @@ scrape = function() {
                   }
                   return _results;
                 })()).length;
-                if (viewCount > 50000 && likeCount > 2000 && titleCount > 0 && badCount === 0 && min < 5) {
+                if (viewCount > 200000 && likeCount > 2000 && badCount === 0 && min < 4) {
                   acceptable.push(j);
                 }
               }
