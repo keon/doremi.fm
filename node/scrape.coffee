@@ -7,7 +7,6 @@ CronJob       = require("cron").CronJob
 YouTube       = require "youtube-node"
 moment        = require("moment")
 async         = require("async")
-googleTranslate = require('google-translate')(gapi_key)
 youTube       = new YouTube()
 songs         = []
 out_file      = "../songs.json"
@@ -184,44 +183,6 @@ scrape = ->
       console.log "done cleaning songs"
       callback null, 'cleaning songs succeeded'
     ), #end scrape
-
-
-    # Translate song artists when there is no english in the name
-    # If there is english, strip out non-english characters
-    ( (callback) ->
-      async.each songs, ( (song, done) ->
-
-        if has_korean.test(song.artist) is false
-          song.artist = song.artist
-            .toLowerCase()
-            .replace(/[^a-zA-z0-9\s\.\,\-]/g, "")
-            .replace(/\s+/g," ")
-            .trim()
-          done()
-
-        else if has_korean.test(song.artist) is true
-          googleTranslate.translate song.artist, 'en', (err, transArtist) ->
-            transArtist  = transArtist.translatedText.toLowerCase()
-
-            deDupeArtist = transArtist.split(" ").filter( (item, i, allItems) ->
-              return i is allItems.indexOf(item)
-            ).join(" ").toLowerCase()
-
-            song.artist  = deDupeArtist
-              .toLowerCase()
-              .replace(/[^a-zA-z0-9\s\.\,\-]/g, "")
-              .replace(/\s+/g," ")
-              .trim()
-
-            done()
-
-        else done()
-        return
-      ), ->
-        console.log "done translating artists"
-        callback null, 'translating artists succeeded'
-      return
-    ), #end translate
 
 
     # Add in query by combining artist and title

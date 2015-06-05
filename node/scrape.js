@@ -1,4 +1,4 @@
-var CronJob, LD, YouTube, add_to_query, async, blacklist, cheerio, date, fs, gaon_kor_url, gapi_key, get_data, googleTranslate, has_english, has_korean, http, kbs_eng_url, mnet_kor_url, mnet_url, moment, out_file, request, scrape, songDataReady, songs, superlist, urls, whitelist, youTube,
+var CronJob, LD, YouTube, add_to_query, async, blacklist, cheerio, date, fs, gaon_kor_url, gapi_key, get_data, has_english, has_korean, http, kbs_eng_url, mnet_kor_url, mnet_url, moment, out_file, request, scrape, songDataReady, songs, superlist, urls, whitelist, youTube,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 gapi_key = "AIzaSyCOHL5Z1IEHvbbt71ASsVbMWwZnP9JUOjg";
@@ -18,8 +18,6 @@ YouTube = require("youtube-node");
 moment = require("moment");
 
 async = require("async");
-
-googleTranslate = require('google-translate')(gapi_key);
 
 youTube = new YouTube();
 
@@ -201,28 +199,6 @@ scrape = function() {
       }
       console.log("done cleaning songs");
       return callback(null, 'cleaning songs succeeded');
-    }), (function(callback) {
-      async.each(songs, (function(song, done) {
-        if (has_korean.test(song.artist) === false) {
-          song.artist = song.artist.toLowerCase().replace(/[^a-zA-z0-9\s\.\,\-]/g, "").replace(/\s+/g, " ").trim();
-          done();
-        } else if (has_korean.test(song.artist) === true) {
-          googleTranslate.translate(song.artist, 'en', function(err, transArtist) {
-            var deDupeArtist;
-            transArtist = transArtist.translatedText.toLowerCase();
-            deDupeArtist = transArtist.split(" ").filter(function(item, i, allItems) {
-              return i === allItems.indexOf(item);
-            }).join(" ").toLowerCase();
-            song.artist = deDupeArtist.toLowerCase().replace(/[^a-zA-z0-9\s\.\,\-]/g, "").replace(/\s+/g, " ").trim();
-            return done();
-          });
-        } else {
-          done();
-        }
-      }), function() {
-        console.log("done translating artists");
-        return callback(null, 'translating artists succeeded');
-      });
     }), (function(callback) {
       var song, _i, _len;
       for (_i = 0, _len = songs.length; _i < _len; _i++) {
