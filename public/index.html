@@ -33,16 +33,21 @@
     <section id="iosWarning">
       Your browser does not support auto-playing of videos. Click below to start video playback manually!
     </section>
+
+    <!-- Progress Bar -->
     <section id="progressContainer">
       <input type="range" id="progress" value="0" max="0"/>
     </section>
 
+    <!-- List Containers -->
     <section id="topList" class="hidden">
       <ol></ol>
     </section>
     <section id="badList" class="hidden">
       <ol></ol>
     </section>
+
+    <!-- Social Media -->
     <section id="socialMedia">
       <div class="share">
           <a href="https://www.facebook.com/sharer/sharer.php?u=jombly.com" target="_blank">
@@ -57,6 +62,43 @@
           </a>
       </div>
     </section>
+
+    <!-- Input Bar -->
+    <style>
+      #inputContainer{
+        z-index: 1;
+        /*position: absolute;*/
+        /*left:30%;*/
+        /*top:50%;*/
+        width:100%;
+        height:100%;
+        font-size: 1.5rem;
+      }
+      #inputEmail{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        
+        padding: .8em 1.2em;
+        color: white;
+        background-color: darkcyan;
+        
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+    </style>
+    <section id="inputContainer">
+      <div id="inputEmail">
+        <h1>LOGO or Title Goes here</h1>
+        <h1>Message Will Go Here</h1>
+        <input placeholder="email goes here"></input>
+      </div>
+    </section>
+
+    <!-- CONTROL BAR -->
     <section id="controlsContainer">
       <div id="playerControls">
           <section id="songInfo" class="hidden"></section>
@@ -70,7 +112,7 @@
           <button id="next">&#xf04e;</button>
       </div>
     </section>
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
    <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"> </script>
    <script src="js/prep-youtube.js"></script>
    <script src="js/min/moment.min.js"></script>

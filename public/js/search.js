@@ -13,7 +13,7 @@ isPlaying = false;
 
 song_history = [];
 
-url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://www.jombly.com/", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
+url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://127.0.0.1/", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
 ReplaceNumberWithCommas = function(yourNumber) {
   var components;
@@ -25,7 +25,7 @@ ReplaceNumberWithCommas = function(yourNumber) {
 onYouTubeIframeAPIReady = function() {
   var client;
   client = new HttpClient();
-  client.get("http://jombly.com:3000/today", function(result) {
+  client.get("http://127.0.0.1:3000/today", function(result) {
     var ratio, song, width;
     song_data = JSON.parse(result);
     songDataReady();
@@ -45,7 +45,7 @@ onYouTubeIframeAPIReady = function() {
         autoplay: 1,
         cc_load_policy: 0,
         iv_load_policy: 3,
-        origin: "http://www.jombly.com/",
+        origin: "http://127.0.0.1/",
         playsinline: 1,
         fs: 0,
         rel: 0,
@@ -350,10 +350,10 @@ $(window).on('focus load', function() {
 
 $(document).ready(function() {
   resize();
-  $.getJSON("http://graph.facebook.com/?id=http://www.jombly.com", function(fbdata) {
+  $.getJSON("http://graph.facebook.com/?id=http://127.0.0.1", function(fbdata) {
     $("#facebook-count").text(ReplaceNumberWithCommas(fbdata.shares));
   });
-  $.getJSON("http://cdn.api.twitter.com/1/urls/count.json?url=http://www.jombly.com&callback=?", function(twitdata) {
+  $.getJSON("http://cdn.api.twitter.com/1/urls/count.json?url=http://127.0.0.1&callback=?", function(twitdata) {
     $("#twitter-count").text(ReplaceNumberWithCommas(twitdata.count));
   });
   if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {

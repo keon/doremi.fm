@@ -1,4 +1,5 @@
 var app, bodyParser, express, fs, out_file, server, songs;
+var path = require('path');
 
 express = require("express");
 
@@ -13,6 +14,9 @@ index = __dirname+"\\index.html";
 console.log(index);
 
 songs = [];
+
+app.set('views', path.join(__dirname, 'public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.all("/*", function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -80,7 +84,7 @@ app.get("/", function(req, res) {
     return res.sendFile(index)
 });
 
-server = app.listen(3000, function() {
+server = app.listen(5000, function() {
   var host, port;
   host = "127.0.0.1";//server.address().address;
   port = server.address().port;
