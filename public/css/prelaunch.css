@@ -6,6 +6,15 @@ body {
   background: #f5f5f5;
 }
 
+#black-background{
+  z-index:1;
+  width:100%;
+  height:100%;
+  position:absolute;
+  background-color:#000;
+  opacity:0.35;
+}
+
 #prelaunchContainer{
   z-index: 2;
   width:100%;
@@ -13,7 +22,6 @@ body {
   position:absolute;
 }
 
-/* phone */
 #phone {
   width: 310px;
   height: 640px;
@@ -25,6 +33,26 @@ body {
   margin: 0 -285px;
   background: #fff;
 }
+
+/* phone */
+@media (max-width: 480px) {
+  #phone{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:0;
+    position:relative;
+    left:0;
+    top:0;
+    /*background:transparent;*/
+    display:none;
+  }
+}
+
+
+
 
 #mobile-screen {
   width: 290px;
@@ -38,6 +66,22 @@ body {
   overflow: hidden;
   display:block !important;
 }
+@media (max-width: 480px) {
+  #mobile-screen {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+    position: relative;
+    left: 0;
+    top: 0;
+    margin: 0;
+
+    box-sizing: border-box;
+    overflow: hidden;
+    display:none !important;
+  }
+}
+
 
 #home {
   width: 36px;
@@ -204,6 +248,16 @@ body {
   width: 318px;
   height: 100%;
 }
+/*@media (max-width: 480px) {
+  #pages {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    left: 0;
+    top: 0;
+    margin: 0;
+  }
+}*/
 .pages.hide {
   -webkit-transition: opacity .1s linear;
           transition: opacity .1s linear;
@@ -329,25 +383,51 @@ body {
 
 #text {
   position: absolute;
-  height: 640px;
+  /*height: 640px;*/
+
   left: 50%;
-  top: 50px;
+  top: 7%;
   margin: 0px 75px;
-  color: #353541;
+  color: #fff;
+  z-index:10;
+}
+@media (max-width: 480px) {
+  #text, #pullmenu-icon {
+    position:relative;
+    left:0;
+    top:0;
+    margin:0 10px;
+    font-size:20px;
+    text-align:center;
+
+  }
+    #text h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 30px;
+      color:#78F0F0;
+    }
 }
 #text h1 {
   margin: 0;
-  font-size: 70px;
+  font-size: 60px;
   line-height: 60px;
-  text-transform: uppercase;
+  color:#78F0F0;
 }
 #text h2 {
+  margin: 0;
+  font-size: 40px;
+  line-height: 50px;
+  color:#fff;
+  text-transform: uppercase;
+}
+#text h3 {
   font-size: 23px;
   margin: 0;
   text-transform: uppercase;
   margin-top: 10px;
 }
-#text h3 {
+#text h4 {
   opacity: 0.3;
   font-style: italic;
   font-weight: 400;
@@ -390,4 +470,83 @@ body {
   color: #353541;
   font-size: 11px;
   text-transform: uppercase;
+}
+
+
+/*****************************************************/
+
+.ortala input{
+  border:none;
+  background:#eee;
+  /*width:250px;*/
+  width:70%;
+  height:40px;
+  padding:10px;
+  font-size:18px;
+  position:relative;
+  left:0px;
+  transition:.5s all;
+  float:left;
+}
+.ortala input:focus, .ortala button:focus{outline:0;}
+.ortala button:active{background:#ac303a}
+.ortala button{
+  /*left:300px;*/
+  content:"sa";
+  display:inline-block;
+  /*width:100px;*/
+  width:30%;
+  height:40px;
+  background:#c43e49;
+  color:white;
+  text-align:center;
+  line-height:40px;
+  position:relative;
+  z-index:2;
+  transition:.5s all, .3s background;
+  left:0;
+  float:right;
+  border:none;
+}
+
+.ortala{
+  /*width:350px;*/
+  margin: 20px 0;
+}
+
+.ortala:hover button{
+    /*left:300px;*/
+  cursor:pointer;
+  content:"sa";
+}
+.ortala:hover input{
+    /*left:-100px;*/
+}
+
+.sa:before{
+  content:"Subscribe";
+  transition:.7s all;
+  opacity:1;
+  position: absolute;
+  z-index:0;
+  left:15px;
+  top:0px;
+}
+
+.sa:after{
+  content: 'Yeah!';
+  transition:.7s all;
+  opacity:0;
+  position: absolute;
+  z-index:0;
+  left:27px;
+  top:0px;
+}
+
+.ortala:hover .sa:before{
+  opacity:0;
+}
+
+.ortala:hover .sa:after{
+  opacity:1;
 }
