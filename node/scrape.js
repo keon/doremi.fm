@@ -21,7 +21,20 @@ async = require("async");
 
 youTube = new YouTube();
 
-songs = [];
+songs = [ { artist: 'CODE KUNST', title: 'PARACHUTE Feat OH HYUK & DOK2', rank: '1' },
+  { artist: '혁오  hyukoh ', title: '와리가리', rank: '90' },
+  { artist: '아이유 iu ', title: '스물셋', rank: '3' },
+
+  { artist: '크러쉬  CRUSH ',
+    title: 'Oasis Feat ZICO ',
+    rank: '93' },
+  { artist: 'Code Kunst (코드 쿤스트) ', title: ' Love Scene Feat 메이슨 더 소울', rank: '2' },
+  { artist: 'Simon Dominic', title: '사이먼 도미닉', rank: '95' },
+  { artist: '키썸',
+    title: 'Love Talk  feat 화사 Of 마마무 ',
+    rank: '96' },
+  { artist: '로꼬  LOCO   유주  여자친구 ', title: '우연히 봄', rank: '97' },
+  { artist: '빅스  VIXX ', title: 'Heaven', rank: '100' } ];;
 
 out_file = "../songs.json";
 
@@ -47,7 +60,7 @@ has_korean = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF
 
 has_english = /[A-Za-z]/g;
 
-add_to_query = " korean MV";
+add_to_query = " MV";
 
 youTube.setKey(gapi_key);
 
@@ -96,96 +109,113 @@ LD = function(s, t) {
   return d[n][m];
 };
 
-get_data = function(url, callback) {
-  return request(url, function(error, response, html) {
-    var $;
-    if (error) {
-      console.log(error);
-    }
-    if (!error && response.statusCode === 200) {
-      $ = cheerio.load(html);
-      if (url === mnet_url) {
-        $("div.voteWeekListResult li").each(function(i, element) {
-          var artist, mwave, rank, title;
-          artist = $(this).find(".artist").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ").trim().toLowerCase();
-          title = $(this).find(".title").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ").trim().toLowerCase();
-          rank = $(this).find(".rank").text();
-          if ((artist != null) && artist !== "") {
-            mwave = {
-              artist: artist,
-              title: title,
-              rank: rank
-            };
-            return songs.push(mwave);
-          }
-        });
-      }
-      if (url === gaon_kor_url) {
-        $(".chart tr").each(function(i, element) {
-          var artist, gaon, rank, title;
-          artist = $(this).find(".subject p:nth-child(2)").text().split("|")[0].replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          title = $(this).find(".subject p:first-child").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          rank = $(this).find(".ranking span").text();
-          if (rank === "") {
-            rank = $(this).find(".ranking").text();
-          }
-          if ((artist != null) && artist !== "") {
-            gaon = {
-              artist: artist,
-              title: title,
-              rank: rank
-            };
-            return songs.push(gaon);
-          }
-        });
-      }
-      if (url === mnet_kor_url) {
-        $(".MnetMusicList tr").each(function(i, element) {
-          var artist, mnet_kor, rank, title;
-          artist = $(this).find(".MMLIInfo_Artist").text().replace(/\s*\(.*?\)\s*/g, '');
-          title = $(this).find(".MMLI_Song").text().replace(/\s*\(.*?\)\s*/g, '').replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          rank = $(this).find(".MMLI_RankNum").text().replace(/\D/g, '');
-          if ((artist != null) && artist !== "") {
-            mnet_kor = {
-              artist: artist,
-              title: title,
-              rank: rank
-            };
-            return songs.push(mnet_kor);
-          }
-        });
-      }
-      if (url === kbs_eng_url) {
-        $(".top10_list_1 ul").each(function(i, element) {
-          var artist, kbs_eng, rank, title;
-          artist = $(this).find(".tit span").text().replace(/\s*\(.*?\)\s*/g, '');
-          title = $(this).find(".tit strong").text().replace(/\s*\(.*?\)\s*/g, '').replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
-          rank = $(this).find(".num img").attr("alt").replace(/\D/g, '');
-          if ((artist != null) && artist !== "") {
-            kbs_eng = {
-              artist: artist,
-              title: title,
-              rank: rank
-            };
-            return songs.push(kbs_eng);
-          }
-        });
-      }
-      return callback();
-    } else {
-      return callback();
-    }
-  });
-};
+// get_data = function(url, callback) {
+//   return request(url, function(error, response, html) {
+//     var $;
+//     if (error) {
+//       console.log(error);
+//     }
+//     if (!error && response.statusCode === 200) {
+//       $ = cheerio.load(html);
+//       if (url === mnet_url) {
+//         $("div.voteWeekListResult li").each(function(i, element) {
+//           var artist, mwave, rank, title;
+//           artist = $(this).find(".artist").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ").trim().toLowerCase();
+//           title = $(this).find(".title").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"\r\n\t]/ig, " ").trim().toLowerCase();
+//           rank = $(this).find(".rank").text();
+//           if ((artist != null) && artist !== "") {
+//             mwave = {
+//               artist: artist,
+//               title: title,
+//               rank: rank
+//             };
+//             return songs.push(mwave);
+//           }
+//         });
+//       }
+//       if (url === gaon_kor_url) {
+//         $(".chart tr").each(function(i, element) {
+//           var artist, gaon, rank, title;
+//           artist = $(this).find(".subject p:nth-child(2)").text().split("|")[0].replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
+//           title = $(this).find(".subject p:first-child").text().replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
+//           rank = $(this).find(".ranking span").text();
+//           if (rank === "") {
+//             rank = $(this).find(".ranking").text();
+//           }
+//           if ((artist != null) && artist !== "") {
+//             gaon = {
+//               artist: artist,
+//               title: title,
+//               rank: rank
+//             };
+//             return songs.push(gaon);
+//           }
+//         });
+//       }
+//       if (url === mnet_kor_url) {
+//         $(".MnetMusicList tr").each(function(i, element) {
+//           var artist, mnet_kor, rank, title;
+//           artist = $(this).find(".MMLIInfo_Artist").text().replace(/\s*\(.*?\)\s*/g, '');
+//           title = $(this).find(".MMLI_Song").text().replace(/\s*\(.*?\)\s*/g, '').replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
+//           rank = $(this).find(".MMLI_RankNum").text().replace(/\D/g, '');
+//           if ((artist != null) && artist !== "") {
+//             mnet_kor = {
+//               artist: artist,
+//               title: title,
+//               rank: rank
+//             };
+//             return songs.push(mnet_kor);
+//           }
+//         });
+//       }
+//       if (url === kbs_eng_url) {
+//         $(".top10_list_1 ul").each(function(i, element) {
+//           var artist, kbs_eng, rank, title;
+//           artist = $(this).find(".tit span").text().replace(/\s*\(.*?\)\s*/g, '');
+//           title = $(this).find(".tit strong").text().replace(/\s*\(.*?\)\s*/g, '').replace(/[\,\(\)\[\]\\\/\<\>\;\"]/ig, " ");
+//           rank = $(this).find(".num img").attr("alt").replace(/\D/g, '');
+//           if ((artist != null) && artist !== "") {
+//             kbs_eng = {
+//               artist: artist,
+//               title: title,
+//               rank: rank
+//             };
+//             return songs.push(kbs_eng);
+//           }
+//         });
+//       }
+//       return callback();
+//     } else {
+//       return callback();
+//     }
+//   });
+// };
+
+function compare(a,b) {
+  // console.log("A: ",a.statistics.viewCount);
+  // console.log("B: ",b.statistics.viewCount);
+  if (Number(a.statistics.viewCount) > Number(b.statistics.viewCount)){
+    // console.log("B WINS");
+    return -1;
+  }
+  if (Number(a.statistics.viewCount)  < Number(b.statistics.viewCount)){
+    // console.log("A WINS")
+    return 1;    
+  }
+  // console.log("NO ONE WINS")  
+  return 0;
+}
+
 
 scrape = function() {
   return async.series([
     (function(callback) {
       async.each(urls, (function(url, done) {
-        get_data(url, function() {
-          console.log("in get data " + url);
+        // get_data(url, function() {
+        //   console.log("in get data " + url);
+          console.log(url);
           return done();
-        });
+        // });
       }), function() {
         console.log("done scraping");
         return callback(null, 'scraping succeeded');
@@ -282,6 +312,7 @@ scrape = function() {
           console.log("no id for " + song.query);
           return callback();
         } else {
+          // console.log(s);
           s = (function() {
             var _i, _len, _ref, _results;
             _ref = r1.items;
@@ -290,6 +321,7 @@ scrape = function() {
               item = _ref[key];
               _results.push(item.id.videoId);
             }
+
             return _results;
           })();
           return youTube.getById(s.join(","), (function(error, r2) {
@@ -337,11 +369,18 @@ scrape = function() {
                   }
                   return _results;
                 })()).length;
-                if (viewCount > 200000 && likeCount > 2000 && badCount === 0 && min < 4) {
+                if (viewCount > 1000 && likeCount > 10 && badCount === 0 && min < 5) {
+                  // console.log(j);
                   acceptable.push(j);
                 }
               }
               if (acceptable.length > 0) {
+                acceptable.sort(compare);
+                console.log("************START**********")
+                console.log(acceptable[0].statistics.viewCount);
+                console.log(acceptable[1].statistics.viewCount);
+                console.log(acceptable[2].statistics.viewCount);
+                console.log("**********END***********")
                 console.log("PASS: " + song.query);
                 song.youtubeId = acceptable[0].id;
                 song.statistics = acceptable[0].statistics;
@@ -404,3 +443,12 @@ songDataReady = function() {
 };
 
 scrape();
+
+     // async.each(urls, (function(url, done) {
+
+     //      return done();
+
+     //  }), function() {
+     //    console.log("done scraping");
+     //    console.log(songs);
+     //  });
