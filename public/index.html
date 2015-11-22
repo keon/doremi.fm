@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" href="img/jombly_icon_70.png">
     <link rel="shortcut icon" href="img/jombly_favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/prelaunch.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:600,400|Open+Sans+Condensed:600,300,300italic&amp;subset=cyrillic,latin">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <script>
@@ -66,35 +67,124 @@
     <!-- Input Bar -->
     <style>
       #inputContainer{
-        z-index: 1;
-        /*position: absolute;*/
-        /*left:30%;*/
-        /*top:50%;*/
+        z-index: 2;
         width:100%;
         height:100%;
-        font-size: 1.5rem;
-      }
-      #inputEmail{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        
-        padding: .8em 1.2em;
-        color: white;
-        background-color: darkcyan;
-        
-        -webkit-transform: translate(-50%, -50%);
-        -moz-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        -o-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
       }
     </style>
     <section id="inputContainer">
-      <div id="inputEmail">
-        <h1>LOGO or Title Goes here</h1>
-        <h1>Message Will Go Here</h1>
-        <input placeholder="email goes here"></input>
+      <div id="phone">
+        <div id="screen">
+          <div id="header">
+            <ul id="menu">
+              <li>Latest Movies</uli>
+              <li>Best Movies</uli>
+              <li>Archive</uli>
+              <li>About</li>
+              <li class="reload"><i class="loader-icon"></i></li>
+            </ul>
+            <div class="pullmenu-icon"></div>
+          </div>
+          <div id="loader"><i class="loader-icon anim"></i></div>
+      <div class="pages">
+          <div class="page back2" id="about">
+            <div>
+              <span>Pullmenu</span><br/>Menu interaction concept<br/>by @_fbrz
+            </div>
+          </div>
+          <div class="page" id="latest">
+            <div class="box hero back11">
+              <span>Interstellar</span>
+            </div>
+            <div class="box back2">
+              <span>Dracula untold</span>
+            </div>
+            <div class="box back9 right tall">
+              <span>The guardians of the galaxy</span>
+            </div>
+            <div class="box back4">
+              <span>The judge</span>
+            </div>
+            <div class="box back3">
+              <span>Frank</span>
+            </div>
+            <div class="box back6 right">
+              <span>Big Hero 6</span>
+            </div>
+            <div class="box back8 wide">
+              <span>Hunger Games</span>
+            </div>
+          </div>
+          <div class="page" id="best">
+            <div class="box wide back11">
+              <span>Boyhood</span>
+            </div>
+            <div class="box wide back2">
+              <span>The lego movie</span>
+            </div>
+            <div class="box wide back9">
+              <span>The Grand Budapest Hotel</span>
+            </div>
+            <div class="box wide back4">
+              <span>Dawn Of The Planet Of The Apes</span>
+            </div>
+            <div class="box wide back3">
+              <span>Nightcrawler</span>
+            </div>
+            <div class="box wide back6">
+              <span>Big Hero 6</span>
+            </div>
+            <div class="box wide back8">
+              <span>Hunger Games</span>
+            </div>
+          </div>
+          <div class="page" id="archive">
+            <div class="box small back11">
+              <span>The Wizard of Oz</span>
+            </div>
+            <div class="box small back2">
+              <span>Citizen Kane</span>
+            </div>
+            <div class="box small back9">
+              <span>The Godfather</span>
+            </div>
+            <div class="box small back4">
+              <span>The Third Man</span>
+            </div>
+            <div class="box small back3">
+              <span>A Hard Day's Night</span>
+            </div>
+            <div class="box small back6">
+              <span>Modern Times</span>
+            </div>
+            <div class="box small back8">
+              <span>All About Eve</span>
+            </div>
+            <div class="box small back7">
+              <span>Metropolis</span>
+            </div>
+            <div class="box small back5">
+              <span>Singin' in the Rain</span>
+            </div>
+            <div class="box small back10">
+              <span>King Kong</span>
+            </div>
+            <div class="box small back1">
+              <span>Sunset Boulevard</span>
+            </div>
+          </div>
+      </div>
+        </div>
+        <div id="home"></div>
+        <div id="speaker"></div>
+      </div>
+
+      <div id="text">
+        <div id="pullmenu-icon"></div>
+        <h1>pull<br/>menu</h1>
+        <h2>Menu<br/>interaction<br/>concept</h2>
+        <h3>* Pull down that icon!</h3>
+        <h3>** Mobile demo: bit.ly/1CI6OEs</h3>
       </div>
     </section>
 
@@ -116,6 +206,7 @@
    <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"> </script>
    <script src="js/prep-youtube.js"></script>
    <script src="js/min/moment.min.js"></script>
-   <script src="js/min/search.min.js"></script>
+   <script src="js/search.js"></script>
+   
   </body>
 </html>

@@ -9,7 +9,7 @@ fs = require("fs");
 
 app = express();
 
-out_file = "../songs.json";
+out_file = "./songs.json";
 index = __dirname+"\\index.html";
 console.log(index);
 

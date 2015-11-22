@@ -25,7 +25,7 @@ ReplaceNumberWithCommas = function(yourNumber) {
 onYouTubeIframeAPIReady = function() {
   var client;
   client = new HttpClient();
-  client.get("http://127.0.0.1:3000/today", function(result) {
+  client.get("http://127.0.0.1:5000/today", function(result) {
     var ratio, song, width;
     song_data = JSON.parse(result);
     songDataReady();
