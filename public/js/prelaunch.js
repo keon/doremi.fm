@@ -86,14 +86,32 @@ $(document).mouseup(function(e){
 
         setTimeout(function(){
 
+
           $(".pages").removeClass("hide");
-          $(".page").hide();
+          $(".page").removeClass("show");
+          $(".page").addClass("hide");
 
           switch($("#menu li").eq(index).attr("data-index")) {
-            case '0': $("#latest").show(); break;
-            case '1': $("#best").show(); break;
-            case '2': $("#archive").show(); break;
-            case '3': $("#about").show(); break;
+            case '0': 
+              console.log("latest");
+              $("#latest").removeClass("hide");
+              $("#latest").addClass("show"); 
+              break;
+            case '1': 
+              console.log("best");
+              $("#best").removeClass("hide");
+              $("#best").addClass("show"); 
+              break;
+            case '2': 
+              console.log("archive");
+              $("#archive").removeClass("hide");
+              $("#archive").addClass("show"); 
+              break;
+            case '3': 
+              console.log("about");
+              $("#about").removeClass("hide");
+              $("#about").addClass("show"); 
+              break;
             }
         },1000);
     }
@@ -136,6 +154,6 @@ var getItemX = function(index){
   var item_offset = $item.offset().left;
   var item_width = $item.outerWidth();
   var menu_offset = $("#menu").offset().left;
-  var screen_width = $("#screen").width();
+  var screen_width = $("#mobile-screen").width();
   return (menu_offset-item_offset)+(screen_width-item_width)/2;
 };
