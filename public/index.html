@@ -41,12 +41,12 @@
     </section>
 
     <!-- List Containers -->
-    <section id="topList" class="hidden">
+<!--     <section id="topList" class="hidden">
       <ol></ol>
     </section>
     <section id="badList" class="hidden">
       <ol></ol>
-    </section>
+    </section> -->
 
     <!-- Social Media -->
 <!--     <section id="socialMedia">
@@ -70,10 +70,10 @@
         <div id="mobile-screen">
           <div id="header">
             <ul id="menu">
-              <li>Latest Movies</uli>
-              <li>Best Movies</uli>
-              <li>Archive</uli>
-              <li>About</li>
+              <li>doremi.fm</uli>
+              <li>Categories</uli>
+              <li>Music List</uli>
+              <li>Current Music</li>
               <li class="reload"><i class="loader-icon"></i></li>
             </ul>
             <div class="pullmenu-icon"></div>
@@ -81,11 +81,10 @@
           <div id="loader"><i class="loader-icon anim"></i></div>
       <div class="pages">
           <div class="page back2" id="about">
-            <div>
-              <span>Pullmenu</span><br/>Menu interaction concept<br/>by @_fbrz
-            </div>
           </div>
           <div class="page show" id="latest">
+            <div class="blackScreen"></div>
+          <!-- dsfsf -->
             <div class="box hero back11">
               <span>Interstellar</span>
             </div>
@@ -107,6 +106,7 @@
             <div class="box back8 wide">
               <span>Hunger Games</span>
             </div>
+            <!-- sdasd -->
           </div>
           <div class="page" id="best">
             <div class="box wide back11">
@@ -132,39 +132,6 @@
             </div>
           </div>
           <div class="page" id="archive">
-            <div class="box small back11">
-              <span>The Wizard of Oz</span>
-            </div>
-            <div class="box small back2">
-              <span>Citizen Kane</span>
-            </div>
-            <div class="box small back9">
-              <span>The Godfather</span>
-            </div>
-            <div class="box small back4">
-              <span>The Third Man</span>
-            </div>
-            <div class="box small back3">
-              <span>A Hard Day's Night</span>
-            </div>
-            <div class="box small back6">
-              <span>Modern Times</span>
-            </div>
-            <div class="box small back8">
-              <span>All About Eve</span>
-            </div>
-            <div class="box small back7">
-              <span>Metropolis</span>
-            </div>
-            <div class="box small back5">
-              <span>Singin' in the Rain</span>
-            </div>
-            <div class="box small back10">
-              <span>King Kong</span>
-            </div>
-            <div class="box small back1">
-              <span>Sunset Boulevard</span>
-            </div>
           </div>
       </div>
         </div>
@@ -177,18 +144,28 @@
         <!-- <div id="pullmenu-icon"></div> -->
         <h1>doremi.fm</h1>
         <br/>
-        <h2>Stream Your <br/>Favorite<br/>Korean Music<br/> On - the - Go</h1>
+        <h2>Stream Your Favorite<br/>Korean Music<br/> On - the - Go</h1>
         <br/>
         <h3>launching 2016</h2>
         <!-- <h4>* Pull down that icon!</h3>
         <h4>** Mobile demo: bit.ly/1CI6OEs</h3> -->
  
         <div class="ortala">
+          <input></input>
           <button class="sa">
-            
-          </button><input></input>
+            Subscribe 
+          </button>
         </div>
-
+        <div class="appstore">
+        <i class="fa fa-apple fa-4x"></i>
+        <i class="fa fa-android fa-4x"></i>
+        </div>
+        <div class="socialmedia">
+        <i class="fa fa-facebook-square fa-4x"></i>
+        <i class="fa fa-reddit-square fa-4x"></i>
+        <i class="fa fa-twitter-square fa-4x"></i>
+        <i class="fa fa-google-plus-square fa-4x"></i>
+        </div>
       </div>
 
       
@@ -199,7 +176,7 @@
       <div id="playerControls">
           <section id="songInfo" class="hidden"></section>
           <input type="range" id="volumeBar" value="50" max="100" min="0" step="0.025">
-          <button id="volume">&#xf027;</button>
+          <button id="volume"><i id="volumeIcon" class="fa fa-volume-off"></i></button>
           <button id="info">&#xf129;</button>
           <button id="topListBtn">&#xf0cb;</button>
           <button id="dontPlay">&#xf165;</button>
@@ -213,7 +190,7 @@
    <script src="js/prep-youtube.js"></script>
    <script src="js/min/moment.min.js"></script>
    <script src="js/search.js"></script>
-   <script src="js/prelaunch.js"></script>
-   
+   <!--<script src="js/prelaunch.js"></script>
+   -->
   </body>
 </html>
