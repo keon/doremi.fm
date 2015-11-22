@@ -2,7 +2,7 @@
   "name": "Jombly2",
   "version": "1.0.0",
   "description": "K-Pop Radio",
-  "main": "index.js",
+  "main": "provider.js",
   "dependencies": {
     "body-parser": "^1.9.2",
     "cheerio": "^0.17.0",
