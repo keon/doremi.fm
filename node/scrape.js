@@ -55,7 +55,7 @@ youTube.addParam("type", "video");
 
 youTube.addParam("part", "id");
 
-youTube.addParam("order", "relevance");
+youTube.addParam("order", "viewCount");
 
 youTube.addParam("publishedAfter", date);
 
@@ -171,6 +171,8 @@ scrape = function() {
       for (_i = 0, _len = songs.length; _i < _len; _i++) {
         song = songs[_i];
         song.query = "" + song.artist + " - " + song.title + add_to_query;
+        console.log("###songs#####");
+        console.log(song);
       }
       console.log("done adding queries");
       return callback(null, 'query adding succeeded');
@@ -204,6 +206,8 @@ scrape = function() {
         }
       }
       songs = unique;
+      console.log("$$$$$$$unique$$$$$$$");
+      console.log(unique);
       console.log("done deDuping");
       callback(null, 'deDupe succeeded');
     }), (function(callback) {
@@ -213,7 +217,7 @@ scrape = function() {
         _results = [];
         for (_i = 0, _len = songs.length; _i < _len; _i++) {
           s = songs[_i];
-          if (s.title.length > 2 && s.artist.length > 2) {
+          if (s.title.length > 0 && s.artist.length > 0) {
             _results.push(s);
           }
         }
@@ -231,15 +235,16 @@ scrape = function() {
         s = songs[_i];
         _results.push(s.query);
       }
+      console.log("results are: " + _results);
       return _results;
     })());
     async.each(songs, (function(song, callback) {
-      return youTube.search(song.query, 50, function(error, r1) {
+      return youTube.search(song.query, 10, function(error, r1) {
         var item, key;
         if (error) {
           console.log(error);
           return callback();
-        } else if (r1.pageInfo.totalResults < 20) {
+        } else if (r1.pageInfo.totalResults < 5) {
           console.log("not enough songs for " + song.query);
           return callback();
         } else if (!r1.items[0]) {
@@ -249,7 +254,7 @@ scrape = function() {
           console.log("no id for " + song.query);
           return callback();
         } else {
-          // console.log(s);
+          console.log(s);
           s = (function() {
             var _i, _len, _ref, _results;
             _ref = r1.items;
@@ -306,18 +311,18 @@ scrape = function() {
                   }
                   return _results;
                 })()).length;
-                if (viewCount > 1000 && likeCount > 10 && badCount === 0 && min < 5) {
+                if (viewCount > 10000 && likeCount > 40 && badCount === 0 && min < 5) {
                   // console.log(j);
                   acceptable.push(j);
                 }
               }
               if (acceptable.length > 0) {
-                acceptable.sort(compare);
-                console.log("************START**********")
-                console.log(acceptable[0].statistics.viewCount);
-                console.log(acceptable[1].statistics.viewCount);
-                console.log(acceptable[2].statistics.viewCount);
-                console.log("**********END***********")
+                // acceptable.sort(compare);
+                // console.log("************START**********")
+                // console.log(acceptable[0].statistics.viewCount);
+                // // console.log(acceptable[1].statistics.viewCount);
+                // // console.log(acceptable[2].statistics.viewCount);
+                // console.log("**********END***********")
                 console.log("PASS: " + song.query);
                 song.youtubeId = acceptable[0].id;
                 song.statistics = acceptable[0].statistics;
@@ -379,15 +384,15 @@ songDataReady = function() {
   });
 };
 
-// scrape();
+scrape();
 
-     async.each(urls, (function(url, done) {
-          get_data(url, function() {
-          console.log("in get data " + url);
-          console.log(url);
-          return done();
-        });
-      }), function() {
-        console.log("done scraping");
-        console.log(songs);
-      });
+     // async.each(urls, (function(url, done) {
+     //      get_data(url, function() {
+     //      console.log("in get data " + url);
+     //      console.log(url);
+     //      return done();
+     //    });
+     //  }), function() {
+     //    console.log("done scraping");
+     //    console.log(songs);
+     //  });
