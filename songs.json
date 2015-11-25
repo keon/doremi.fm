@@ -10,13 +10,13 @@
       "title":"못먹는 감 (Sour grapes)",
       "rank":2,
 
-      "youtubeId":"bLoO0FSXncg"
+      "youtubeId":"Bou4Re1f3UQ"
    },
    {  
       "artist":"이적 (Lee Juck)",
       "title":"걱정말아요 그대 (Don't worry)",
       "rank":3,
-      "youtubeId":"NuoY1g3BCKI"
+      "youtubeId":"Dic27EnDDls"
    },
    {  
       "artist":"EXID(이엑스아이디)",
@@ -46,13 +46,13 @@
       "artist":"IU(아이유)",
       "title":"Twenty-three(스물셋)",
       "rank":8,
-      "youtubeId":"sOK0bze_p2o"
+      "youtubeId":"42Gtm4-Ax2U"
    },
    {  
       "artist":"윤하 (Younha)",
       "title":"널 생각해",
       "rank":9,
-      "youtubeId":"널 생각해 (Prod. by 이찬혁 of 악동뮤지션) "
+      "youtubeId":"zaiUgWP82Ck"
    },
    {  
       "artist":"Dynamic Duo (다이나믹듀오)",
@@ -94,7 +94,7 @@
       "artist":"여자친구 GFriend",
       "title":"오늘부터 우리는(Me Gustas Tu)",
       "rank":16,
-      "youtubeId":"Me Gustas Tu"
+      "youtubeId":"m-CKVr6Z1Tw"
    },
    {  
       "artist":"SOYOU(소유), BROTHER SU(브라더수) ",
@@ -115,9 +115,75 @@
       "youtubeId":"WzbvPKfLF2g"
    },
    {  
-      "artist":"IU(아이유) ",
+      "artist":"IU(아이유)",
       "title":"푸르던",
       "rank":20,
       "youtubeId":"m-V6Ec73dVA"
+   },
+   {  
+      "artist":"GARY(개리)",
+      "title":"GET SOME AIR(바람이나 좀 쐐) (Feat. MIWOO)",
+      "rank":21,
+      "youtubeId":"JojOd079xwQ"
+   },
+   {  
+      "artist":"IU(아이유)",
+      "title":"Zezé",
+      "rank":22,
+      "youtubeId":"xsWVmf2UAkg"
+   },
+   {  
+      "artist":"러블리즈(Lovelyz)",
+      "title":"Ah-Choo",
+      "rank":23,
+      "youtubeId":"v7qisJ_KuYI"
+   },
+   {  
+      "artist":"Beenzino(빈지노) ",
+      "title":"Break",
+      "rank":24,
+      "youtubeId":"5DNZ5lj4TIY"
+   },
+   {  
+      "artist":"Red Velvet(레드벨벳)",
+      "title":"Dumb Dumb",
+      "rank":25,
+      "youtubeId":"XGdbaEDVWp0"
    }
+   ,
+   {  
+      "artist":"Zion.T(자이언티)",
+      "title":"Yanghwa BRDG(양화대교)",
+      "rank":26,
+      "youtubeId":"uLUvHUzd4UA"
+   }
+   ,
+   {  
+      "artist":"Brown Eyed Girls(브라운아이드걸스) ",
+      "title":"Brave New World(신세계)",
+      "rank":27,
+      "youtubeId":"8fMnBrts2cg"
+   }
+   ,
+   {  
+      "artist":"백아연(Baek A Yeon)",
+      "title":"이럴거면 그러지말지(Shouldn’t Have)",
+      "rank":28,
+      "youtubeId":"x815A21RIto"
+   }
+   ,
+   {  
+      "artist":"KYUHYUN (규현)",
+      "title":"밀리언조각(A Million Pieces)",
+      "rank":29,
+      "youtubeId":"wUXdWyCjs8w"
+   }
+   ,
+   {  
+      "artist":"유재환, 김예림(투개월)",
+      "title":"커피(Coffee)",
+      "rank":30,
+      "youtubeId":"Cyf_OrZLAIM"
+   }
+
 ]
