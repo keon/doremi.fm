@@ -2,6 +2,7 @@ var app, bodyParser, express, fs, out_file, server, songs;
 var path = require('path');
 
 express = require("express");
+var favicon = require('serve-favicon');
 
 bodyParser = require("body-parser");
 
@@ -17,6 +18,8 @@ songs = [];
 
 app.set('views', path.join(__dirname, 'public'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(__dirname + '/public/img/Favicon.png'));
+
 
 app.all("/*", function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

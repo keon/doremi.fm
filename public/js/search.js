@@ -13,7 +13,7 @@ isPlaying = false;
 
 song_history = [];
 
-url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://doremi.fm", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
+url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://127.0.0.1", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
 ReplaceNumberWithCommas = function(yourNumber) {
   var components;
@@ -25,7 +25,7 @@ ReplaceNumberWithCommas = function(yourNumber) {
 onYouTubeIframeAPIReady = function() {
   var client;
   client = new HttpClient();
-  client.get("http://doremi.fm/today", function(result) {
+  client.get("http://127.0.0.1:5000/today", function(result) {
     var ratio, song, width;
     song_data = JSON.parse(result);
     songDataReady();
@@ -45,7 +45,7 @@ onYouTubeIframeAPIReady = function() {
         autoplay: 1,
         cc_load_policy: 0,
         iv_load_policy: 3,
-        origin: "http://doremi.fm/",
+        origin: "http://127.0.0.1/",
         playsinline: 1,
         fs: 0,
         rel: 0,
@@ -159,9 +159,11 @@ pauseVideo = function() {
 };
 
 newSong = function(song) {
+  console.log(song);
   if (song == null) {
     song = randSong();
   }
+  console.log(song);
   if (song === current_song) {
     newSong();
   }
