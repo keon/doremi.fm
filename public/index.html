@@ -13,10 +13,14 @@
     <title>doremi</title>
     <link rel="apple-touch-icon" href="img/Favicon.png">
     <link rel="shortcut icon" href="img/Favicon.png">
+
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/prelaunch.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:600,400|Open+Sans+Condensed:600,300,300italic&amp;subset=cyrillic,latin">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
 
     <script>
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -31,7 +35,21 @@
 <!-- MAIL CHIMP -->
 <link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
 <style type="text/css">
-    #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+  #mc_embed_signup form{
+    padding:0;
+  }
+  #mc_embed_signup input.email{
+    padding:10px 8px;
+    font-size:14px;
+    width:60%;
+    display:inline-block;
+  }
+  #mc_embed_signup input.button{
+    display:inline-block;
+    width:30%;
+    height:40px;
+  }
+    /*#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }*/
     /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
        We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
 </style>
@@ -161,17 +179,17 @@
         <!-- <h4>* Pull down that icon!</h3>
         <h4>** Mobile demo: bit.ly/1CI6OEs</h3> -->
  
-        <div class="ortala">
+        <!-- <div class="ortala">
           <input></input>
           <button class="sa">
             Subscribe 
           </button>
-        </div>
+        </div> -->
         <!-- MAIL CHIMP -->
         <div id="mc_embed_signup">
           <form action="//doremi.us12.list-manage.com/subscribe/post?u=1bd39e76b9e7289e6351b188e&amp;id=9cb575eaf0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
              <div id="mc_embed_signup_scroll">
-              <label for="mce-EMAIL">Notify me of the upcoming goodies:</label>
+              <!-- <label for="mce-EMAIL">Notify me of the upcoming goodies:</label> -->
               <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
              <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
              <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_1bd39e76b9e7289e6351b188e_9cb575eaf0" tabindex="-1" value=""></div>
