@@ -28,7 +28,7 @@ onYouTubeIframeAPIReady = function() {
   client.get("http://127.0.0.1:5000/today", function(result) {
     var ratio, song, width;
     song_data = JSON.parse(result);
-    console.log("song_data:" + song_data);
+    // console.log("song_data:" + song_data);
     songDataReady();
     width = $(window).width();
     ratio = 16 / 9;
@@ -109,7 +109,7 @@ songDataReady = function() {
       }
       return _results;
     })())[0];
-    console.log("SONG:  "+song);
+    // console.log("SONG:  "+song);
     //$("#badList ol").append("<li class='badSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
   }
 };
@@ -161,17 +161,20 @@ pauseVideo = function() {
 };
 
 newSong = function(song) {
-  console.log(song);
+  // console.log(song);
   if (song == null) {
     song = randSong();
   }
-  console.log(song);
+  // console.log(song);
   if (song === current_song) {
     newSong();
   }
   player.loadVideoById(song.youtubeId);
   current_song = song;
-  $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+  // $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+  //
+  $("#about").append("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
+  // $("#about").text("" + current_song.artist + " - " + current_song.title);
   return addToHistory(song);
 };
 
@@ -187,8 +190,7 @@ addToHistory = function(song) {
 
 randSong = function() {
   var songs;
-  console.log("SONGS before: ",songs);
-  console.log("SONG DATA before: ", song_data);
+  
   songs = song_data;
   // song_data.filter(function(x) {
   //   var _ref;
@@ -197,7 +199,7 @@ randSong = function() {
   //   var _ref;
   //   return _ref = y.query, __indexOf.call(song_history, _ref) < 0;
   // });
-  console.log("SONGS after: ",songs);
+  // console.log("SONGS after: ",songs);
   return songs[Math.floor(Math.random() * song_data.length)];
 };
 
@@ -293,7 +295,7 @@ $("#topListBtn").on("click", function() {
 
 
 
-  return $('#playerControls').removeClass("squareTop");
+  return $('#playerControls').addClass("squareTop");
 });
 
 $('#topList').on("click", ".topSong", function() {
@@ -304,19 +306,19 @@ $('#topList').on("click", ".topSong", function() {
   $("#topListBtn").toggleClass("active");
   $("#topList").toggleClass("active");
   $("#badList").toggleClass("active");
-  return $('#playerControls').removeClass("show");
+  return $('#playerControls').addClass("show");
 });
 
 $('#controlsContainer').hover((function() {
   $('#playerControls').addClass("show");
 }), function() {
   if ($("#topListBtn").hasClass("active") === false) {
-    $('#playerControls').removeClass("show");
+    // $('#playerControls').removeClass("show");
     $("#info").removeClass("active");
     $("#songInfo").removeClass("active");
-    $("#volumeBar").removeClass("active");
-    $("#volume").removeClass("active");
-    $('#playerControls').removeClass("squareTop");
+    // $("#volumeBar").removeClass("active");
+    // $("#volume").removeClass("active");
+    // $('#playerControls').removeClass("squareTop");
   }
 });
 
@@ -352,8 +354,8 @@ $('#info').on("click", function() {
   $("#topList").removeClass("active");
   $("#badList").removeClass("active");
   $("#screen").hide();
-  $("#volumeBar").removeClass("active");
-  $("#volume").removeClass("active");
+  // $("#volumeBar").removeClass("active");
+  // $("#volume").removeClass("active");
   $("#info").toggleClass("active");
   // $("#songInfo").toggleClass("active");
         $("#menu li").removeClass("show");
@@ -388,12 +390,12 @@ $('#info').on("click", function() {
         },1000);
 
 
-
-  if ($("#volume").hasClass("active") === true || $("#info").hasClass("active") === true) {
-    return $("#playerControls").addClass("squareTop");
-  } else {
-    return $("#playerControls").removeClass("squareTop");
-  }
+return $("#playerControls").addClass("squareTop");
+  // if ($("#volume").hasClass("active") === true || $("#info").hasClass("active") === true) {
+    
+  // } else {
+  //   return $("#playerControls").removeClass("squareTop");
+  // }
 });
 // setTimeout(function(){
 //   player.setVolume(0);
@@ -401,7 +403,7 @@ $('#info').on("click", function() {
 
 var volumeClick = false;
 $('#volume').on("click", function() {
-  $("#topListBtn").removeClass("active");
+  // $("#topListBtn").removeClass("active");
   $("#topList").removeClass("active");
   $("#badList").removeClass("active");
   $("#screen").hide();
@@ -440,16 +442,16 @@ $('#volumeBar').on("change input", function() {
 $(window).on('resize', function() {
   return resize();
 });
-
-$(window).on('focus load', function() {
-  var timeout;
-  $("#playerControls").addClass("show");
-  return timeout = setTimeout((function() {
-    if ($('#controlsContainer').is(":hover") !== true) {
-      return $("#playerControls").removeClass("show");
-    }
-  }), 5000);
-});
+$("#playerControls").addClass("show");
+// $(window).on('focus load', function() {
+//   var timeout;
+//   $("#playerControls").addClass("show");
+//   return timeout = setTimeout((function() {
+//     if ($('#controlsContainer').is(":hover") !== true) {
+//       return $("#playerControls").removeClass("show");
+//     }
+//   }), 5000);
+// });
 
 $(document).ready(function() {
   resize();
