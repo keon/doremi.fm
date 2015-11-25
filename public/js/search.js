@@ -117,7 +117,7 @@ songDataReady = function() {
 onPlayerReady = function(event) {
   player.setVolume(0);
   event.target.playVideo();
-  $("#about").append("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
+  $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
 };
 
 onPlayerStateChange = function(event) {
@@ -173,7 +173,7 @@ newSong = function(song) {
   current_song = song;
   // $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
   //
-  $("#about").append("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
+  $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
   // $("#about").text("" + current_song.artist + " - " + current_song.title);
   return addToHistory(song);
 };
@@ -217,13 +217,23 @@ HttpClient = function() {
   };
 };
 
-$("#mc-embedded-subscribe").on("click", function(){
-  $("#mc_embed_signup").addClass("hide");
-  $("#appstore").addClass("hide");
-  $("#socialmedia").removeClass("hide");
+$("#inputGroup input").keypress(function (e) {
+    if (e.which == 13) {
+      $("#inputGroup").addClass("hide");
+      $("#appstore").addClass("hide");
+      $("#socialmedia").removeClass("hide");
+      $("#thankyou").removeClass("hide");
 
-  // $("socialmedia").addClass("show");
-})
+    }
+});
+
+$("#emailButton").on("click", function(){
+    $("#inputGroup").addClass("hide");
+      $("#appstore").addClass("hide");
+      $("#socialmedia").removeClass("hide");
+      $("#thankyou").removeClass("hide");
+
+});
 
 $("#dontPlay").on("click", function() {
   var _ref;
@@ -318,18 +328,18 @@ $('#song-pick').on("click", function() {
   return $('#playerControls').addClass("show");
 });
 
-$('#controlsContainer').hover((function() {
-  $('#playerControls').addClass("show");
-}), function() {
-  if ($("#topListBtn").hasClass("active") === false) {
-    // $('#playerControls').removeClass("show");
-    $("#info").removeClass("active");
-    $("#songInfo").removeClass("active");
-    // $("#volumeBar").removeClass("active");
-    // $("#volume").removeClass("active");
-    // $('#playerControls').removeClass("squareTop");
-  }
-});
+// $('#controlsContainer').hover((function() {
+//   $('#playerControls').addClass("show");
+// }), function() {
+//   if ($("#topListBtn").hasClass("active") === false) {
+//     // $('#playerControls').removeClass("show");
+//     // $("#info").removeClass("active");
+//     // $("#songInfo").removeClass("active");
+//     // $("#volumeBar").removeClass("active");
+//     // $("#volume").removeClass("active");
+//     // $('#playerControls').removeClass("squareTop");
+//   }
+// });
 
 $('#progressContainer').hover((function() {
   $('#progress').addClass("show");

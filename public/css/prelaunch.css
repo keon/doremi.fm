@@ -27,9 +27,15 @@ body {
   position:absolute;
 }
 
+
 #socialmedia{
   margin-top:30px;
   margin-left:-10px;
+  transition:opacity 0.5s linear;
+}
+#appstore i{
+  margin-top:30px;
+  transition:opacity 0.5s linear;
 }
 
 #phone {
@@ -533,6 +539,7 @@ body {
 .ortala{
   /*width:350px;*/
   margin: 20px 0;
+  /*margin-bottom:50px;*/
 }
 
 .ortala:hover button{
