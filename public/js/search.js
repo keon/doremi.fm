@@ -217,22 +217,61 @@ HttpClient = function() {
   };
 };
 
-$("#inputGroup input").keypress(function (e) {
-    if (e.which == 13) {
-      $("#inputGroup").addClass("hide");
-      $("#appstore").addClass("hide");
-      $("#socialmedia").removeClass("hide");
-      $("#thankyou").removeClass("hide");
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
 
+$("#inputGroup input").keypress(function (e) {
+
+    if (e.which == 13) {
+    var email = $('#inputGroup input').val();
+    if(validateEmail(email)){
+    $.ajax({
+      method: "POST",
+      url: "/subscribe",
+      data: { email:email}
+    })
+      .done(function( msg ) {
+        console.log( msg.message );
+      });
+
+    $("#inputGroup").addClass("hide");
+    $("#appstore").addClass("hide");
+    $("#invalid").addClass("hide");
+    $("#socialmedia").removeClass("hide");
+    $("#thankyou").removeClass("hide");
+
+    }else{
+      console.log("invalid")
+      $("#invalid").removeClass("hide");
+    }
     }
 });
 
 $("#emailButton").on("click", function(){
-    $("#inputGroup").addClass("hide");
-      $("#appstore").addClass("hide");
-      $("#socialmedia").removeClass("hide");
-      $("#thankyou").removeClass("hide");
+    var email = $('#inputGroup input').val();
+    if(validateEmail(email)){
+    $.ajax({
+      method: "POST",
+      url: "/subscribe",
+      data: { email:email}
+    })
+      .done(function( msg ) {
+        console.log( msg.message );
+      });
 
+    $("#inputGroup").addClass("hide");
+    $("#appstore").addClass("hide");
+    $("#invalid").addClass("hide");
+    $("#socialmedia").removeClass("hide");
+    $("#thankyou").removeClass("hide");
+
+    }else{
+      console.log("invalid")
+      $("#invalid").removeClass("hide");
+    }
+    
 });
 
 $("#dontPlay").on("click", function() {

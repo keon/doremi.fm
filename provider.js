@@ -1,5 +1,7 @@
 var app, bodyParser, express, fs, out_file, server, songs;
 var path = require('path');
+var mongoose = require('mongoose');
+
 
 express = require("express");
 var favicon = require('serve-favicon');
@@ -13,7 +15,7 @@ app = express();
 out_file = "./songs.json";
 index = __dirname+"\\index.html";
 console.log(index);
-
+mongoose.connect('mongodb://admin:admin4545@ds059644.mongolab.com:59644/doremi');
 songs = [];
 
 app.set('views', path.join(__dirname, 'public'));
@@ -63,6 +65,44 @@ app.post("/getSong", function(req, res) {
     }));
   }
 });
+
+var Subscriber = mongoose.model('Subscriber', { 
+  email: String,
+  date: {type: Date, default: Date.now }
+});
+
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
+
+
+app.post("/subscribe", function (req, res){
+  if(!req.body.email){
+    return res.json({
+      message:"invalid parameter"
+    });
+  }else{
+    if(validateEmail(req.body.email)){
+      var newSubscriber = new Subscriber({email:req.body.email});
+      newSubscriber.save(function(err){
+        if(err){
+          return res.json({
+            message:"error while saving user"
+          })
+        }else{
+          return res.json({
+            message:"user subscription complete"
+          })
+        }
+      })      
+    }else{
+      return res.json({
+        message:"invalid parameter"
+      });      
+    }
+  }
+})
 
 app.get("/today", function(req, res) {
   if (songs.length <= 0) {

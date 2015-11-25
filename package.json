@@ -9,6 +9,7 @@
     "cron": "^1.0.5",
     "express": "^4.10.1",
     "fast-csv": "^0.6.0",
+    "mongoose": "^4.2.7",
     "promise": "^6.1.0",
     "request": "^2.47.0",
     "serve-favicon": "^2.3.0"
