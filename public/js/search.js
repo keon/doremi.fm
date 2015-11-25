@@ -28,6 +28,7 @@ onYouTubeIframeAPIReady = function() {
   client.get("http://127.0.0.1:5000/today", function(result) {
     var ratio, song, width;
     song_data = JSON.parse(result);
+    console.log("song_data:" + song_data);
     songDataReady();
     width = $(window).width();
     ratio = 16 / 9;
@@ -108,6 +109,7 @@ songDataReady = function() {
       }
       return _results;
     })())[0];
+    console.log("SONG:  "+song);
     //$("#badList ol").append("<li class='badSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
   }
 };
@@ -185,13 +187,17 @@ addToHistory = function(song) {
 
 randSong = function() {
   var songs;
-  songs = song_data.filter(function(x) {
-    var _ref;
-    return _ref = x.query, __indexOf.call(dont_play, _ref) < 0;
-  }).filter(function(y) {
-    var _ref;
-    return _ref = y.query, __indexOf.call(song_history, _ref) < 0;
-  });
+  console.log("SONGS before: ",songs);
+  console.log("SONG DATA before: ", song_data);
+  songs = song_data;
+  // song_data.filter(function(x) {
+  //   var _ref;
+  //   return _ref = x.query, __indexOf.call(dont_play, _ref) < 0;
+  // }).filter(function(y) {
+  //   var _ref;
+  //   return _ref = y.query, __indexOf.call(song_history, _ref) < 0;
+  // });
+  console.log("SONGS after: ",songs);
   return songs[Math.floor(Math.random() * song_data.length)];
 };
 
