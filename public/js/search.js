@@ -173,7 +173,7 @@ newSong = function(song) {
   current_song = song;
   // $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
   //
-  $("#about").append("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
+  $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
   // $("#about").text("" + current_song.artist + " - " + current_song.title);
   return addToHistory(song);
 };
