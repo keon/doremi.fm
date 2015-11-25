@@ -7,7 +7,8 @@ body {
 }
 
 .logo{
-  max-width:400px;
+  max-width:300px;
+  width:100%;
 }
 
 #black-background{
@@ -26,14 +27,19 @@ body {
   position:absolute;
 }
 
+#socialmedia{
+  margin-top:30px;
+  margin-left:-10px;
+}
+
 #phone {
-  width: 310px;
-  height: 640px;
+  width: 248px;
+  height: 512px;
   border: 2px solid #ccc;
   border-radius: 30px;
   position: absolute;
   left: 45%;
-  top: 50px;
+  top: 75px;
   margin: 0 -310px;
   background: #fff;
 }
@@ -59,12 +65,12 @@ body {
 
 
 #mobile-screen {
-  width: 290px;
-  height: 520px;
+  width: 232px;
+  height: 416px;
   border: 1px solid #ccc;
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 61.5%;
+  top: 59%;
   margin: -260px -145px;
   box-sizing: border-box;
   overflow: hidden;
@@ -249,7 +255,7 @@ body {
           transition: opacity .2s linear;
   z-index: 29;
   position: absolute;
-  width: 318px;
+  width: 254.4px;
   height: 100%;
 }
 /*@media (max-width: 480px) {
@@ -271,9 +277,16 @@ body {
 .page {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 472px;
+  height: 377.6px;
   display: none;
   padding-right: 15px;
+}
+
+.hide{
+  display:none;
+}
+.show{
+  display:block;
 }
 
 .page.hide{
@@ -337,6 +350,7 @@ body {
   position: relative;
   width: 50%;
   float: left;
+  cursor: pointer;
 }
 .box.right {
   float: right;
@@ -349,7 +363,7 @@ body {
 }
 .box.small {
   width: 100%;
-  height: 70px;
+  height: 50px;
 }
 .box.hero {
   height: 240px;
@@ -361,11 +375,13 @@ body {
 .box span {
   position: absolute;
   color: #fff;
-  font-size: 15px;
+  font-size: 13px;
   bottom: 0;
   left: 0;
-  text-transform: uppercase;
-  padding: 25px 25px;
+  padding:0 0 10px 10px;
+  margin:0;
+  /*text-transform: uppercase;*/
+  /*padding: 25px 25px;*/
   font-weight: 600;
 }
 
@@ -566,9 +582,7 @@ body {
 }
 
 
-
-/*****MAIL CHIMP*************************************/
-
-#mc_embed_signup form{
-  padding:0;
+/***************/
+#socialmedia i, #appstore i{
+  padding: 0 10px;
 }
