@@ -49,6 +49,9 @@
     width:30%;
     height:40px;
   }
+  #mc_embed_signup{
+    margin: 20px 0;
+  }
     /*#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }*/
     /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
        We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
@@ -178,31 +181,34 @@
         <h3>launching 2016</h2>
         <!-- <h4>* Pull down that icon!</h3>
         <h4>** Mobile demo: bit.ly/1CI6OEs</h3> -->
+
+        <h3 id="invalid" class="hide">Please Enter Valid Email</h3>
  
-        <!-- <div class="ortala">
-          <input></input>
-          <button class="sa">
+        <div id="inputGroup" class="ortala">
+          <input id="email" type="text" name="email" pattern="[a-zA-Z]{3,}@[a-zA-Z]{3,}[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,}" required placeholder="Enter you Email">
+          <button id="emailButton" class="sa">
             Subscribe 
           </button>
-        </div> -->
+        </div>
+        <div id="thankyou" class="hide">
+          <h3>Thank You!</h3>
+        </div>
         <!-- MAIL CHIMP -->
-        <div id="mc_embed_signup">
+<!--         <div id="mc_embed_signup">
           <form action="//doremi.us12.list-manage.com/subscribe/post?u=1bd39e76b9e7289e6351b188e&amp;id=9cb575eaf0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
              <div id="mc_embed_signup_scroll">
-              <!-- <label for="mce-EMAIL">Notify me of the upcoming goodies:</label> -->
               <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-             <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
              <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_1bd39e76b9e7289e6351b188e_9cb575eaf0" tabindex="-1" value=""></div>
              <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
              </div>
           </form>
-        </div>
+        </div> -->
         <!-- END MAIL CHIMP -->
-        <div class="appstore">
+        <div id="appstore">
         <i class="fa fa-apple fa-4x"></i>
         <i class="fa fa-android fa-4x"></i>
         </div>
-        <div class="socialmedia">
+        <div id="socialmedia" class="hide">
         <i class="fa fa-facebook-square fa-4x"></i>
         <i class="fa fa-reddit-square fa-4x"></i>
         <i class="fa fa-twitter-square fa-4x"></i>

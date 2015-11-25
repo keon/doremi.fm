@@ -13,7 +13,7 @@ isPlaying = false;
 
 song_history = [];
 
-url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://127.0.0.1", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
+url_params = ["enablejsapi=1", "controls=0", "showinfo=0", "modestbranding=0", "autoplay=1", "cc_load_policy=0", "iv_load_policy=3", "origin=http://doremi.fm", "playsinline=1", "disablekb=1", "fs=0", "rel=0", "wmode=transparent"].join("&");
 
 ReplaceNumberWithCommas = function(yourNumber) {
   var components;
@@ -25,7 +25,7 @@ ReplaceNumberWithCommas = function(yourNumber) {
 onYouTubeIframeAPIReady = function() {
   var client;
   client = new HttpClient();
-  client.get("http://127.0.0.1:5000/today", function(result) {
+  client.get("http://doremi.fm/today", function(result) {
     var ratio, song, width;
     song_data = JSON.parse(result);
     // console.log("song_data:" + song_data);
@@ -46,7 +46,7 @@ onYouTubeIframeAPIReady = function() {
         autoplay: 1,
         cc_load_policy: 0,
         iv_load_policy: 3,
-        origin: "http://127.0.0.1/",
+        origin: "http://doremi.fm/",
         playsinline: 1,
         fs: 0,
         rel: 0,
@@ -88,7 +88,7 @@ songDataReady = function() {
     song = song_data[_i];
     if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
       // $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
-      $("#archive").append("<div class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
+      $("#archive").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
       if(counter < 11){
         counter++;
       }else{
@@ -117,7 +117,7 @@ songDataReady = function() {
 onPlayerReady = function(event) {
   player.setVolume(0);
   event.target.playVideo();
-  $("#about").append("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
+  $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
 };
 
 onPlayerStateChange = function(event) {
@@ -217,6 +217,63 @@ HttpClient = function() {
   };
 };
 
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
+
+$("#inputGroup input").keypress(function (e) {
+
+    if (e.which == 13) {
+    var email = $('#inputGroup input').val();
+    if(validateEmail(email)){
+    $.ajax({
+      method: "POST",
+      url: "/subscribe",
+      data: { email:email}
+    })
+      .done(function( msg ) {
+        console.log( msg.message );
+      });
+
+    $("#inputGroup").addClass("hide");
+    $("#appstore").addClass("hide");
+    $("#invalid").addClass("hide");
+    $("#socialmedia").removeClass("hide");
+    $("#thankyou").removeClass("hide");
+
+    }else{
+      console.log("invalid")
+      $("#invalid").removeClass("hide");
+    }
+    }
+});
+
+$("#emailButton").on("click", function(){
+    var email = $('#inputGroup input').val();
+    if(validateEmail(email)){
+    $.ajax({
+      method: "POST",
+      url: "/subscribe",
+      data: { email:email}
+    })
+      .done(function( msg ) {
+        console.log( msg.message );
+      });
+
+    $("#inputGroup").addClass("hide");
+    $("#appstore").addClass("hide");
+    $("#invalid").addClass("hide");
+    $("#socialmedia").removeClass("hide");
+    $("#thankyou").removeClass("hide");
+
+    }else{
+      console.log("invalid")
+      $("#invalid").removeClass("hide");
+    }
+    
+});
+
 $("#dontPlay").on("click", function() {
   var _ref;
   if (_ref = current_song.query, __indexOf.call(dont_play, _ref) < 0) {
@@ -298,7 +355,8 @@ $("#topListBtn").on("click", function() {
   return $('#playerControls').addClass("squareTop");
 });
 
-$('#topList').on("click", ".topSong", function() {
+$('#song-pick').on("click", function() {
+  console.log("PICKED");
   var id;
   id = this.getAttribute("data-song");
   newSong(song_data[id - 1]);
@@ -309,18 +367,18 @@ $('#topList').on("click", ".topSong", function() {
   return $('#playerControls').addClass("show");
 });
 
-$('#controlsContainer').hover((function() {
-  $('#playerControls').addClass("show");
-}), function() {
-  if ($("#topListBtn").hasClass("active") === false) {
-    // $('#playerControls').removeClass("show");
-    $("#info").removeClass("active");
-    $("#songInfo").removeClass("active");
-    // $("#volumeBar").removeClass("active");
-    // $("#volume").removeClass("active");
-    // $('#playerControls').removeClass("squareTop");
-  }
-});
+// $('#controlsContainer').hover((function() {
+//   $('#playerControls').addClass("show");
+// }), function() {
+//   if ($("#topListBtn").hasClass("active") === false) {
+//     // $('#playerControls').removeClass("show");
+//     // $("#info").removeClass("active");
+//     // $("#songInfo").removeClass("active");
+//     // $("#volumeBar").removeClass("active");
+//     // $("#volume").removeClass("active");
+//     // $('#playerControls').removeClass("squareTop");
+//   }
+// });
 
 $('#progressContainer').hover((function() {
   $('#progress').addClass("show");
@@ -455,10 +513,10 @@ $("#playerControls").addClass("show");
 
 $(document).ready(function() {
   resize();
-  $.getJSON("http://graph.facebook.com/?id=http://127.0.0.1", function(fbdata) {
+  $.getJSON("http://graph.facebook.com/?id=http://doremi.fm", function(fbdata) {
     $("#facebook-count").text(ReplaceNumberWithCommas(fbdata.shares));
   });
-  $.getJSON("http://cdn.api.twitter.com/1/urls/count.json?url=http://127.0.0.1&callback=?", function(twitdata) {
+  $.getJSON("http://cdn.api.twitter.com/1/urls/count.json?url=http://doremi.fm&callback=?", function(twitdata) {
     $("#twitter-count").text(ReplaceNumberWithCommas(twitdata.count));
   });
   if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
