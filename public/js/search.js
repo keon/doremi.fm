@@ -88,7 +88,8 @@ songDataReady = function() {
     song = song_data[_i];
     if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
       // $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
-      $("#archive").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
+      // $("#archive").append("<li id=\"topSong\"></li>")
+      $("#archive").append("<div id='song_pick' data-song=\""+song.rank+"\" class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
       if(counter < 11){
         counter++;
       }else{
@@ -355,7 +356,7 @@ $("#topListBtn").on("click", function() {
   return $('#playerControls').addClass("squareTop");
 });
 
-$('#song-pick').on("click", function() {
+$('#song_pick').on("click", function() {
   console.log("PICKED");
   var id;
   id = this.getAttribute("data-song");
