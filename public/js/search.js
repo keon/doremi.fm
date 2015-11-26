@@ -84,9 +84,11 @@ resize = function() {
 songDataReady = function() {
   var query, song, _i, _j, _len, _len1, _ref;
   var counter = 1;
+  $("#archive").html("");
   for (_i = 0, _len = song_data.length; _i < _len; _i++) {
     song = song_data[_i];
     if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
+
       // $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
       $("#archive").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
       if(counter < 11){
@@ -526,6 +528,96 @@ $(document).ready(function() {
   }
 });
 
+$("#calm").on("click", function() {
+  console.log("calm clicked");
+  $.get("/category/calm", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#top50").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/top50", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#cafetime").on("click", function() {
+  console.log("cafetime clicked");
+  $.get("/category/cafetime", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#chill").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/chill", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#classic").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/classic", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#focus").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/focus", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#ost").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/ost", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#rain").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/rain", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#sunshine").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/sunshine", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
+$("#workout").on("click", function() {
+  console.log("top50 clicked");
+  $.get("/category/workout", function(data){ 
+    console.log(data[0].artist);
+     song_data = data;
+     songDataReady();
+     newSong();
+  });
+});
 
 /*****************************************************************************/
 
