@@ -6,25 +6,25 @@ var csv = require("fast-csv");
 
 // var stream = fs.createReadStream("./lists/top50.csv");
 // var stream = fs.createReadStream("./lists/cafetime.csv");
-// var stream = fs.createReadStream("./lists/calm.csv");
+var stream = fs.createReadStream("./lists/calm.csv");
 // var stream = fs.createReadStream("./lists/chill.csv");
 // var stream = fs.createReadStream("./lists/classic.csv");
 // var stream = fs.createReadStream("./lists/focus.csv");
 // var stream = fs.createReadStream("./lists/ost.csv");
 // var stream = fs.createReadStream("./lists/rain.csv");
 // var stream = fs.createReadStream("./lists/sunshine.csv");
-var stream = fs.createReadStream("./lists/workout.csv");
+// var stream = fs.createReadStream("./lists/workout.csv");
 
 // var output = "./lists/top50.json";
 // var output = "./lists/cafetime.json";
-// var output = "./lists/calm.json";
+var output = "./lists/calm.json";
 // var output = "./lists/chill.json";
 // var output = "./lists/classic.json";
 // var output = "./lists/focus.json";
 // var output = "./lists/ost.json";
 // var output = "./lists/rain.json";
 // var output = "./lists/sunshine.json";
-var output = "./lists/workout.json";
+// var output = "./lists/workout.json";
 
 
 
