@@ -123,6 +123,28 @@ app.get("/today", function(req, res) {
   }
 });
 
+app.get("/category/:category", function(req, res) {
+  if (songs.length <= 0) {
+
+    var json_file = "./lists/"+ req.params.category +".json"
+    console.log("sending from JSON: " + json_file);
+    return fs.readFile(json_file, "utf8", "w", function(err, in_file) {
+      if (err) {
+        throw err;
+      }
+      if (!err) {
+        songs = JSON.parse(in_file);
+        console.log(songs);
+        return res.send(songs);
+      }
+    });
+  } else {
+    console.log("sending existing from memory");
+    return res.send(songs);
+  }
+});
+
+
 app.get("/", function(req, res) {
     return res.sendFile(index)
 });
