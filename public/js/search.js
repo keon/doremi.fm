@@ -355,21 +355,18 @@ $("#topListBtn").on("click", function() {
   return $('#playerControls').addClass("squareTop");
 });
 
-// $('#song-pick').on("click", function() {
-//   console.log("PICKED");
-//   var id;
-//   id = this.getAttribute("data-song");
-//   newSong(song_data[id - 1]);
-//   $("#screen").hide();
-//   $("#topListBtn").toggleClass("active");
-//   $("#topList").toggleClass("active");
-//   $("#badList").toggleClass("active");
-//   return $('#playerControls').addClass("show");
-// });
+$('#archive').on("click",'#song-pick', function() {
+  console.log("PICKED");
+  var id;
+  id = this.getAttribute("data-song");
+  newSong(song_data[id - 1]);
+  // $("#screen").hide();
+  // $("#topListBtn").toggleClass("active");
+  // $("#topList").toggleClass("active");
+  // $("#badList").toggleClass("active");
+  return $('#playerControls').addClass("show");
+});
 
-$("div#song-pick").on("click", function(){
-  console.log("sdf");
-})
 
 
 // $('#controlsContainer').hover((function() {
