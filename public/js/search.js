@@ -84,13 +84,13 @@ resize = function() {
 songDataReady = function() {
   var query, song, _i, _j, _len, _len1, _ref;
   var counter = 1;
-  $("#archive").html("");
+  $("#archive #song-list").html("");
   for (_i = 0, _len = song_data.length; _i < _len; _i++) {
     song = song_data[_i];
     if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
 
       // $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
-      $("#archive").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
+      $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
       if(counter < 11){
         counter++;
       }else{
@@ -652,25 +652,25 @@ $(document).ready(function(){
   $("#menu li").eq(0).addClass("show");
 });
 
-$("#header").mousedown(function(e){
+// $("#header").mousedown(function(e){
   
-  //
-  mouse_down = true;
-  mouse_start_y = e.pageY;
-  //
+//   //
+//   mouse_down = true;
+//   mouse_start_y = e.pageY;
+//   //
   
-  if(index == menu_items_count-1) {
-    index = 0;
-  } else {
-    var $item = $("#menu li").eq(index);
-    $("#menu").html(menu);
-    $("#menu li").eq($item.attr("data-index")).remove();
-    $item.prependTo($("#menu"));
-    $("#menu li").eq(0).addClass("show");
-    $("#menu").addClass("notrans");
-    $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
-    }
-});
+//   if(index == menu_items_count-1) {
+//     index = 0;
+//   } else {
+//     var $item = $("#menu li").eq(index);
+//     $("#menu").html(menu);
+//     $("#menu li").eq($item.attr("data-index")).remove();
+//     $item.prependTo($("#menu"));
+//     $("#menu li").eq(0).addClass("show");
+//     $("#menu").addClass("notrans");
+//     $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
+//     }
+// });
 
 $(document).mouseup(function(e){
   if(mouse_down) {
