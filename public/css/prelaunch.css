@@ -45,8 +45,10 @@ body {
   border-radius: 30px;
   position: absolute;
   left: 45%;
-  top: 23%;
+  top: 15%;
+
   margin: 0 -310px;
+  /*margin-top:8%;*/
   background: #fff;
 }
 
@@ -330,8 +332,13 @@ body {
 }
 .box.small {
   width: 100%;
-  height: 50px;
+  height: 40px;
+  padding-top:10px;
+  border-bottom:1px solid #ddd;
 
+}
+.box.small:hover{
+  color:#e53245;
 }
 .box.category-box{
   height:200px;
@@ -357,7 +364,6 @@ body {
   /*text-transform: uppercase;*/
   /*padding: 25px 25px;*/
   font-weight: 600;
-
 }
 .box p{
   color:#9e9e9e;
@@ -406,8 +412,9 @@ body {
   /*height: 640px;*/
 
   left: 46%;
-  top: 23%;
+  top: 15%;
   margin: 0px 20px;
+  /*margin-top:8%;*/
   color: #fff;
   z-index:10;
 }
@@ -580,7 +587,13 @@ body {
   z-index:50;
   position:absolute;
 }
-
+.blackScreen>div{
+  display:inline-block;
+  margin-top: 170px;
+  margin-left:68px;
+  /*left:50%;*/
+  /*top:50%;*/
+}
 
 /***************/
 #socialmedia i, #appstore i{
@@ -755,6 +768,57 @@ a.control_next {
     background-size: 100% 100%;
 }
 
+/********fuck********/
+.track-slider1{
+  background-image: url("/img/cafe.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider2{
+  background-image: url("/img/calm.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider3{
+  background-image: url("/img/chillax.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider4{
+  background-image: url("/img/top50.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider5{
+  background-image: url("/img/classic.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider6{
+  background-image: url("/img/drama.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider7{
+  background-image: url("/img/rainy-days.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider8{
+  background-image: url("/img/study.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider9{
+  background-image: url("/img/sunshine.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.track-slider10{
+  background-image: url("/img/workout.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
 
 /**********************************************/
 
