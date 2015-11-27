@@ -499,18 +499,43 @@ $('#volume').on("click", function() {
     return player.setVolume(0);
   }else{
     volumeClick = true;
+    $("#phone-black-screen").addClass("hide");
     $("#volume").addClass("active");
     $("#volumeIcon").removeClass("fa-volume-off")
-    $("#volumeIcon").addClass("fa-volume-up")
-    return player.setVolume(100);  
+    $("#volumeIcon").addClass("fa-volume-up")    
+    if(pbsclick){
+      return player.setVolume(100);        
+    }else{
+      pbsclick = true;
+      setTimeout(function(){
+        console.log("volume up!");
+        return player.setVolume(100); 
+      }, 1500)
+    }
   }
-  
   // if ($("#volume").hasClass("active") === true || $("#info").hasClass("active") === true) {
   //   return $("#playerControls").addClass("squareTop");
   // } else {
   //   return $("#playerControls").removeClass("squareTop");
   // }
 });
+
+var pbsclick = false;
+$("#phone-black-screen").on("click", function(){
+  if(!pbsclick){
+
+    $("#phone-black-screen").addClass("hide");
+    volumeClick = true;
+    $("#volume").addClass("active");
+    $("#volumeIcon").removeClass("fa-volume-off")
+    $("#volumeIcon").addClass("fa-volume-up")
+    setTimeout(function(){
+      console.log("volume up!");
+      return player.setVolume(100); 
+    }, 1500)
+  }
+});
+
 
 $('#volumeBar').on("change input", function() {
   console.log(this.value);
@@ -544,95 +569,46 @@ $(document).ready(function() {
   }
 });
 
-$("#calm").on("click", function() {
-  console.log("calm clicked");
-  $.get("/category/calm", function(data){ 
+
+var changeCategory = function(category){
+  $.get("/category/"+category, function(data){ 
     console.log(data[0].artist);
      song_data = data;
      songDataReady();
      newSong();
   });
+}
+
+$("#calm").on("click", function() {
+  changeCategory("calm");
 });
 $("#top50").on("click", function() {
-  console.log("top50 clicked");
-  $.get("/category/top50", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("top50")
 });
 $("#cafetime").on("click", function() {
-  console.log("cafetime clicked");
-  $.get("/category/cafetime", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("cafetime")
 });
 $("#chill").on("click", function() {
-  console.log("top50 clicked");
-  $.get("/category/chill", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("chill");
 });
 $("#classic").on("click", function() {
-  console.log("top50 clicked");
-  $.get("/category/classic", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("classic");
 });
 $("#focus").on("click", function() {
-  console.log("top50 clicked");
-  $.get("/category/focus", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("focus");
 });
 $("#ost").on("click", function() {
   console.log("top50 clicked");
-  $.get("/category/ost", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("ost");
 });
 $("#rain").on("click", function() {
-  console.log("top50 clicked");
-  $.get("/category/rain", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("rain");
 });
 $("#sunshine").on("click", function() {
-  console.log("top50 clicked");
-  $.get("/category/sunshine", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("sunshine");
 });
 $("#workout").on("click", function() {
-  console.log("top50 clicked");
-  $.get("/category/workout", function(data){ 
-    console.log(data[0].artist);
-     song_data = data;
-     songDataReady();
-     newSong();
-  });
+  changeCategory("sunshine");
 });
 
 /*****************************************************************************/
