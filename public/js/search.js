@@ -90,7 +90,7 @@ songDataReady = function() {
     if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
 
       // $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
-      $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small back"+counter+"\"><span>"+song.title+"</span></div>");
+      $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small\"><span>"+song.title+"</span></div>");
       if(counter < 11){
         counter++;
       }else{
@@ -119,7 +119,8 @@ songDataReady = function() {
 onPlayerReady = function(event) {
   player.setVolume(0);
   event.target.playVideo();
-  $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
+  $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+  // $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
 };
 
 onPlayerStateChange = function(event) {
@@ -150,15 +151,30 @@ onPlayerStateChange = function(event) {
   }
 };
 
+isStop = false;
+$("#stopstart").on("click",function(){
+  console.log("ok");
+  if(isStop){
+    startVideo();
+    isStop = false;
+  }else{
+    pauseVideo();
+    isStop = true;
+  }
+});
+
 stopVideo = function() {
+  isStop = true;
   player.stopVideo();
 };
 
 startVideo = function() {
+  isStop = false;
   player.playVideo();
 };
 
 pauseVideo = function() {
+  isStop = true;
   player.pauseVideo();
 };
 
@@ -173,9 +189,9 @@ newSong = function(song) {
   }
   player.loadVideoById(song.youtubeId);
   current_song = song;
-  // $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+  $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
   //
-  $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
+  // $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
   // $("#about").text("" + current_song.artist + " - " + current_song.title);
   return addToHistory(song);
 };
@@ -317,8 +333,8 @@ $("#topListBtn").on("click", function() {
   $("#topListBtn").toggleClass("active");
   $("#topList").toggleClass("active");
   $("#badList").toggleClass("active");
-  $("#info").removeClass("active");
-  $("#songInfo").removeClass("active");
+  // $("#info").removeClass("active");
+  // $("#songInfo").removeClass("active");
   // $("#volumeBar").removeClass("active");
   // $("#volume").removeClass("active");
   $('#playerControls').addClass("show");
@@ -343,8 +359,8 @@ $("#topListBtn").on("click", function() {
               infoClick = false;
           }else{
               console.log("archive");
-              $("#menu").css("transform","translate3d("+getItemX(2)+"px,0,0)");
-              $("#menu li").eq(2).addClass("show");
+              $("#menu").css("transform","translate3d("+getItemX(1)+"px,0,0)");
+              $("#menu li").eq(1).addClass("show");
               $("#archive").removeClass("hide");
               $("#archive").addClass("show");
               topListBtnClick = true;
@@ -412,44 +428,44 @@ $('#pause').on("click", function() {
 
 var infoClick = false;
 $('#info').on("click", function() {
-  $("#topListBtn").removeClass("active");
-  $("#topList").removeClass("active");
-  $("#badList").removeClass("active");
+  // $("#topListBtn").removeClass("active");
+  // $("#topList").removeClass("active");
+  // $("#badList").removeClass("active");
   $("#screen").hide();
   // $("#volumeBar").removeClass("active");
   // $("#volume").removeClass("active");
   $("#info").toggleClass("active");
-  // $("#songInfo").toggleClass("active");
-        $("#menu li").removeClass("show");
+  $("#songInfo").toggleClass("active");
+        // $("#menu li").removeClass("show");
         // $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
         // $(".reload i").removeClass("anim");
 
-        $(".pages").addClass("hide");
-        setTimeout(function(){
+        // $(".pages").addClass("hide");
+        // setTimeout(function(){
 
 
-          $(".pages").removeClass("hide");
-          $(".page").removeClass("show");
-          $(".page").addClass("hide");
+        //   $(".pages").removeClass("hide");
+        //   $(".page").removeClass("show");
+        //   $(".page").addClass("hide");
 
-          if(infoClick){
-              console.log("latest");
-              $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
-              $("#menu li").eq(0).addClass("show");
-              $("#latest").removeClass("hide");
-              $("#latest").addClass("show");
-              infoClick = false;
-              topListBtnClick = false;
-          }else{
-              console.log("about");
-              $("#menu").css("transform","translate3d("+getItemX(3)+"px,0,0)");
-              $("#menu li").eq(3).addClass("show");
-              $("#about").removeClass("hide");
-              $("#about").addClass("show");
-              infoClick = true;
-              topListBtnClick = false;
-          }
-        },1000);
+        //   if(infoClick){
+        //       console.log("latest");
+        //       $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
+        //       $("#menu li").eq(0).addClass("show");
+        //       $("#latest").removeClass("hide");
+        //       $("#latest").addClass("show");
+        //       infoClick = false;
+        //       topListBtnClick = false;
+        //   }else{
+        //       console.log("about");
+        //       $("#menu").css("transform","translate3d("+getItemX(2)+"px,0,0)");
+        //       $("#menu li").eq(2).addClass("show");
+        //       $("#about").removeClass("hide");
+        //       $("#about").addClass("show");
+        //       infoClick = true;
+        //       topListBtnClick = false;
+        //   }
+        // },1000);
 
 
 return $("#playerControls").addClass("squareTop");
@@ -652,25 +668,26 @@ $(document).ready(function(){
   $("#menu li").eq(0).addClass("show");
 });
 
-// $("#header").mousedown(function(e){
+$("#header").mousedown(function(e){
   
-//   //
-//   mouse_down = true;
-//   mouse_start_y = e.pageY;
-//   //
+  //
+  mouse_down = true;
+  mouse_start_y = e.pageY;
+  //
   
-//   if(index == menu_items_count-1) {
-//     index = 0;
-//   } else {
-//     var $item = $("#menu li").eq(index);
-//     $("#menu").html(menu);
-//     $("#menu li").eq($item.attr("data-index")).remove();
-//     $item.prependTo($("#menu"));
-//     $("#menu li").eq(0).addClass("show");
-//     $("#menu").addClass("notrans");
-//     $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
-//     }
-// });
+  if(index == menu_items_count-1) {
+    index = 0;
+  } 
+  // else {
+  //   var $item = $("#menu li").eq(index);
+  //   $("#menu").html(menu);
+  //   $("#menu li").eq($item.attr("data-index")).remove();
+  //   $item.prependTo($("#menu"));
+  //   $("#menu li").eq(0).addClass("show");
+  //   $("#menu").addClass("notrans");
+  //   $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
+  //   }
+});
 
 $(document).mouseup(function(e){
   if(mouse_down) {
@@ -699,7 +716,7 @@ $(document).mouseup(function(e){
           
           $("#menu li").eq(0).addClass("show");
         },500);
-      },1000);
+      },800);
     
       } else {
 
@@ -721,22 +738,17 @@ $(document).mouseup(function(e){
               $("#latest").addClass("show"); 
               break;
             case '1': 
-              console.log("best");
-              $("#best").removeClass("hide");
-              $("#best").addClass("show"); 
-              break;
-            case '2': 
               console.log("archive");
               $("#archive").removeClass("hide");
               $("#archive").addClass("show"); 
               break;
-            case '3': 
-              console.log("about");
-              $("#about").removeClass("hide");
-              $("#about").addClass("show"); 
-              break;
+            // case '2': 
+            //   console.log("about");
+            //   $("#about").removeClass("hide");
+            //   $("#about").addClass("show"); 
+            //   break;
             }
-        },1000);
+        },800);
     }
   }
   }
