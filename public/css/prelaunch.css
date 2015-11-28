@@ -615,7 +615,7 @@ body {
 }
 
 /***************/
-#socialmedia i, #appstore i{
+#socialmedia a, #appstore a{
   padding: 0 10px;
 }
 
@@ -736,6 +736,16 @@ a.control_next {
 
 
 /***************CUSTOMIZE SLIDER****************/
+
+.slide-overlay{
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.6);
+}
+
+
+
+
 .slider1{
   background-image: url("/img/category/cafe.png");
     background-repeat: no-repeat;
@@ -922,3 +932,12 @@ a.control_next {
   background: -moz-linear-gradient(-50deg, #bde5d0, #123c6c); /* For Firefox 3.6 to 15 */
   background: linear-gradient(-50deg, #bde5d0, #123c6c); /* Standard syntax */
 }
+
+
+/* seongsoon */
+.boxbox .box div img {
+  margin: 27px;
+  width: 50%;
+  height: 50%;
+}
+
