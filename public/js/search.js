@@ -91,10 +91,10 @@ songDataReady = function() {
     song = song_data[_i];
     if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
       if(song.title == current_song.title){
-        $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small active\"><span>"+song.title+" - </span><span>"+song.artist+"</span></div>");
+        $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small active\"><span>"+song.title+"</span><span> - "+song.artist+"</span></div>");
         // $("#song-list #song-pick span").text()
       } else {
-        $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small\"><span>"+song.title+" - </span><span>"+song.artist+"</span></div>");
+        $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small\"><span>"+song.title+"</span><span> - "+song.artist+"</span></div>");
 
       }
       // $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
@@ -200,12 +200,11 @@ newSong = function(song) {
   }
   player.loadVideoById(song.youtubeId);
   current_song = song;
-  $("#song-list #song-pick").each(function(i, obj) {
-    console.log($(this).text());
+  $("#song-list #song-pick span:first-child").each(function(i, obj) {
     if(current_song.title && $(this).text() === current_song.title){
-      $(this).addClass("active"); 
+      $(this).parent().addClass("active"); 
     }else{
-      $(this).removeClass("active");
+      $(this).parent().removeClass("active");
     }
   });
   $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
@@ -588,6 +587,20 @@ $("#playerControls").addClass("show");
 //     }
 //   }), 5000);
 // });
+$(".boxbox").children().children("div").addClass("hide");
+
+$(".boxbox").on("mouseover", function() {
+  console.log("on");
+  $(this).children().children("div").removeClass("hide");
+  $(this).children().children("div").addClass("slide-overlay");
+})
+$(".boxbox").on("mouseout", function() {
+  console.log("off");
+  $(this).children().children("div").addClass("hide");
+  $(this).children().children("div").removeClass("slide-overlay");
+})
+
+
 
 $(document).ready(function() {
   resize();
