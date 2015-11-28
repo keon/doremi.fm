@@ -119,7 +119,7 @@ songDataReady = function() {
 onPlayerReady = function(event) {
   player.setVolume(0);
   event.target.playVideo();
-  $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
+  $("#songInfo").text("Now Playing: " + current_song.artist + " - " + current_song.title);
   // $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
 };
 
@@ -426,16 +426,20 @@ $('#pause').on("click", function() {
   return pauseVideo();
 });
 
+$('#songInfo').addClass("active");
+
 var infoClick = false;
 $('#info').on("click", function() {
   // $("#topListBtn").removeClass("active");
   // $("#topList").removeClass("active");
   // $("#badList").removeClass("active");
   $("#screen").hide();
+  $("#black-background").toggleClass("hide");
+  $("#prelaunchContainer").toggleClass("hide");
   // $("#volumeBar").removeClass("active");
   // $("#volume").removeClass("active");
-  $("#info").toggleClass("active");
-  $("#songInfo").toggleClass("active");
+  // $("#info").toggleClass("active");
+  // $("#songInfo").toggleClass("active");
         // $("#menu li").removeClass("show");
         // $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
         // $(".reload i").removeClass("anim");
@@ -503,7 +507,7 @@ $('#volume').on("click", function() {
     $("#volume").addClass("active");
     $("#volumeIcon").removeClass("fa-volume-off")
     $("#volumeIcon").addClass("fa-volume-up")    
-    if(pbsclick){
+    if(pbsclick || pbswait){
       return player.setVolume(100);        
     }else{
       pbsclick = true;
@@ -520,6 +524,11 @@ $('#volume').on("click", function() {
   // }
 });
 
+var pbswait = false;
+setTimeout(function(){
+  pbswait = true;
+}, 1500);
+
 var pbsclick = false;
 $("#phone-black-screen").on("click", function(){
   if(!pbsclick){
@@ -529,10 +538,14 @@ $("#phone-black-screen").on("click", function(){
     $("#volume").addClass("active");
     $("#volumeIcon").removeClass("fa-volume-off")
     $("#volumeIcon").addClass("fa-volume-up")
-    setTimeout(function(){
-      console.log("volume up!");
-      return player.setVolume(100); 
-    }, 1500)
+    if(pbswait){
+        return player.setVolume(100); 
+    }else{
+      setTimeout(function(){
+        console.log("volume up!");
+        return player.setVolume(100); 
+      }, 1500)
+    }
   }
 });
 
