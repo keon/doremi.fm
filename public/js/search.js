@@ -29,11 +29,12 @@ onYouTubeIframeAPIReady = function() {
     var ratio, song, width;
     song_data = JSON.parse(result);
     // console.log("song_data:" + song_data);
-    songDataReady();
+    
     width = $(window).width();
     ratio = 16 / 9;
     song = randSong();
     current_song = song;
+    songDataReady();
     return player = new YT.Player('player', {
       width: $(window).width(),
       height: Math.ceil(width / ratio),
@@ -81,6 +82,7 @@ resize = function() {
   }
 };
 
+
 songDataReady = function() {
   var query, song, _i, _j, _len, _len1, _ref;
   var counter = 1;
@@ -88,9 +90,15 @@ songDataReady = function() {
   for (_i = 0, _len = song_data.length; _i < _len; _i++) {
     song = song_data[_i];
     if (_ref = song.query, __indexOf.call(dont_play, _ref) < 0) {
+      if(song.title == current_song.title){
+        $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small active\"><span>"+song.title+" - </span><span>"+song.artist+"</span></div>");
+        // $("#song-list #song-pick span").text()
+      } else {
+        $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small\"><span>"+song.title+" - </span><span>"+song.artist+"</span></div>");
 
+      }
       // $("#topList ol").append("<li class='topSong' data-song=" + song.rank + "> <strong>" + song.artist + "</strong> / <em>" + song.title + "</em> </li>");
-      $("#archive #song-list").append("<div id=\"song-pick\" data-song=\""+song.rank+"\" class=\"box small\"><span>"+song.title+"</span></div>");
+      
       if(counter < 11){
         counter++;
       }else{
@@ -179,6 +187,9 @@ pauseVideo = function() {
 };
 
 newSong = function(song) {
+  // var a = $("#song-list #song-pick").text();
+
+  // 
   // console.log(song);
   if (song == null) {
     song = randSong();
@@ -189,6 +200,14 @@ newSong = function(song) {
   }
   player.loadVideoById(song.youtubeId);
   current_song = song;
+  $("#song-list #song-pick").each(function(i, obj) {
+    console.log($(this).text());
+    if(current_song.title && $(this).text() === current_song.title){
+      $(this).addClass("active"); 
+    }else{
+      $(this).removeClass("active");
+    }
+  });
   $("#songInfo").text("" + current_song.artist + " - " + current_song.title);
   //
   // $("#about").html("<div><span>"+current_song.title+"</span><br/>"+current_song.artist+"<br/><br/><br/><br/>doremi</div>");
@@ -239,6 +258,7 @@ function validateEmail(email) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     return re.test(email);
 }
+
 
 $("#inputGroup input").keypress(function (e) {
 
@@ -571,6 +591,55 @@ $("#playerControls").addClass("show");
 
 $(document).ready(function() {
   resize();
+  $('#checkbox').change(function(){
+    setInterval(function () {
+        moveRight();
+    }, 3000);
+  });
+  
+  var slideCount = $('#slider ul li').length;
+  var slideWidth = $('#slider ul li').width();
+  var slideHeight = $('#slider ul li').height();
+  var sliderUlWidth = slideCount * slideWidth;
+  
+  // $('#slider').css({ width: slideWidth, height: slideHeight });
+  
+  // $('#slider ul').css({ width: sliderUlWidth, marginLeft: - slideWidth });
+  
+  //   $('#slider ul li:last-child').prependTo('#slider ul');
+
+    function moveLeft() {
+        $('#slider ul').animate({
+            left: + slideWidth
+        }, 200, function () {
+            $('#slider ul li:last-child').prependTo('#slider ul');
+            $('#slider ul').css('left', '');
+            var currentCategory = $('#slider ul li:first-child').attr("data-category");
+            console.log(currentCategory);
+            changeCategory(currentCategory);
+
+        });
+    };
+
+    function moveRight() {
+        $('#slider ul').animate({
+            left: - slideWidth
+        }, 200, function () {
+            $('#slider ul li:first-child').appendTo('#slider ul');
+            $('#slider ul').css('left', '');
+            var currentCategory = $('#slider ul li:first-child').attr("data-category");
+            console.log(currentCategory);
+            changeCategory(currentCategory);
+        });
+    };
+
+    $('a.control_prev').click(function () {
+        moveLeft();
+    });
+
+    $('a.control_next').click(function () {
+        moveRight();
+    });
   $.getJSON("http://graph.facebook.com/?id=http://doremi.fm", function(fbdata) {
     $("#facebook-count").text(ReplaceNumberWithCommas(fbdata.shares));
   });
@@ -584,7 +653,19 @@ $(document).ready(function() {
 
 
 var changeCategory = function(category){
-  $.get("/category/"+category, function(data){ 
+
+  $(".pages").removeClass("hide");
+  $(".page").removeClass("show");
+  $(".page").addClass("hide");
+
+  console.log("archive");
+  $("#archive").removeClass("hide");
+  $("#archive").addClass("show");
+
+  $("li[data-category="+category+"]").prependTo("#slider ul");
+            
+  $.get("/category/"+category, function(data){
+
     console.log(data[0].artist);
      song_data = data;
      songDataReady();

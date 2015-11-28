@@ -13,6 +13,12 @@
       "youtubeId":"eW4Mt6NnGIA"
    },
    {  
+      "artist":"꽃별(FlowerStar)",
+      "title":"히칸바나",
+      "rank":3,
+      "youtubeId":"LQuFWtVfVks"
+   },
+   {  
       "artist":"센티멘탈 시너리(Sentimental Scenery)",
       "title":"Soundscape",
       "rank":4,
@@ -120,16 +126,11 @@
       "rank":21,
       "youtubeId":"vzW8ngssZZY"
    },
-   {  
-      "artist":"꽃별(FlowerStar)",
-      "title":"히칸바나",
-      "rank":22,
-      "youtubeId":"LQuFWtVfVks"
-   },
+   
    {  
       "artist":"꽃별(FlowerStar)",
       "title":"비익련리",
-      "rank":23,
+      "rank":22,
       "youtubeId":"wvTYJSOpRwA"
    }
 ]

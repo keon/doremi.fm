@@ -288,7 +288,7 @@ body {
   overflow-x: hidden;
   height: 377.6px;
   display: none;
-  padding-right: 22px;
+  padding-right: 20px;
 }
 
 .hide{
@@ -333,9 +333,16 @@ body {
 .box.small {
   width: 100%;
   height: 40px;
-  padding-top:10px;
+  padding-top:8px;
   border-bottom:1px solid #ddd;
+}
 
+.box.small.active{
+  background-color: #BF3A3E;
+  color: #FFF;
+}
+.box.small.active:hover{
+  color:#eee;
 }
 .box.small:hover{
   color:#e53245;
@@ -356,7 +363,19 @@ body {
 .box span {
   /*position: absolute;*/
   /*color: #000;*/
-  font-size: 13px;
+  font-size: 12px;
+  bottom: 0;
+  left: 0;
+  padding:0 0 8px 8px;
+  margin:0;
+  /*text-transform: uppercase;*/
+  /*padding: 25px 25px;*/
+  font-weight: 600;
+}
+.box span:nth-child(2) {
+    /*position: absolute;*/
+  /*color: #000;*/
+  font-size: 11px;
   bottom: 0;
   left: 0;
   padding:0 0 8px 8px;
