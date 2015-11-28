@@ -666,14 +666,18 @@ $(document).ready(function() {
 
 
 var changeCategory = function(category){
-
+  $("#topListBtn").toggleClass("active");
   $(".pages").removeClass("hide");
   $(".page").removeClass("show");
   $(".page").addClass("hide");
-
+  topListBtnClick = true;
   console.log("archive");
   $("#archive").removeClass("hide");
   $("#archive").addClass("show");
+
+ $("#menu").css("transform","translate3d("+getItemX(1)+"px,0,0)");
+  $("#menu li").removeClass("show");
+  $("#menu li").eq(1).addClass("show");
 
   $("li[data-category="+category+"]").prependTo("#slider ul");
             
