@@ -347,6 +347,8 @@ body {
 .box.small:hover{
   color:#e53245;
 }
+
+
 .box.category-box{
   height:200px;
   width:100%;
@@ -394,7 +396,9 @@ body {
   /*text-transform: uppercase;*/
   /*padding: 25px 25px;*/
   font-weight: 600;
-
+}
+.box p:hover{
+  color:#000;
 }
 .boxbox{
   color:#000;
