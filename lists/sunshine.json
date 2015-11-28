@@ -1,21 +1,21 @@
 [  
    {  
-      "artist":"K.Will",
-      "title":"My Heart is Beating",
+      "artist":"Urban Zakapa",
+      "title":"둘 하나 둘",
       "rank":1,
-      "youtubeId":"HslrJ1TyLXw"
+      "youtubeId":"oop4-M-hwVE"
    },
    {  
-      "artist":"Geeks, SoYou",
-      "title":"Officially Missing You",
+      "artist":"SugarBowl",
+      "title":"농담 반 진담 반",
       "rank":2,
-      "youtubeId":"3J-0MJIlLeA"
+      "youtubeId":"lNm1dt7NrF4"
    },
    {  
-      "artist":"정엽",
-      "title":"왜 이제야 왔니",
+      "artist":"Standing EGG",
+      "title":"그래 너",
       "rank":3,
-      "youtubeId":"KlqpJLyv-6Y"
+      "youtubeId":"RWZvZZIffUQ"
    },
    {  
       "artist":"델리스파이스",
@@ -24,28 +24,28 @@
       "youtubeId":"pY9TR_g2SIc"
    },
    {  
-      "artist":"Girl's Day",
-      "title":"Hug Me Once",
+      "artist":"Standing EGG",
+      "title":"Miss Flower",
       "rank":5,
-      "youtubeId":"yebXjZA60OQ"
+      "youtubeId":"D9R2h8f44FU"
    },
    {  
-      "artist":"Rainbow",
-      "title":"Sunshine",
+      "artist":"SORAN",
+      "title":"자꾸 생각나",
       "rank":6,
-      "youtubeId":"h-3V0FwPzes"
+      "youtubeId":"zDpDe9LZb0k"
    },
    {  
-      "artist":"HelloVenus",
-      "title":"Venus",
+      "artist":"Urban Zakapa",
+      "title":"Like a bird",
       "rank":7,
-      "youtubeId":"zU3Ug5pw7sw"
+      "youtubeId":"MgrQXgARh7M"
    },
    {  
-      "artist":"Sistar",
-      "title":"Touch My Body",
+      "artist":"J Rabbit",
+      "title":"If You Love Me(Acoustic Ver.)",
       "rank":8,
-      "youtubeId":"9txzvu6eQuw"
+      "youtubeId":"v6lSxk96Kp4"
    },
    {  
       "artist":"10cm",
@@ -72,27 +72,126 @@
       "youtubeId":"f_4NhMDNuGc"
    },
    {  
-      "artist":"Park Shin Hye",
-      "title":"Lovely Day",
+      "artist":"Used Cassettes",
+      "title":"열대, 우리",
       "rank":13,
-      "youtubeId":"OFU7AcTwKZk"
+      "youtubeId":"xlEsQIAPo3o"
    },
    {  
-      "artist":"NELL",
-      "title":"Ocean of light",
+      "artist":"HUMMING URBAN STEREO",
+      "title":"HAWAIIAN COUPLE",
       "rank":14,
-      "youtubeId":"elffyl3rF70"
+      "youtubeId":"AOz2i95-wKY"
    },
    {  
-      "artist":"G-DRAGON",
-      "title":"WHO YOU?",
+      "artist":"Lucite Tokki",
+      "title":"Let Me Dance",
       "rank":15,
-      "youtubeId":"doFK7Eanm3I"
+      "youtubeId":"0dbxrCQFGaI"
    },
    {  
-      "artist":"Kim Yoo Jung",
-      "title":"Happy",
+      "artist":"Fromm (프롬)",
+      "title":"A Spring Day Out (봄맞이 가출)",
       "rank":16,
-      "youtubeId":"i2jBst-iroM"
+      "youtubeId":"-n2EsCF48go"
    }
+   ,
+   {  
+      "artist":"Eddy Kim(에디킴)",
+      "title":"Darling(달링)",
+      "rank":17,
+      "youtubeId":"QkGyA26VPQA"
+   }
+   ,
+   {  
+      "artist":"K.will(케이윌)",
+      "title":"Day 1(오늘부터 1일)",
+      "rank":18,
+      "youtubeId":"9KVVPxexz1c"
+   }
+   ,
+   {  
+      "artist":"K.will(케이윌)",
+      "title":"Love Blossom",
+      "rank":19,
+      "youtubeId":"iRGOb6aKcgw"
+   }
+   ,
+   {  
+      "artist":"랄라스윗(lalasweet)",
+      "title":"시간열차",
+      "rank":20,
+      "youtubeId":"Y83MTy9IGas"
+   }
+   ,
+   {  
+      "artist":"Daybreak",
+      "title":"SILLY",
+      "rank":21,
+      "youtubeId":"NOCO9pior78"
+   }
+   ,
+   {  
+      "artist":"Acoustic Collabo",
+      "title":"그대와 나, 설레임 (Feat 소울맨)",
+      "rank":22,
+      "youtubeId":"XKaUjwE_Los"
+   }
+   ,
+   {  
+      "artist":"Jazzyfact",
+      "title":"아까워",
+      "rank":23,
+      "youtubeId":"ZxBV5kC4Gcc"
+   }
+   ,
+   {  
+      "artist":"10cm",
+      "title":"죽겠네 (album ver)",
+      "rank":24,
+      "youtubeId":"CSMNTV1fpvw"
+   }
+   ,
+   {  
+      "artist":"Crush(크러쉬)",
+      "title":"Whatever You Do (Feat. Gray)",
+      "rank":25,
+      "youtubeId":"efvicp2UysY"
+   }
+   ,
+   {  
+      "artist":"스무살(Twenty)",
+      "title":"걷자, 집앞이야 (Feat. 주예인)",
+      "rank":26,
+      "youtubeId":"FTajxt1dtCo"
+   }
+   ,
+   {  
+      "artist":"Mamamoo",
+      "title":"Love Lane",
+      "rank":27,
+      "youtubeId":"YdkR96DKGcE"
+   }
+   ,
+   {  
+      "artist":"Kisum(키썸)",
+      "title":"LOVE TALK (Feat. Hwa Sa)",
+      "rank":28,
+      "youtubeId":"YGWCd6-kKD4"
+   }
+   ,
+   {  
+      "artist":"McKay",
+      "title":"Angel 2 Me (Duet. Jeff Bernat)",
+      "rank":29,
+      "youtubeId":"c64vgmNlq84"
+   }
+   ,
+   {  
+      "artist":"SoulstaR",
+      "title":"연애의 시작 (Love Love)",
+      "rank":30,
+      "youtubeId":"g58nRZSX8Fc"
+   }
+
 ]
