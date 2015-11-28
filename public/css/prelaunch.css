@@ -45,7 +45,7 @@ body {
   border-radius: 30px;
   position: absolute;
   left: 45%;
-  top: 15%;
+  top: 13%;
 
   margin: 0 -310px;
   /*margin-top:8%;*/
@@ -347,6 +347,8 @@ body {
 .box.small:hover{
   color:#e53245;
 }
+
+
 .box.category-box{
   height:200px;
   width:100%;
@@ -394,7 +396,9 @@ body {
   /*text-transform: uppercase;*/
   /*padding: 25px 25px;*/
   font-weight: 600;
-
+}
+.box p:hover{
+  color:#000;
 }
 .boxbox{
   color:#000;
@@ -431,7 +435,7 @@ body {
   /*height: 640px;*/
 
   left: 46%;
-  top: 15%;
+  top: 13%;
   margin: 0px 20px;
   /*margin-top:8%;*/
   color: #fff;
@@ -549,6 +553,8 @@ body {
   line-height:40px;
   position:relative;
   z-index:2;
+  font-size:18px;
+  font-weight:800;
   transition:.5s all, .3s background;
   left:0;
   float:right;
@@ -615,7 +621,7 @@ body {
 }
 
 /***************/
-#socialmedia a, #appstore a{
+#socialmedia a, #appstore i{
   padding: 0 10px;
 }
 
