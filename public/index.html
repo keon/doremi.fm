@@ -59,6 +59,16 @@
 <!-- END MAIL CHIMP -->
   </head>
   <body>
+
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
     <section id="video-container">
       <div id="player"></div>
     </section>
@@ -348,17 +358,19 @@
         <i class="fa fa-apple fa-4x"></i>
         <i class="fa fa-android fa-4x"></i>
         </div>
-        <div id="socialmedia" class="hide" >
-        <a href="https://www.facebook.com/doremifm">
+
+        <div id="socialmedia" class="hide">
+          <!-- <div class="fb-share-button" data-href="http://doremi.fm/" data-layout="icon"></div> -->
+        <a target="popup" href="https://www.facebook.com/sharer/sharer.php?sdk=joey&u=http%3A%2F%2Fdoremi.fm%2F&display=popup&ref=plugin&src=share_button" onclick="window.open(this.href, 'Facebook Share','width=500,height=400,toolbar=1,resizable=0'); return false;">
           <img src="./img/facebook.png"/>
         </a>
-        <a href="https://twitter.com/doremi_stream">
+        <a target="popup" class="twitter-share-button" href="https://twitter.com/share?url=http://doremi.fm/" onclick="window.open(this.href, 'Twitter Share','width=500,height=500,toolbar=1,resizable=0'); return false;">
           <img src="./img/twitter.png"/>
         </a>
-        <a href="/#">
+        <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false">
           <img src="./img/reddit.png"/>
         </a>
-        <a href="/#">
+        <a target="popup" href="https://plus.google.com/share?url=http://doremi.fm/" onclick="window.open(this.href, 'Twitter Share','width=500,height=500,toolbar=1,resizable=0'); return false;">
           <img src="./img/google.png"/>
         </a>
 <!--         <i class="fa fa-facebook-square fa-4x"></i>

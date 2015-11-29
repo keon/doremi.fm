@@ -626,6 +626,12 @@ body {
   padding: 0 10px;
 }
 
+#socialmedia .fb-share-button {
+  background-image: url("./img/facebook.png");
+  padding: 0 10px;
+}
+
+
 
 
 /************SLIDER**************************/
@@ -947,4 +953,5 @@ a.control_next {
   width: 50%;
   height: 50%;
 }
+
 

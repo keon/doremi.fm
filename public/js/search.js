@@ -881,3 +881,5 @@ var getItemX = function(index){
   var screen_width = $("#mobile-screen").width();
   return (menu_offset-item_offset)+(screen_width-item_width)/2;
 };
+
+
