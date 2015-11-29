@@ -352,6 +352,8 @@ $("#topListBtn").on("click", function() {
   $("#topListBtn").toggleClass("active");
   $("#topList").toggleClass("active");
   $("#badList").toggleClass("active");
+  $("#topListBtnRed").toggleClass("hide");
+  $("#topListBtnWhite").toggleClass("hide");
   // $("#info").removeClass("active");
   // $("#songInfo").removeClass("active");
   // $("#volumeBar").removeClass("active");
@@ -454,6 +456,8 @@ $('#info').on("click", function() {
   // $("#topListBtn").removeClass("active");
   // $("#topList").removeClass("active");
   // $("#badList").removeClass("active");
+  $("#infoBtnRed").toggleClass("hide");
+  $("#infoBtnWhite").toggleClass("hide");
   $("#screen").hide();
   $("#black-background").toggleClass("hide");
   $("#prelaunchContainer").toggleClass("hide");
@@ -518,6 +522,8 @@ $('#volume').on("click", function() {
   // player.setVolume(100);
   if(volumeClick){
     volumeClick = false;
+    $("#volumeBtnNotMute").addClass("hide");
+    $("#volumeBtnMute").removeClass("hide");
     $("#volume").removeClass("active");
     $("#volumeIcon").removeClass("fa-volume-up")
     $("#volumeIcon").addClass("fa-volume-off")
@@ -525,6 +531,8 @@ $('#volume').on("click", function() {
   }else{
     volumeClick = true;
     $("#phone-black-screen").addClass("hide");
+    $("#volumeBtnNotMute").removeClass("hide");
+    $("#volumeBtnMute").addClass("hide");
     $("#volume").addClass("active");
     $("#volumeIcon").removeClass("fa-volume-off")
     $("#volumeIcon").addClass("fa-volume-up")    
@@ -559,6 +567,8 @@ $("#phone-black-screen").on("click", function(){
     $("#volume").addClass("active");
     $("#volumeIcon").removeClass("fa-volume-off")
     $("#volumeIcon").addClass("fa-volume-up")
+    $("#volumeBtnNotMute").removeClass("hide");
+    $("#volumeBtnMute").addClass("hide");
     if(pbswait){
         return player.setVolume(100); 
     }else{
@@ -568,6 +578,12 @@ $("#phone-black-screen").on("click", function(){
       }, 4000)
     }
   }
+});
+
+$("#phone-black-screen").on("mouseover", function(){
+  $("#phone-black-screen img").attr("src", "./img/Play-red.png");
+}).on("mouseout", function(){
+  $("#phone-black-screen img").attr("src", "./img/Play.png");
 });
 
 
@@ -592,12 +608,12 @@ $("#playerControls").addClass("show");
 $(".boxbox").children().children("div").addClass("hide");
 
 $(".boxbox").on("mouseover", function() {
-  console.log("on");
+  // console.log("on");
   $(this).children().children("div").removeClass("hide");
   $(this).children().children("div").addClass("slide-overlay");
 })
 $(".boxbox").on("mouseout", function() {
-  console.log("off");
+  // console.log("off");
   $(this).children().children("div").addClass("hide");
   $(this).children().children("div").removeClass("slide-overlay");
 })
@@ -676,7 +692,8 @@ var changeCategory = function(category){
   console.log("archive");
   $("#archive").removeClass("hide");
   $("#archive").addClass("show");
-
+  $("#topListBtnRed").toggleClass("hide");
+  $("#topListBtnWhite").toggleClass("hide");
  $("#menu").css("transform","translate3d("+getItemX(1)+"px,0,0)");
   $("#menu li").removeClass("show");
   $("#menu li").eq(1).addClass("show");

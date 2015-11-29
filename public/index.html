@@ -394,13 +394,13 @@
       <div id="playerControls">
           <section id="songInfo" class="hidden"></section>
           <input type="range" id="volumeBar" value="50" max="100" min="0" step="0.025">
-          <button id="volume"><i id="volumeIcon" class="fa fa-volume-off"></i></button>
-          <button id="info">&#xf129;</button>
-          <button id="topListBtn">&#xf0cb;</button>
+          <button id="volume"><img id="volumeBtnMute" src="./img/Mute.png"/><img id="volumeBtnNotMute" class="hide" src="./img/Volume.png"/></button>
+          <button id="info"><img id="infoBtnWhite" class="hide" src="./img/Info.png"/><img id="infoBtnRed" src="./img/Info-red.png"/></button>
+          <button id="topListBtn"><img id="topListBtnWhite"  src="./img/Playlist.png"/><img id="topListBtnRed" class="hide" src="./img/Playlist-red.png"/></button>
           <!-- <button id="dontPlay">&#xf165;</button> -->
-          <button id="play" class="hidden">&#xf04b;</button>
-          <button id="pause">&#xf04c;</button>
-          <button id="next">&#xf04e;</button>
+          <button id="play" class="hidden"><img src="./img/Play-001.png"/></button>
+          <button id="pause"><img src="./img/Pause.png"/></button>
+          <button id="next"><img src="./img/Skip.png"/></button>
       </div>
     </section>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>

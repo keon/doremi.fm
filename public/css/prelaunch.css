@@ -558,6 +558,8 @@ body {
   transition:.5s all;
   float:left;
 }
+
+
 .ortala input:focus, .ortala button:focus{outline:0;}
 .ortala button:active{background:#ac303a}
 .ortala button{
@@ -568,7 +570,7 @@ body {
   /*width:100px;*/
   width:30%;
   height:50px;
-  background:#c43e49;
+  background-color:#c43e49;
   color:white;
   text-align:center;
   line-height:40px;
@@ -580,6 +582,9 @@ body {
   left:0;
   float:right;
   border:none;
+}
+.ortala button:hover{
+  background-color:#AD3440;
 }
 
 .ortala{
@@ -632,6 +637,7 @@ body {
   background: rgba(0, 0, 0, 0.5);
   z-index:50;
   position:absolute;
+  cursor:pointer;
 }
 .blackScreen>div{
   display:inline-block;
@@ -640,6 +646,7 @@ body {
   /*left:50%;*/
   /*top:50%;*/
 }
+
 
 /***************/
 #socialmedia a img, #appstore a img{
@@ -974,4 +981,11 @@ a.control_next {
   height: 50%;
 }
 
+#playerControls button img{
+  width:37px;
+}
 
+/*
+#my-img:hover {
+    content: url('http://dummyimage.com/100x100/eb00eb/fff');
+}*/
