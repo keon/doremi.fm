@@ -487,10 +487,10 @@ body {
 }
 #credit h6 {
   position: fixed;
-  margin-left: 5px;
+  margin-right: 5px;
   margin-bottom: 5px;
   color:#fff;
-  left: 0;
+  right: 0;
   bottom: 0;
 }
 
