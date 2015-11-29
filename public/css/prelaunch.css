@@ -33,8 +33,8 @@ body {
   margin-left:-10px;
   transition:opacity 0.5s linear;
 }
-#appstore i{
-  margin-top:30px;
+#appstore a img{
+  margin-top:17px;
   transition:opacity 0.5s linear;
 }
 
@@ -44,7 +44,7 @@ body {
   border: 2px solid #ccc;
   border-radius: 30px;
   position: absolute;
-  left: 45%;
+  left: 46%;
   top: 13%;
 
   margin: 0 -310px;
@@ -476,7 +476,7 @@ body {
 #text h3 {
   font-size: 23px;
   margin: 0;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   margin-top: 10px;
 }
 #text h4 {
@@ -545,12 +545,13 @@ body {
 /*****************************************************/
 
 .ortala input{
+  border-radius:6px 0px 0px 6px;
   border:none;
   background:#eee;
   /*width:250px;*/
   width:70%;
-  height:40px;
-  padding:10px;
+  height:50px;
+  padding:15px;
   font-size:18px;
   position:relative;
   left:0px;
@@ -561,11 +562,12 @@ body {
 .ortala button:active{background:#ac303a}
 .ortala button{
   /*left:300px;*/
+  border-radius:0px 6px 6px 0px;
   content:"sa";
   display:inline-block;
   /*width:100px;*/
   width:30%;
-  height:40px;
+  height:50px;
   background:#c43e49;
   color:white;
   text-align:center;
@@ -640,8 +642,9 @@ body {
 }
 
 /***************/
-#socialmedia a, #appstore i{
+#socialmedia a img, #appstore a img{
   padding: 0 10px;
+  max-width:70px;
 }
 
 a, u {
