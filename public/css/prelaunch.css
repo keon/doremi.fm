@@ -485,6 +485,14 @@ body {
   font-size: 16px;
   margin-top: 30px;
 }
+#credit h6 {
+  position: fixed;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  color:#fff;
+  left: 0;
+  bottom: 0;
+}
 
 #pullmenu-icon {
   width: 40px;
@@ -626,9 +634,8 @@ body {
   padding: 0 10px;
 }
 
-#socialmedia .fb-share-button {
-  background-image: url("./img/facebook.png");
-  padding: 0 10px;
+a, u {
+    text-decoration: none;
 }
 
 
