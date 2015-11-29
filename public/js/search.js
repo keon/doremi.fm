@@ -757,16 +757,16 @@ $(document).ready(function(){
   $("#menu li").eq(0).addClass("show");
 });
 
-$("#header").mousedown(function(e){
+// $("#header").mousedown(function(e){
   
-  //
-  mouse_down = true;
-  mouse_start_y = e.pageY;
-  //
+//   //
+//   mouse_down = true;
+//   mouse_start_y = e.pageY;
+//   //
   
-  if(index == menu_items_count-1) {
-    index = 0;
-  } 
+//   if(index == menu_items_count-1) {
+//     index = 0;
+//   } 
   // else {
   //   var $item = $("#menu li").eq(index);
   //   $("#menu").html(menu);
@@ -776,72 +776,72 @@ $("#header").mousedown(function(e){
   //   $("#menu").addClass("notrans");
   //   $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
   //   }
-});
+// });
 
-$(document).mouseup(function(e){
-  if(mouse_down) {
-  //
-  mouse_down = false;
-  $("#header").animate({height: 46},300);
-  $("#menu").removeClass("show");
-  $(".pullmenu-icon").removeClass("hide");
-  //
+// $(document).mouseup(function(e){
+//   if(mouse_down) {
+//   //
+//   mouse_down = false;
+//   $("#header").animate({height: 46},300);
+//   $("#menu").removeClass("show");
+//   $(".pullmenu-icon").removeClass("hide");
+//   //
   
   
   
-  if(index>0) {
+//   if(index>0) {
 
-    if(index==menu_items_count-1) {
+//     if(index==menu_items_count-1) {
       
-        $(".reload i").addClass("anim");
+//         $(".reload i").addClass("anim");
       
-        setTimeout(function(){
-        $("#menu li").removeClass("show");
-        $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
-        $(".reload i").removeClass("anim");
-        newSong();
+//         setTimeout(function(){
+//         $("#menu li").removeClass("show");
+//         $("#menu").css("transform","translate3d("+getItemX(0)+"px,0,0)");
+//         $(".reload i").removeClass("anim");
+//         newSong();
         
-        setTimeout(function(){
+//         setTimeout(function(){
           
-          $("#menu li").eq(0).addClass("show");
-        },500);
-      },800);
+//           $("#menu li").eq(0).addClass("show");
+//         },500);
+//       },800);
     
-      } else {
+//       } else {
 
-        current_index = index;
+//         current_index = index;
 
-        $(".pages").addClass("hide");
+//         $(".pages").addClass("hide");
 
-        setTimeout(function(){
+//         setTimeout(function(){
 
 
-          $(".pages").removeClass("hide");
-          $(".page").removeClass("show");
-          $(".page").addClass("hide");
+//           $(".pages").removeClass("hide");
+//           $(".page").removeClass("show");
+//           $(".page").addClass("hide");
 
-          switch($("#menu li").eq(index).attr("data-index")) {
-            case '0': 
-              console.log("latest");
-              $("#latest").removeClass("hide");
-              $("#latest").addClass("show"); 
-              break;
-            case '1': 
-              console.log("archive");
-              $("#archive").removeClass("hide");
-              $("#archive").addClass("show"); 
-              break;
-            // case '2': 
-            //   console.log("about");
-            //   $("#about").removeClass("hide");
-            //   $("#about").addClass("show"); 
-            //   break;
-            }
-        },800);
-    }
-  }
-  }
-});
+//           switch($("#menu li").eq(index).attr("data-index")) {
+//             case '0': 
+//               console.log("latest");
+//               $("#latest").removeClass("hide");
+//               $("#latest").addClass("show"); 
+//               break;
+//             case '1': 
+//               console.log("archive");
+//               $("#archive").removeClass("hide");
+//               $("#archive").addClass("show"); 
+//               break;
+//             // case '2': 
+//             //   console.log("about");
+//             //   $("#about").removeClass("hide");
+//             //   $("#about").addClass("show"); 
+//             //   break;
+//             }
+//         },800);
+//     }
+//   }
+//   }
+// });
 
 $(document).mousemove(function(e){
   
