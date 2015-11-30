@@ -38,6 +38,10 @@ body {
   transition:opacity 0.5s linear;
 }
 
+#appstore a {
+  cursor: default;
+}
+
 #phone {
   width: 248px;
   height: 512px;
@@ -98,6 +102,29 @@ body {
     overflow: hidden;
     display:none !important;
   }
+  /*#controlsContainer{
+    display:none;
+  }*/
+  #progressContainer {
+    display:none;
+  }
+  .subtitle {
+    display:none;
+  }
+  .doremi {
+    width: 200px;
+  }
+  .main-title h2 {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    line-height: 25px !important;
+  }
+  .ortala input, .ortala button {
+    font-size: 15px !important;
+    height: 40px !important;
+  } 
+
+  
 }
 
 
