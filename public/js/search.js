@@ -272,6 +272,10 @@ function validateEmail(email) {
     return re.test(email);
 }
 
+$("#share-button").on("click", function(){
+  $("#text").toggleClass("hide");
+  $("#mobile-share").toggleClass("hide");
+}); 
 
 $("#inputGroup input").keypress(function (e) {
 
@@ -284,15 +288,21 @@ $("#inputGroup input").keypress(function (e) {
       data: { email:email}
     })
       .done(function( msg ) {
+        window.localStorage.setItem("subscribed", "true");
         console.log( msg.message );
       });
-
-    $("#inputGroup").addClass("hide");
-    $("#appstore").addClass("hide");
-    $("#invalid").addClass("hide");
-    $("#socialmedia").removeClass("hide");
-    $("#thankyou").removeClass("hide");
-
+    if(isMobile){
+      console.log("mobile subscription")
+      $("#text").addClass("hide");
+      $("#phone-black-screen").addClass("hide");
+      newSong();
+    }else{
+      $("#inputGroup").addClass("hide");
+      $("#appstore").addClass("hide");
+      $("#invalid").addClass("hide");
+      $("#socialmedia").removeClass("hide");
+      $("#thankyou").removeClass("hide");
+    }
     }else{
       console.log("invalid")
       $("#invalid").removeClass("hide");
@@ -300,8 +310,18 @@ $("#inputGroup input").keypress(function (e) {
     }
 });
 
+var valoutput ;
+if(typeof(window.localStorage) != 'undefined'){ 
+  valoutput = window.localStorage.getItem("subscribed"); 
+  if(valoutput === "true" && isMobile){
+    $("#text").addClass("hide");
+    $("#phone-black-screen").addClass("hide");
+  }
+}
+
+
 $("#emailButton").on("click", function(){
-    window.localStorage.setItem("subscribed", "true");
+    
     var email = $('#inputGroup input').val();
     if(validateEmail(email)){
     $.ajax({
@@ -309,21 +329,27 @@ $("#emailButton").on("click", function(){
       url: "/subscribe",
       data: { email:email}
     })
-      .done(function( msg ) {
-        console.log( msg.message );
-      });
-
-    $("#inputGroup").addClass("hide");
-    $("#appstore").addClass("hide");
-    $("#invalid").addClass("hide");
-    $("#socialmedia").removeClass("hide");
-    $("#thankyou").removeClass("hide");
-
+    .done(function( msg ) {
+      window.localStorage.setItem("subscribed", "true");
+      console.log( msg.message );
+    });
+    if(isMobile){
+      console.log("mobile subscription")
+      $("#text").addClass("hide");
+      $("#phone-black-screen").addClass("hide");
+      newSong();
     }else{
-      console.log("invalid")
-      $("#invalid").removeClass("hide");
-    }
-    
+      $("#inputGroup").addClass("hide");
+      $("#appstore").addClass("hide");
+      $("#invalid").addClass("hide");
+      $("#socialmedia").removeClass("hide");
+      $("#thankyou").removeClass("hide");      
+    }    
+  }else{
+    console.log("invalid")
+    $("#invalid").removeClass("hide");
+  }
+  
 });
 
 $("#dontPlay").on("click", function() {
@@ -464,9 +490,18 @@ $('#pause').on("click", function() {
 
 $('#songInfo').addClass("active");
 
+
+$('.pullmenu-icon').on("click", function(){
+  infoClick = true;
+  $("#infoBtnRed").toggleClass("hide");
+  $("#infoBtnWhite").toggleClass("hide");
+  $("#black-background").toggleClass("hide");
+  $("#prelaunchContainer").toggleClass("hide");
+});
+
 $("#info").toggleClass("active");
 var infoClick = false;
-$('#info, .pullmenu-icon').on("click", function() {
+$('#info').on("click", function() {
   // $("#topListBtn").removeClass("active");
   // $("#topList").removeClass("active");
   // $("#badList").removeClass("active");
@@ -527,7 +562,7 @@ $('#volume').on("click", function() {
   // $("#topListBtn").removeClass("active");
   $("#topList").removeClass("active");
   $("#badList").removeClass("active");
-  $("#screen").hide();
+  // $("#screen").hide();
   // $("#info").removeClass("active");
   // $("#songInfo").removeClass("active");
   
@@ -544,7 +579,9 @@ $('#volume').on("click", function() {
     return player.setVolume(0);
   }else{
     volumeClick = true;
-    $("#phone-black-screen").addClass("hide");
+    if(!isMobile){
+      $("#phone-black-screen").addClass("hide");
+    }
     $("#volumeBtnNotMute").removeClass("hide");
     $("#volumeBtnMute").addClass("hide");
     $("#volume").addClass("active");
@@ -573,7 +610,9 @@ setTimeout(function(){
 }, 4000);
 
 var pbsclick = false;
+if(!isMobile){
 $("#phone-black-screen").on("click", function(){
+
   if(!pbsclick){
 
     $("#phone-black-screen").addClass("hide");
@@ -592,7 +631,8 @@ $("#phone-black-screen").on("click", function(){
       }, 4000)
     }
   }
-});
+});  
+}
 
 $("#phone-black-screen").on("mouseover", function(){
   $("#phone-black-screen img").attr("src", "./img/Play-red.png");

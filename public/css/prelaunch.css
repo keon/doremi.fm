@@ -70,7 +70,58 @@ body {
   overflow: hidden;
   display:block !important;
 }
+.share-button{
+  display:none;
+}
 @media (max-width: 480px) {
+  #mobile-share{
+    position:absolute;
+    z-index:2000;
+    top:40px;
+    margin-top:50%;
+    font-size:20px;
+    width:100%;
+    height:100%;
+    left:0;
+  }   
+  #mobile-socialmedia{
+    text-align:center;
+    margin-top:10px;
+  }
+  #mobile-thankyou{
+    font-size:20px;
+    font-weight:500px;
+    color:#fff;
+  }
+  #mobile-socialmedia a img{
+    margin:10px;
+    width:50px;
+  }
+  #phone-black-screen img{
+    display:none !important;
+
+  }
+  .blackScreen{
+    top:46px !important;
+    background:rgba(0, 0, 0, 0.8) !important;
+  }
+  #text, #pullmenu-icon {
+    position:absolute !important;
+    text-align: left !important;
+    z-index:1000 !important;
+    left:10px !important;
+    top:40px !important;
+    margin:0 10px !important;
+    font-size:20px !important;
+
+  }
+  #text h1 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 20px;
+    color:#78F0F0;
+  }
+
   #phone{
     width:100%;
     height:100%;
@@ -83,6 +134,15 @@ body {
     top:0;
     /*background:transparent;*/
     /*display:none;*/
+  }
+  .share-button{
+    z-index:100;
+    display:block;
+    font-size:15px;
+    color:white;
+    position: absolute;
+    padding:10px;
+    right: 5%;
   }
   #mobile-screen {
     width: 100%;
@@ -111,6 +171,7 @@ body {
   .box.category-box{
     height:50% !important;
   }
+
   #slider ul{
     height:100% !important;
   }
@@ -126,16 +187,21 @@ body {
   #progressContainer {
     display:none;
   }
-  .subtitle {
+  .subtitle{
+    margin-top:10px;
+  }
+  .subtitle h5 {
     display:none;
+    /*font-size:14px !important;*/
   }
   .doremi {
     width: 200px;
   }
   .main-title h2 {
-    font-size: 33px !important;
-    font-weight: 800 !important;
-    line-height: 36px !important;
+    font-size: 27px !important;
+    font-weight: 500 !important;
+    line-height: 30px !important;
+    margin-top:30px !important;
   }
   .ortala input, .ortala button {
     font-size: 15px !important;
@@ -145,7 +211,9 @@ body {
   
 }
 
-
+.main-title h2 {
+  margin-top:20px !important;
+}
 #home {
   width: 36px;
   height: 36px;
@@ -182,6 +250,7 @@ body {
 }
 
 .pullmenu-icon {
+  z-index: 100;
   width: 16px;
   height: 2px;
   background: #FFF;
@@ -487,23 +556,7 @@ body {
   color: #fff;
   z-index:10;
 }
-@media (max-width: 480px) {
-  #text, #pullmenu-icon {
-    position:relative;
-    left:0;
-    top:0;
-    margin:0 10px;
-    font-size:20px;
-    text-align:center;
 
-  }
-    #text h1 {
-      margin: 0;
-      font-size: 30px;
-      line-height: 30px;
-      color:#78F0F0;
-    }
-}
 #text h1 {
   margin: 0;
   font-size: 60px;

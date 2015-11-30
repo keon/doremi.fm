@@ -132,6 +132,7 @@
               <!-- <li>Current Music</li> -->
               <li class="reload"><i class="loader-icon"></i></li>
             </ul>
+            <div id="share-button" class="share-button">SHARE</div>
             
           </div>
           <div id="loader"><i class="loader-icon anim"></i></div>
@@ -324,12 +325,31 @@
 <!--       <div id="credit">
         <h6>Powered by Jombly</h6>
       </div> -->
-
+      <div id="mobile-share" class="hide">
+       <div id="mobile-socialmedia">
+          <div id="mobile-thankyou">
+            <h3>Share This With Your Friends</h3>
+          </div>
+          <!-- <div class="fb-share-button" data-href="http://doremi.fm/" data-layout="icon"></div> -->
+          <a target="popup" href="https://www.facebook.com/sharer/sharer.php?sdk=joey&u=http%3A%2F%2Fdoremi.fm%2F&display=popup&ref=plugin&src=share_button" onclick="window.open(this.href, 'Facebook Share','width=500,height=400,toolbar=1,resizable=0'); return false;">
+            <img src="./img/facebook.png"/>
+          </a>
+          <a target="popup" class="twitter-share-button" href="http://twitter.com/share?text=Listen to your favorite Kpop hits and discover new K-music. Free and No Ads.&url=http://doremi.fm/&hashtags=kpop" onclick="window.open(this.href, 'Twitter Share','width=500,height=500,toolbar=1,resizable=0'); return false;">
+            <img src="./img/twitter.png"/>
+          </a>
+          <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false">
+            <img src="./img/reddit.png"/>
+          </a>
+          <a target="popup" href="https://plus.google.com/share?url=http://doremi.fm/" onclick="window.open(this.href, 'Twitter Share','width=500,height=500,toolbar=1,resizable=0'); return false;">
+            <img src="./img/google.png"/>
+          </a>
+        </div>
+      </div>
       <div id="text" class="main-title">
         <br/>
         <!-- <div id="pullmenu-icon"></div> -->
         <h1><img class="doremi" src="/img/doremi_white.png" /></h1>
-        <br/>
+        <!-- <br/> -->
         <h2>Listen to Your Favorite<br/>Korean Music<br/> On - the - Go</h1>
         <!-- <br/> -->
         <div class="subtitle">
