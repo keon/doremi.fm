@@ -141,6 +141,7 @@ body {
     font-size:15px;
     color:white;
     position: absolute;
+    margin-top:2px;
     padding:12px;
     right: 2%;
   }
