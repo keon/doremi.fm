@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="wot-verification" content="95986abca4f10a301d34"/>
     <meta property="og:image" content="http://doremi.fm/img/share_logo.png"/>
+    <meta name="keywords" content="korea, korean music, internet radio, streaming">
     <meta property="og:title"content="Doremi.fm | Internet Radio - Streaming KPOP and Korean Music" />
 
 <meta name="google-site-verification" content="oKC1ZtipCCIRRF_5rhMtV-kgBtrHGbjeWXaLGfY5fl8" />
@@ -79,9 +80,9 @@
       <div id="player"></div>
     </section>
     <section id="screen"></section>
-    <section id="iosWarning">
+  <!--   <section id="iosWarning">
       Your browser does not support auto-playing of videos. Click below to start video playback manually!
-    </section>
+    </section> -->
 
     <!-- Progress Bar -->
     <section id="progressContainer">
@@ -97,20 +98,20 @@
     </section> -->
 
     <!-- Social Media -->
-    <section id="socialMedia">
+<!--     <section id="socialMedia">
       <div class="share">
           <a href="https://www.facebook.com/sharer/sharer.php?u=jombly.com" target="_blank">
               <i class="fa fa-facebook"></i>
               <label id="facebook-count"></label>
           </a>
       </div>
-     <!--  <div class="share">
+      <div class="share">
           <a href="https://twitter.com/share" target="_blank">
               <i class="fa fa-twitter"></i>
               <label id="twitter-count"></label>
           </a>
-      </div> -->
-    </section>
+      </div> 
+    </section> -->
 
     <div id="black-background"></div>
     <section id="prelaunchContainer">
@@ -324,7 +325,7 @@
         <h6>Powered by Jombly</h6>
       </div> -->
 
-      <div id="text">
+      <div id="text" class="main-title">
         <br/>
         <!-- <div id="pullmenu-icon"></div> -->
         <h1><img class="doremi" src="/img/doremi_white.png" /></h1>
@@ -371,12 +372,12 @@
         <a href="#"><img src="/img/Apple.png" /></a>
         </div>
 
-        <div id="socialmedia">
+        <div id="socialmedia" class="hide">
           <!-- <div class="fb-share-button" data-href="http://doremi.fm/" data-layout="icon"></div> -->
         <a target="popup" href="https://www.facebook.com/sharer/sharer.php?sdk=joey&u=http%3A%2F%2Fdoremi.fm%2F&display=popup&ref=plugin&src=share_button" onclick="window.open(this.href, 'Facebook Share','width=500,height=400,toolbar=1,resizable=0'); return false;">
           <img src="./img/facebook.png"/>
         </a>
-        <a target="popup" class="twitter-share-button" href="https://twitter.com/share?url=http://doremi.fm/" onclick="window.open(this.href, 'Twitter Share','width=500,height=500,toolbar=1,resizable=0'); return false;">
+        <a target="popup" class="twitter-share-button" href="http://twitter.com/share?text=Listen to your favorite Kpop hits and discover new K-music. Free and No Ads.&url=http://doremi.fm/&hashtags=korea, korean music, internet radio, streaming" onclick="window.open(this.href, 'Twitter Share','width=500,height=500,toolbar=1,resizable=0'); return false;">
           <img src="./img/twitter.png"/>
         </a>
         <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false">
