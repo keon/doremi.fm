@@ -6,7 +6,7 @@ body {
   background: #f5f5f5;
 }
 
-.logo{
+.doremi{
   max-width:250px;
   width:100%;
 }
@@ -492,14 +492,14 @@ body {
   color:#ddd;
   font-family:Lato, sans-serif;
 }
-#credit h6 {
+/*#credit h6 {
   position: fixed;
   margin-right: 5px;
   margin-bottom: 5px;
   color:#fff;
   right: 0;
   bottom: 0;
-}
+}*/
 .subtitle{
   margin-top:10px;
   margin-bottom:10px;
