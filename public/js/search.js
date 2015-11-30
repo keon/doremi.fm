@@ -272,9 +272,18 @@ function validateEmail(email) {
     return re.test(email);
 }
 
+
+
+
 $("#share-button").on("click", function(){
-  $("#text").toggleClass("hide");
+  var valoutput = window.localStorage.getItem("subscribed");
+  if(valoutput === "true"){
+    $("#phone-black-screen").toggleClass("hide");  
+  }else{
+    $("#text").toggleClass("hide");
+  }     
   $("#mobile-share").toggleClass("hide");
+
 }); 
 
 $("#inputGroup input").keypress(function (e) {
