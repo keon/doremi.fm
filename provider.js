@@ -12,8 +12,13 @@ fs = require("fs");
 
 app = express();
 
+adminPassword = "musicforall";
+
 out_file = "./songs.json";
 index = __dirname+"\\index.html";
+admin = __dirname+"\\public\\admin.html";
+
+
 console.log(index);
 mongoose.connect('mongodb://admin:admin4545@ds059644.mongolab.com:59644/doremi');
 songs = [];
@@ -37,6 +42,36 @@ app.use(bodyParser.json({
 app.use(bodyParser.urlencoded({
   extended: false
 }));
+
+
+app.post("/admin/subscriptions", function (req, res){
+  if(!req.body.password){
+    return res.json({
+      type:false,
+      message:"please enter password"
+    });
+  }else if(req.body.password !== adminPassword){
+    return res.json({
+      type:false,
+      message:"password is invalid"
+    });
+  }else{
+    Subscriber.find({}, function(err, users){
+      if(err){
+        return res.json({
+          type:false,
+          message:"error while finding users"
+        });
+      }else{
+        return res.send(users);
+      }
+    });
+  }
+});
+
+app.get("/admin", function (req, res){
+  return res.sendFile(admin);
+});
 
 app.post("/update", function(req, res) {
   songs = req.body;
