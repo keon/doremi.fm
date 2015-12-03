@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>Admin</title>
+</head>
+<body>
+
+  <!-- <form> -->
+    Enter Password
+    <input placeholder="Enter Password" id="password">
+    and Type Date:
+    <!-- <input type="date" name="day" id="date"> -->
+    <input type="submit" id="submit">
+  <!-- </form> -->
+
+  <ol id="list">
+    <li>1</li>
+    <li>2</li>
+  </ol>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+  <script>
+    
+
+      $("#submit").on("click", function(){
+        var typedPassword = $("#password").val();
+        console.log("fuck");
+        $.ajax({
+          method: "POST",
+          url: "/admin/subscriptions",
+          data: {
+            password:typedPassword
+          }
+        })
+        .done(function( returnData ) {
+          $("#list").empty().each(function(i){
+            for (var x = 0; x < returnData.length; x++){
+                $(this).append('<li>' + returnData[x].email + '</li>');
+                if (x == returnData.length - 1){
+                    $(this).appendTo(parent);
+                }
+            }
+          })
+        });      
+      });
+  </script>
+</body>
+</html>
