@@ -14,7 +14,7 @@ app = express();
 
 adminPassword = "musicforall";
 
-out_file = "./songs.json";
+out_file = "./lists/top50.json";
 index = __dirname+"\\index.html";
 admin = __dirname+"\\public\\admin.html";
 
